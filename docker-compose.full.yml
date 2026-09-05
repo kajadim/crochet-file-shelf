@@ -1,0 +1,50 @@
+# Pokreće CELU aplikaciju (baza + backend + frontend) jednom komandom:
+#   docker compose -f docker-compose.full.yml up -d --build
+#
+# Za svakodnevni razvoj se i dalje koristi docker-compose.yml (samo baza) + Visual Studio (F5) + `npm start`,
+# jer to omogućava debugging i brži hot-reload. Ovaj fajl je za brzu proveru da sve radi zajedno / demo.
+#
+# Napomena: ne pokreći ovaj fajl istovremeno sa docker-compose.yml - oba koriste port 5433 za Postgres.
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: crochet-file-shelf-db-full
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: crochetfileshelf
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - crochet-file-shelf-db-full-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crochet-file-shelf-backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__CrochetFileShelfDb: "Host=postgres;Port=5432;Database=crochetfileshelf;Username=postgres;Password=password"
+      Cors__AllowedOrigins__0: "http://localhost:4200"
+    ports:
+      - "5080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: crochet-file-shelf-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+
+volumes:
+  crochet-file-shelf-db-full-data:

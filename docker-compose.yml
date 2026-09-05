@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: crochet-file-shelf-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: crochetfileshelf
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - crochet-file-shelf-db-data:/var/lib/postgresql/data
+
+volumes:
+  crochet-file-shelf-db-data:

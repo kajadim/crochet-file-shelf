@@ -1,0 +1,14 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "CrochetFileShelfDb": "Host=localhost;Port=5433;Database=crochetfileshelf;Username=postgres;Password=YOUR_PASSWORD"
+  },
+  "Cors": {
+    "AllowedOrigins": [ "http://localhost:4200" ]
+  }
+}
