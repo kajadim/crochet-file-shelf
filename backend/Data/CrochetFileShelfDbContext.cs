@@ -20,6 +20,8 @@ namespace backend.Data
         public DbSet<WorkInvitation> WorkInvitations => Set<WorkInvitation>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<Notification> Notifications => Set<Notification>();
+        public DbSet<PendingRegistration> PendingRegistrations => Set<PendingRegistration>();
+        public DbSet<PasswordResetCode> PasswordResetCodes => Set<PasswordResetCode>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

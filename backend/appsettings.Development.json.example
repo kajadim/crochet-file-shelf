@@ -10,5 +10,22 @@
   },
   "Cors": {
     "AllowedOrigins": [ "http://localhost:4200" ]
+  },
+  "Jwt": {
+    "Issuer": "CrochetFileShelf",
+    "Audience": "CrochetFileShelfClient",
+    "Secret": "REPLACE_WITH_A_LONG_RANDOM_DEV_SECRET",
+    "AccessTokenExpiryMinutes": 15
+  },
+  "RefreshToken": {
+    "ExpiryDays": 30
+  },
+  "Email": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": 587,
+    "SenderEmail": "YOUR_GMAIL_ADDRESS@gmail.com",
+    "SenderName": "Crochet File Shelf",
+    "Username": "YOUR_GMAIL_ADDRESS@gmail.com",
+    "Password": "YOUR_16_CHARACTER_APP_PASSWORD"
   }
 }
