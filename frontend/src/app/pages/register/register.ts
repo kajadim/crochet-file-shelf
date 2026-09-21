@@ -1,0 +1,48 @@
+import { Component, inject, signal } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../core/services/auth';
+import { extractErrorMessage } from '../../core/utils/http-error';
+
+@Component({
+  selector: 'app-register',
+  imports: [ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule],
+  templateUrl: './register.html',
+  styleUrl: './register.scss',
+})
+export class Register {
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+
+  readonly form = this.fb.group({
+    displayName: ['', [Validators.required, Validators.maxLength(100)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+  });
+
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+
+  submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    const request = this.form.getRawValue();
+    this.auth.register(request).subscribe({
+      next: () => this.router.navigate(['/verify-email'], { queryParams: { email: request.email } }),
+      error: (err) => {
+        this.error.set(extractErrorMessage(err));
+        this.loading.set(false);
+      },
+    });
+  }
+}
