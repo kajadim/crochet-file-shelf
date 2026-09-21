@@ -5,6 +5,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { Login } from './pages/login/login';
+import { Palette } from './pages/palette/palette';
 import { Register } from './pages/register/register';
 import { ResetPassword } from './pages/reset-password/reset-password';
 import { VerifyEmail } from './pages/verify-email/verify-email';
@@ -19,7 +20,10 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     canActivate: [authGuard],
-    children: [{ path: '', component: Dashboard }],
+    children: [
+      { path: '', component: Dashboard },
+      { path: 'palette', component: Palette },
+    ],
   },
 
   { path: '**', redirectTo: '' },

@@ -103,6 +103,8 @@ builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<IWorkRepository, WorkRepository>();
 builder.Services.AddScoped<IFolderService, FolderService>();
 builder.Services.AddScoped<IWorkService, WorkService>();
+builder.Services.AddScoped<IYarnColorRepository, YarnColorRepository>();
+builder.Services.AddScoped<IYarnColorService, YarnColorService>();
 
 
 var app = builder.Build();

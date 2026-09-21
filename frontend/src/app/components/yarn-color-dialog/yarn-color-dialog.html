@@ -1,0 +1,59 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+
+  <mat-dialog-content>
+    @if (error()) {
+      <p class="mb-3 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    }
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" maxlength="100" placeholder="e.g. Sage Green" />
+      @if (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) {
+        <mat-error>Name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="flex items-start gap-3">
+      <input
+        type="color"
+        class="mt-1 h-12 w-14 shrink-0 cursor-pointer rounded border border-gray-300 bg-white p-1"
+        aria-label="Pick a color"
+        [value]="pickerValue()"
+        (input)="onPickerInput($event)"
+      />
+
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label>Color code</mat-label>
+        <input matInput type="text" formControlName="hexValue" maxlength="7" placeholder="#RRGGBB" />
+        <mat-hint>Format #RRGGBB</mat-hint>
+        @if (form.controls.hexValue.invalid) {
+          <mat-error>Enter a color like #C2694B</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="mt-2 w-full">
+      <mat-label>Notes (optional)</mat-label>
+      <textarea
+        matInput
+        rows="2"
+        formControlName="notes"
+        maxlength="500"
+        placeholder="Brand, dye lot, skein number..."
+      ></textarea>
+    </mat-form-field>
+
+    @if (data.color && data.color.worksUsingCount > 0) {
+      <p class="text-xs text-gray-500">
+        This color is used in {{ data.color.worksUsingCount }}
+        {{ data.color.worksUsingCount === 1 ? 'work' : 'works' }}. Changing the code updates it everywhere.
+      </p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button type="submit" [disabled]="loading()">{{ data.submitLabel }}</button>
+  </mat-dialog-actions>
+</form>
