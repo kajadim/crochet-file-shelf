@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+
+  <mat-dialog-content>
+    @if (error()) {
+      <p class="mb-3 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    }
+
+    <div class="mb-4">
+      <p class="mb-1 text-sm text-gray-600">Type</p>
+      <mat-radio-group formControlName="type" class="flex gap-4">
+        <mat-radio-button value="Pattern">Matrix</mat-radio-button>
+        <mat-radio-button value="Video">Video</mat-radio-button>
+      </mat-radio-group>
+      @if (isEdit) {
+        <p class="mt-1 text-xs text-gray-500">The type of an existing work cannot be changed.</p>
+      }
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" maxlength="150" />
+      @if (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) {
+        <mat-error>Name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Description (optional)</mat-label>
+      <textarea matInput rows="3" formControlName="description" maxlength="2000"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button type="submit" [disabled]="loading()">{{ data.submitLabel }}</button>
+  </mat-dialog-actions>
+</form>

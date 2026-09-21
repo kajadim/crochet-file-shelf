@@ -1,5 +1,7 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using backend.Data;
+using backend.Exceptions;
 using backend.Models;
 using backend.Options;
 using backend.Repository.Implementation;
@@ -21,8 +23,10 @@ builder.Services.AddDbContext<CrochetFileShelfDbContext>(options => options.UseN
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<DomainExceptionHandler>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -95,6 +99,10 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+builder.Services.AddScoped<IWorkRepository, WorkRepository>();
+builder.Services.AddScoped<IFolderService, FolderService>();
+builder.Services.AddScoped<IWorkService, WorkService>();
 
 
 var app = builder.Build();

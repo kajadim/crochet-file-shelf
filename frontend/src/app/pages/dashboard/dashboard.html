@@ -1,4 +1,92 @@
-<div class="p-8">
-  <h1 class="text-2xl font-semibold">Dashboard</h1>
-  <p class="text-gray-500">Folder tree, work list, search and filters dolaze u Fazi 4.</p>
+<div class="flex min-h-[calc(100vh-3.5rem)]">
+  <aside class="flex w-72 shrink-0 flex-col gap-3 border-r border-gray-200 p-3">
+    <button mat-stroked-button type="button" (click)="openCreateFolder(null)">
+      <mat-icon>create_new_folder</mat-icon>
+      New folder
+    </button>
+
+    <button
+      type="button"
+      class="flex items-center gap-2 rounded-md px-3 py-1.5 text-left hover:bg-gray-100"
+      [class.bg-gray-200]="folderStore.selectedId() === null"
+      (click)="selectFolder(null)"
+    >
+      <mat-icon class="text-lg! h-5! w-5!">folder_copy</mat-icon>
+      All works
+    </button>
+
+    <app-folder-tree
+      [rows]="folderStore.rows()"
+      [selectedId]="folderStore.selectedId()"
+      (selectFolder)="selectFolder($event)"
+      (toggleFolder)="folderStore.toggle($event)"
+      (createSubfolder)="openCreateFolder($event)"
+      (renameFolder)="openRenameFolder($event)"
+      (deleteFolder)="deleteFolder($event)"
+    />
+  </aside>
+
+  <main class="min-w-0 flex-1 p-6">
+    @if (loadError()) {
+      <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ loadError() }}</p>
+    } @else if (folderStore.loaded()) {
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 class="text-xl font-semibold">
+          @if (folderStore.breadcrumb().length > 0) {
+            @for (folder of folderStore.breadcrumb(); track folder.id; let last = $last) {
+              <span [class.text-gray-500]="!last">{{ folder.name }}</span>
+              @if (!last) {
+                <span class="text-gray-400"> / </span>
+              }
+            }
+          } @else {
+            All works
+          }
+        </h1>
+
+        <button
+          mat-flat-button
+          type="button"
+          [disabled]="!folderStore.selectedFolder()"
+          (click)="openCreateWork()"
+        >
+          <mat-icon>add</mat-icon>
+          New work
+        </button>
+      </div>
+
+      @if (folderStore.folders().length === 0) {
+        <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
+          <p class="mb-3">Create your first folder to start adding works.</p>
+          <button mat-flat-button type="button" (click)="openCreateFolder(null)">
+            <mat-icon>create_new_folder</mat-icon>
+            New folder
+          </button>
+        </div>
+      } @else if (workStore.error()) {
+        <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ workStore.error() }}</p>
+      } @else if (workStore.loading()) {
+        <p class="text-gray-500">Loading...</p>
+      } @else if (workStore.works().length === 0) {
+        <p class="text-gray-500">
+          @if (folderStore.selectedFolder()) {
+            This folder has no works yet.
+          } @else {
+            You have no works yet. Select a folder and add your first one.
+          }
+        </p>
+      } @else {
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          @for (work of workStore.works(); track work.id) {
+            <app-work-card
+              [work]="work"
+              (edit)="openEditWork($event)"
+              (move)="openMoveWork($event)"
+              (remove)="deleteWork($event)"
+            />
+          }
+        </div>
+      }
+    }
+  </main>
 </div>

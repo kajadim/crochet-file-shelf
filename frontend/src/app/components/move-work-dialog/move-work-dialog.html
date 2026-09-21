@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Move “{{ data.work.name }}”</h2>
+
+<mat-dialog-content>
+  @if (error()) {
+    <p class="mb-3 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+  }
+
+  <p class="mb-2 text-sm text-gray-600">Choose the destination folder.</p>
+
+  <mat-radio-group
+    class="flex flex-col"
+    [value]="selectedId()"
+    (change)="selectedId.set($event.value)"
+    aria-label="Destination folder"
+  >
+    @for (row of data.rows; track row.folder.id) {
+      <mat-radio-button
+        [value]="row.folder.id"
+        [disabled]="row.folder.id === data.work.folderId"
+        [style.margin-left.rem]="row.depth * 1.25"
+      >
+        {{ row.folder.name }}
+        @if (row.folder.id === data.work.folderId) {
+          <span class="text-xs text-gray-500">(current folder)</span>
+        }
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button mat-flat-button type="button" [disabled]="!selectedId() || loading()" (click)="submit()">Move</button>
+</mat-dialog-actions>
