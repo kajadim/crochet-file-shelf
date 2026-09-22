@@ -1,8 +1,10 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class InvalidCredentialsException : Exception
+    public class InvalidCredentialsException : AppException
     {
-        public InvalidCredentialsException() : base("Email or password is incorrect.")
-        { }
+        public override ErrorCode Code => ErrorCode.InvalidCredentials;
+        public override HttpStatusCode StatusCode => HttpStatusCode.Unauthorized;
     }
 }

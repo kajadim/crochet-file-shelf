@@ -1,0 +1,146 @@
+{
+  "common": {
+    "cancel": "Otkaži",
+    "save": "Sačuvaj",
+    "create": "Napravi",
+    "rename": "Preimenuj",
+    "delete": "Obriši",
+    "edit": "Izmeni",
+    "error": "Greška",
+    "cannotBeUndone": "Ovo ne može da se poništi.",
+    "email": "Email",
+    "emailRequired": "Email je obavezan",
+    "emailInvalid": "Unesi ispravnu email adresu",
+    "password": "Lozinka",
+    "passwordRequired": "Lozinka je obavezna",
+    "passwordMinLength": "Lozinka mora imati bar 8 karaktera",
+    "passwordHint": "Bar 8 karaktera",
+    "name": "Naziv",
+    "nameRequired": "Naziv je obavezan",
+    "currentFolder": "(trenutni folder)",
+    "and": "i",
+    "work": "rad",
+    "works": "radova",
+    "subfolder": "podfolder",
+    "subfolders": "podfoldera",
+    "loading": "Učitavanje...",
+    "somethingWentWrong": "Nešto je pošlo po zlu. Pokušaj ponovo.",
+    "cannotReachServer": "Server nije dostupan. Pokušaj ponovo kasnije."
+  },
+  "auth": {
+    "appName": "Crochet File Shelf",
+    "login": {
+      "title": "Prijavi se na nalog",
+      "resetNotice": "Lozinka je promenjena. Prijavi se novom lozinkom.",
+      "submit": "Prijavi se",
+      "forgotPassword": "Zaboravljena lozinka?",
+      "createAccount": "Napravi nalog"
+    },
+    "register": {
+      "title": "Napravi nalog",
+      "displayName": "Ime za prikaz",
+      "displayNameRequired": "Ime za prikaz je obavezno",
+      "displayNameMaxLength": "Ime za prikaz može imati najviše 100 karaktera",
+      "submit": "Pošalji kod za verifikaciju",
+      "haveAccount": "Već imaš nalog?",
+      "login": "Prijavi se"
+    },
+    "verifyEmail": {
+      "title": "Potvrdi email",
+      "subtitle": "Unesi šestocifreni kod koji smo poslali na tvoj email. Kod ističe za 15 minuta.",
+      "code": "Kod za verifikaciju",
+      "codeRequired": "Kod je obavezan",
+      "codePattern": "Kod ima tačno 6 cifara",
+      "submit": "Potvrdi i napravi nalog",
+      "resend": "Pošalji nov kod",
+      "back": "Nazad na registraciju"
+    },
+    "forgotPassword": {
+      "title": "Zaboravljena lozinka?",
+      "subtitle": "Unesi svoj email i poslaćemo ti kod za resetovanje.",
+      "submit": "Pošalji kod za reset",
+      "back": "Nazad na prijavu"
+    },
+    "resetPassword": {
+      "title": "Resetuj lozinku",
+      "subtitle": "Unesi šestocifreni kod iz email-a i izaberi novu lozinku.",
+      "code": "Kod za reset",
+      "newPassword": "Nova lozinka",
+      "submit": "Resetuj lozinku",
+      "resend": "Pošalji nov kod",
+      "back": "Nazad na prijavu"
+    }
+  },
+  "layout": {
+    "nav": {
+      "dashboard": "Početna",
+      "palette": "Paleta"
+    },
+    "logout": "Odjava"
+  },
+  "dashboard": {
+    "newFolder": "Novi folder",
+    "newFolderIn": "Novi folder u „{{name}}”",
+    "renameFolder": "Preimenuj folder",
+    "allWorks": "Svi radovi",
+    "newWork": "Novi rad",
+    "newWorkIn": "Novi rad u „{{name}}”",
+    "editWork": "Izmeni rad",
+    "moveWork": "Premesti „{{name}}”",
+    "emptyFolders": "Napravi svoj prvi folder da bi dodala radove.",
+    "emptyWorksInFolder": "Ovaj folder još nema radova.",
+    "emptyWorksNoFolder": "Još nemaš nijedan rad. Izaberi folder i dodaj prvi.",
+    "deleteWorkTitle": "Obriši „{{name}}”?",
+    "deleteWorkMessage": "Ovaj rad će biti trajno obrisan. Ovo ne može da se poništi.",
+    "deleteFolderTitle": "Obriši „{{name}}”?",
+    "deleteFolderMessageWithContents": "Ovo će trajno obrisati i {{parts}}. Ovo ne može da se poništi.",
+    "deleteFolderMessageEmpty": "Ovaj folder je prazan. Ovo ne može da se poništi."
+  },
+  "palette": {
+    "title": "Moja paleta",
+    "subtitle": "Boje prediva koje poseduješ. Možeš ih koristiti u bilo kojoj svojoj matrici.",
+    "addColor": "Dodaj boju",
+    "editColor": "Izmeni boju",
+    "empty": "Tvoja paleta je prazna. Dodaj prvu boju koju poseduješ.",
+    "usedIn": "Korišćeno u {{count}} {{unit}}",
+    "deleteTitle": "Obriši „{{name}}”?",
+    "deleteMessageInUse": "Ova boja se koristi u {{count}} {{unit}}. Biće uklonjena iz palete, ali radovi koji je već koriste je zadržavaju.",
+    "colorNamePlaceholder": "npr. Sage Green",
+    "notesPlaceholder": "Proizvođač, partija bojenja, broj klupka..."
+  },
+  "dialogs": {
+    "folderName": {
+      "label": "Naziv foldera"
+    },
+    "workForm": {
+      "type": "Tip",
+      "matrix": "Matrica",
+      "video": "Video",
+      "typeLocked": "Tip postojećeg rada ne može da se menja.",
+      "description": "Opis (opciono)"
+    },
+    "moveWork": {
+      "chooseDestination": "Izaberi odredišni folder.",
+      "move": "Premesti"
+    },
+    "yarnColor": {
+      "colorCode": "Kod boje",
+      "colorFormatHint": "Format #RRGGBB",
+      "colorFormatError": "Unesi boju u obliku #C2694B",
+      "notes": "Napomena (opciono)",
+      "usageNote": "Ova boja se koristi u {{count}} {{unit}}. Izmena koda je menja svuda."
+    }
+  },
+  "folderTree": {
+    "newSubfolder": "Novi podfolder",
+    "folderActions": "Akcije nad folderom"
+  },
+  "workCard": {
+    "matrix": "Matrica",
+    "video": "Video",
+    "moveTo": "Premesti u...",
+    "updated": "Ažurirano {{date}}",
+    "workActions": "Akcije nad radom"
+  },
+  "colorActions": "Akcije nad bojom"
+}

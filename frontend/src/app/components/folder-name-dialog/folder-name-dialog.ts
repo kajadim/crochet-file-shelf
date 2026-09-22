@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Observable } from 'rxjs';
@@ -14,7 +15,7 @@ export interface FolderNameDialogData {
 
 @Component({
   selector: 'app-folder-name-dialog',
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, TranslocoPipe],
   templateUrl: './folder-name-dialog.html',
   styleUrl: './folder-name-dialog.scss',
 })

@@ -81,14 +81,14 @@ namespace backend.Services.Implementation
         private async Task<YarnColor> GetOwnedColorAsync(Guid userId, Guid colorId)
         {
             var color = await _yarnColorRepository.GetActiveByIdAsync(colorId, userId);
-            return color ?? throw new NotFoundException("Color not found.");
+            return color ?? throw new NotFoundException(ErrorCode.ColorNotFound);
         }
 
         private async Task EnsureNameIsUniqueAsync(Guid userId, string name, Guid? excludeColorId)
         {
             if (await _yarnColorRepository.NameExistsAsync(userId, name, excludeColorId))
             {
-                throw new ConflictException("A color with this name already exists in your palette.");
+                throw new ConflictException(ErrorCode.ColorNameConflict);
             }
         }
 

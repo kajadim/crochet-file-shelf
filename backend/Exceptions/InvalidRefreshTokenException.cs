@@ -1,8 +1,10 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class InvalidRefreshTokenException : Exception
+    public class InvalidRefreshTokenException : AppException
     {
-        public InvalidRefreshTokenException() : base("Refresh token is invalid, expired, or has been revoked.")
-        { }
+        public override ErrorCode Code => ErrorCode.InvalidRefreshToken;
+        public override HttpStatusCode StatusCode => HttpStatusCode.Unauthorized;
     }
 }

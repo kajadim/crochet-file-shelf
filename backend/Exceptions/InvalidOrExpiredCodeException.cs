@@ -1,8 +1,10 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class InvalidOrExpiredCodeException : Exception
+    public class InvalidOrExpiredCodeException : AppException
     {
-        public InvalidOrExpiredCodeException() : base("Code is invalid or has expired.")
-        { }
+        public override ErrorCode Code => ErrorCode.InvalidOrExpiredCode;
+        public override HttpStatusCode StatusCode => HttpStatusCode.Unauthorized;
     }
 }

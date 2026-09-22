@@ -1,8 +1,15 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class NotFoundException : Exception
+    public class NotFoundException : AppException
     {
-        public NotFoundException(string message) : base(message)
-        { }
+        public override ErrorCode Code { get; }
+        public override HttpStatusCode StatusCode => HttpStatusCode.NotFound;
+
+        public NotFoundException(ErrorCode code)
+        {
+            Code = code;
+        }
     }
 }

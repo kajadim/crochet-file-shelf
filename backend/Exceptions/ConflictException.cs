@@ -1,8 +1,15 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class ConflictException : Exception
+    public class ConflictException : AppException
     {
-        public ConflictException(string message) : base(message)
-        { }
+        public override ErrorCode Code { get; }
+        public override HttpStatusCode StatusCode => HttpStatusCode.Conflict;
+
+        public ConflictException(ErrorCode code)
+        {
+            Code = code;
+        }
     }
 }

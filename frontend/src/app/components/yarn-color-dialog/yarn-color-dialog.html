@@ -4,13 +4,21 @@
   }
 
   <div class="flex flex-col gap-1">
-    <label for="color-name" class="text-sm text-gray-700">Name</label>
-    <input pInputText id="color-name" type="text" formControlName="name" maxlength="100" placeholder="e.g. Sage Green" class="w-full" />
+    <label for="color-name" class="text-sm text-gray-700">{{ 'common.name' | transloco }}</label>
+    <input
+      pInputText
+      id="color-name"
+      type="text"
+      formControlName="name"
+      maxlength="100"
+      [placeholder]="'palette.colorNamePlaceholder' | transloco"
+      class="w-full"
+    />
     @if (
       (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
       form.controls.name.touched
     ) {
-      <small class="text-red-600">Name is required</small>
+      <small class="text-red-600">{{ 'common.nameRequired' | transloco }}</small>
     }
   </div>
 
@@ -24,37 +32,34 @@
     />
 
     <div class="flex flex-1 flex-col gap-1">
-      <label for="color-hex" class="text-sm text-gray-700">Color code</label>
+      <label for="color-hex" class="text-sm text-gray-700">{{ 'dialogs.yarnColor.colorCode' | transloco }}</label>
       <input pInputText id="color-hex" type="text" formControlName="hexValue" maxlength="7" placeholder="#RRGGBB" class="w-full" />
-      <small class="text-gray-500">Format #RRGGBB</small>
+      <small class="text-gray-500">{{ 'dialogs.yarnColor.colorFormatHint' | transloco }}</small>
       @if (form.controls.hexValue.invalid && form.controls.hexValue.touched) {
-        <small class="text-red-600">Enter a color like #C2694B</small>
+        <small class="text-red-600">{{ 'dialogs.yarnColor.colorFormatError' | transloco }}</small>
       }
     </div>
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="color-notes" class="text-sm text-gray-700">Notes (optional)</label>
+    <label for="color-notes" class="text-sm text-gray-700">{{ 'dialogs.yarnColor.notes' | transloco }}</label>
     <textarea
       pTextarea
       id="color-notes"
       rows="2"
       formControlName="notes"
       maxlength="500"
-      placeholder="Brand, dye lot, skein number..."
+      [placeholder]="'palette.notesPlaceholder' | transloco"
       class="w-full"
     ></textarea>
   </div>
 
-  @if (data.color && data.color.worksUsingCount > 0) {
-    <p class="text-xs text-gray-500">
-      This color is used in {{ data.color.worksUsingCount }}
-      {{ data.color.worksUsingCount === 1 ? 'work' : 'works' }}. Changing the code updates it everywhere.
-    </p>
+  @if (usageNote()) {
+    <p class="text-xs text-gray-500">{{ usageNote() }}</p>
   }
 
   <div class="flex justify-end gap-2">
-    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
   </div>
 </form>

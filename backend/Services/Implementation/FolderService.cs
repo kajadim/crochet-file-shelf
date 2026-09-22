@@ -28,7 +28,7 @@ namespace backend.Services.Implementation
                 var parent = await _folderRepository.GetByIdAsync(request.ParentFolderId.Value, userId);
                 if (parent is null)
                 {
-                    throw new NotFoundException("Parent folder not found.");
+                    throw new NotFoundException(ErrorCode.ParentFolderNotFound);
                 }
             }
 
@@ -87,14 +87,14 @@ namespace backend.Services.Implementation
         {
             if (await _folderRepository.NameExistsAmongSiblingsAsync(userId, parentFolderId, name, excludeFolderId))
             {
-                throw new ConflictException("A folder with this name already exists here.");
+                throw new ConflictException(ErrorCode.FolderNameConflict);
             }
         }
 
         private async Task<Folder> GetOwnedFolderAsync(Guid userId, Guid folderId)
         {
             var folder = await _folderRepository.GetByIdAsync(folderId, userId);
-            return folder ?? throw new NotFoundException("Folder not found.");
+            return folder ?? throw new NotFoundException(ErrorCode.FolderNotFound);
         }
 
         private async Task<List<Guid>> GetFolderAndDescendantIdsAsync(Guid userId, Guid folderId)

@@ -1,0 +1,146 @@
+{
+  "common": {
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "create": "Créer",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "error": "Erreur",
+    "cannotBeUndone": "Cette action est irréversible.",
+    "email": "Email",
+    "emailRequired": "L'email est requis",
+    "emailInvalid": "Saisissez une adresse email valide",
+    "password": "Mot de passe",
+    "passwordRequired": "Le mot de passe est requis",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordHint": "Au moins 8 caractères",
+    "name": "Nom",
+    "nameRequired": "Le nom est requis",
+    "currentFolder": "(dossier actuel)",
+    "and": "et",
+    "work": "ouvrage",
+    "works": "ouvrages",
+    "subfolder": "sous-dossier",
+    "subfolders": "sous-dossiers",
+    "loading": "Chargement...",
+    "somethingWentWrong": "Une erreur est survenue. Veuillez réessayer.",
+    "cannotReachServer": "Impossible de joindre le serveur. Veuillez réessayer plus tard."
+  },
+  "auth": {
+    "appName": "Crochet File Shelf",
+    "login": {
+      "title": "Connecte-toi à ton compte",
+      "resetNotice": "Ton mot de passe a été modifié. Connecte-toi avec le nouveau mot de passe.",
+      "submit": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "createAccount": "Créer un compte"
+    },
+    "register": {
+      "title": "Crée ton compte",
+      "displayName": "Nom d'affichage",
+      "displayNameRequired": "Le nom d'affichage est requis",
+      "displayNameMaxLength": "Le nom d'affichage peut contenir au maximum 100 caractères",
+      "submit": "Envoyer le code de vérification",
+      "haveAccount": "Tu as déjà un compte ?",
+      "login": "Se connecter"
+    },
+    "verifyEmail": {
+      "title": "Vérifie ton email",
+      "subtitle": "Saisis le code à 6 chiffres que nous avons envoyé à ton email. Le code expire dans 15 minutes.",
+      "code": "Code de vérification",
+      "codeRequired": "Le code est requis",
+      "codePattern": "Le code contient exactement 6 chiffres",
+      "submit": "Vérifier et créer le compte",
+      "resend": "Envoyer un nouveau code",
+      "back": "Retour à l'inscription"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié ?",
+      "subtitle": "Saisis ton email et nous t'enverrons un code de réinitialisation.",
+      "submit": "Envoyer le code de réinitialisation",
+      "back": "Retour à la connexion"
+    },
+    "resetPassword": {
+      "title": "Réinitialise ton mot de passe",
+      "subtitle": "Saisis le code à 6 chiffres reçu par email et choisis un nouveau mot de passe.",
+      "code": "Code de réinitialisation",
+      "newPassword": "Nouveau mot de passe",
+      "submit": "Réinitialiser le mot de passe",
+      "resend": "Envoyer un nouveau code",
+      "back": "Retour à la connexion"
+    }
+  },
+  "layout": {
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "palette": "Palette"
+    },
+    "logout": "Se déconnecter"
+  },
+  "dashboard": {
+    "newFolder": "Nouveau dossier",
+    "newFolderIn": "Nouveau dossier dans « {{name}} »",
+    "renameFolder": "Renommer le dossier",
+    "allWorks": "Tous les ouvrages",
+    "newWork": "Nouvel ouvrage",
+    "newWorkIn": "Nouvel ouvrage dans « {{name}} »",
+    "editWork": "Modifier l'ouvrage",
+    "moveWork": "Déplacer « {{name}} »",
+    "emptyFolders": "Crée ton premier dossier pour commencer à ajouter des ouvrages.",
+    "emptyWorksInFolder": "Ce dossier ne contient encore aucun ouvrage.",
+    "emptyWorksNoFolder": "Tu n'as encore aucun ouvrage. Sélectionne un dossier et ajoute le premier.",
+    "deleteWorkTitle": "Supprimer « {{name}} » ?",
+    "deleteWorkMessage": "Cet ouvrage sera définitivement supprimé. Cette action est irréversible.",
+    "deleteFolderTitle": "Supprimer « {{name}} » ?",
+    "deleteFolderMessageWithContents": "Cela supprimera également définitivement {{parts}}. Cette action est irréversible.",
+    "deleteFolderMessageEmpty": "Ce dossier est vide. Cette action est irréversible."
+  },
+  "palette": {
+    "title": "Ma palette",
+    "subtitle": "Les couleurs de laine que tu possèdes. Tu peux les utiliser dans n'importe laquelle de tes grilles.",
+    "addColor": "Ajouter une couleur",
+    "editColor": "Modifier la couleur",
+    "empty": "Ta palette est vide. Ajoute la première couleur de laine que tu possèdes.",
+    "usedIn": "Utilisée dans {{count}} {{unit}}",
+    "deleteTitle": "Supprimer « {{name}} » ?",
+    "deleteMessageInUse": "Cette couleur est utilisée dans {{count}} {{unit}}. Elle sera retirée de ta palette, mais les ouvrages qui l'utilisent déjà la conserveront.",
+    "colorNamePlaceholder": "ex. Sage Green",
+    "notesPlaceholder": "Marque, lot de teinture, numéro de pelote..."
+  },
+  "dialogs": {
+    "folderName": {
+      "label": "Nom du dossier"
+    },
+    "workForm": {
+      "type": "Type",
+      "matrix": "Grille",
+      "video": "Vidéo",
+      "typeLocked": "Le type d'un ouvrage existant ne peut pas être modifié.",
+      "description": "Description (facultatif)"
+    },
+    "moveWork": {
+      "chooseDestination": "Choisis le dossier de destination.",
+      "move": "Déplacer"
+    },
+    "yarnColor": {
+      "colorCode": "Code couleur",
+      "colorFormatHint": "Format #RRGGBB",
+      "colorFormatError": "Saisis une couleur comme #C2694B",
+      "notes": "Notes (facultatif)",
+      "usageNote": "Cette couleur est utilisée dans {{count}} {{unit}}. Modifier le code la met à jour partout."
+    }
+  },
+  "folderTree": {
+    "newSubfolder": "Nouveau sous-dossier",
+    "folderActions": "Actions sur le dossier"
+  },
+  "workCard": {
+    "matrix": "Grille",
+    "video": "Vidéo",
+    "moveTo": "Déplacer vers...",
+    "updated": "Mis à jour le {{date}}",
+    "workActions": "Actions sur l'ouvrage"
+  },
+  "colorActions": "Actions sur la couleur"
+}

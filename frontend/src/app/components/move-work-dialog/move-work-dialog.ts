@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { Observable } from 'rxjs';
@@ -16,7 +17,7 @@ export interface MoveWorkDialogData {
 
 @Component({
   selector: 'app-move-work-dialog',
-  imports: [FormsModule, ButtonModule, RadioButtonModule],
+  imports: [FormsModule, ButtonModule, RadioButtonModule, TranslocoPipe],
   templateUrl: './move-work-dialog.html',
   styleUrl: './move-work-dialog.scss',
 })

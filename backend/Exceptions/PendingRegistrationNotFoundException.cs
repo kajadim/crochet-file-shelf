@@ -1,8 +1,10 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class PendingRegistrationNotFoundException : Exception
+    public class PendingRegistrationNotFoundException : AppException
     {
-        public PendingRegistrationNotFoundException() : base("No pending registration found for this email.")
-        { }
+        public override ErrorCode Code => ErrorCode.PendingRegistrationNotFound;
+        public override HttpStatusCode StatusCode => HttpStatusCode.NotFound;
     }
 }

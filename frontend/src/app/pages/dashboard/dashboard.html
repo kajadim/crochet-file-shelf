@@ -1,6 +1,12 @@
 <div class="flex min-h-[calc(100vh-3.5rem)]">
   <aside class="flex w-72 shrink-0 flex-col gap-3 border-r border-gray-200 p-3">
-    <p-button label="New folder" icon="pi pi-folder-plus" [outlined]="true" [fluid]="true" (onClick)="openCreateFolder(null)" />
+    <p-button
+      [label]="'dashboard.newFolder' | transloco"
+      icon="pi pi-folder-plus"
+      [outlined]="true"
+      [fluid]="true"
+      (onClick)="openCreateFolder(null)"
+    />
 
     <button
       type="button"
@@ -9,7 +15,7 @@
       (click)="selectFolder(null)"
     >
       <i class="pi pi-folder text-sm"></i>
-      All works
+      {{ 'dashboard.allWorks' | transloco }}
     </button>
 
     <app-folder-tree
@@ -37,12 +43,12 @@
               }
             }
           } @else {
-            All works
+            {{ 'dashboard.allWorks' | transloco }}
           }
         </h1>
 
         <p-button
-          label="New work"
+          [label]="'dashboard.newWork' | transloco"
           icon="pi pi-plus"
           [disabled]="!folderStore.selectedFolder()"
           (onClick)="openCreateWork()"
@@ -51,19 +57,19 @@
 
       @if (folderStore.folders().length === 0) {
         <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
-          <p class="mb-3">Create your first folder to start adding works.</p>
-          <p-button label="New folder" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
+          <p class="mb-3">{{ 'dashboard.emptyFolders' | transloco }}</p>
+          <p-button [label]="'dashboard.newFolder' | transloco" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
         </div>
       } @else if (workStore.error()) {
         <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ workStore.error() }}</p>
       } @else if (workStore.loading()) {
-        <p class="text-gray-500">Loading...</p>
+        <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
         <p class="text-gray-500">
           @if (folderStore.selectedFolder()) {
-            This folder has no works yet.
+            {{ 'dashboard.emptyWorksInFolder' | transloco }}
           } @else {
-            You have no works yet. Select a folder and add your first one.
+            {{ 'dashboard.emptyWorksNoFolder' | transloco }}
           }
         </p>
       } @else {

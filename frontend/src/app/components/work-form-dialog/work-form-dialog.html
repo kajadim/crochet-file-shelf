@@ -4,40 +4,40 @@
   }
 
   <div>
-    <p class="mb-1 text-sm text-gray-600">Type</p>
+    <p class="mb-1 text-sm text-gray-600">{{ 'dialogs.workForm.type' | transloco }}</p>
     <div class="flex gap-4">
       <label class="flex items-center gap-2">
         <p-radiobutton formControlName="type" value="Pattern" inputId="type-pattern" />
-        Matrix
+        {{ 'dialogs.workForm.matrix' | transloco }}
       </label>
       <label class="flex items-center gap-2">
         <p-radiobutton formControlName="type" value="Video" inputId="type-video" />
-        Video
+        {{ 'dialogs.workForm.video' | transloco }}
       </label>
     </div>
     @if (isEdit) {
-      <p class="mt-1 text-xs text-gray-500">The type of an existing work cannot be changed.</p>
+      <p class="mt-1 text-xs text-gray-500">{{ 'dialogs.workForm.typeLocked' | transloco }}</p>
     }
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="work-name" class="text-sm text-gray-700">Name</label>
+    <label for="work-name" class="text-sm text-gray-700">{{ 'common.name' | transloco }}</label>
     <input pInputText id="work-name" type="text" formControlName="name" maxlength="150" class="w-full" />
     @if (
       (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
       form.controls.name.touched
     ) {
-      <small class="text-red-600">Name is required</small>
+      <small class="text-red-600">{{ 'common.nameRequired' | transloco }}</small>
     }
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="work-description" class="text-sm text-gray-700">Description (optional)</label>
+    <label for="work-description" class="text-sm text-gray-700">{{ 'dialogs.workForm.description' | transloco }}</label>
     <textarea pTextarea id="work-description" rows="3" formControlName="description" maxlength="2000" class="w-full"></textarea>
   </div>
 
   <div class="flex justify-end gap-2">
-    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
   </div>
 </form>

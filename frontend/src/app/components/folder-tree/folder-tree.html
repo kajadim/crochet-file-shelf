@@ -24,7 +24,7 @@
         <span class="truncate">{{ row.folder.name }}</span>
       </button>
 
-      <app-action-menu [items]="menuItems(row.folder)" ariaLabel="Folder actions" />
+      <app-action-menu [items]="menuItems(row.folder)" [ariaLabel]="folderActionsLabel" />
     </div>
   }
 </nav>

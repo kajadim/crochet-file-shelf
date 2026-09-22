@@ -4,18 +4,18 @@
   }
 
   <div class="flex flex-col gap-1">
-    <label for="folder-name" class="text-sm text-gray-700">Folder name</label>
+    <label for="folder-name" class="text-sm text-gray-700">{{ 'dialogs.folderName.label' | transloco }}</label>
     <input pInputText id="folder-name" type="text" formControlName="name" maxlength="150" class="w-full" />
     @if (
       (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
       form.controls.name.touched
     ) {
-      <small class="text-red-600">Folder name is required</small>
+      <small class="text-red-600">{{ 'common.nameRequired' | transloco }}</small>
     }
   </div>
 
   <div class="flex justify-end gap-2">
-    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
   </div>
 </form>

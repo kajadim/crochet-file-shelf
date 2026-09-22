@@ -2,13 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/services/auth';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -17,6 +18,7 @@ export class Login {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly transloco = inject(TranslocoService);
 
   readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -27,7 +29,7 @@ export class Login {
   readonly error = signal<string | null>(null);
   readonly notice = signal<string | null>(
     this.route.snapshot.queryParamMap.get('reset') === 'success'
-      ? 'Your password has been changed. Please log in with the new password.'
+      ? this.transloco.translate('auth.login.resetNotice')
       : null,
   );
 

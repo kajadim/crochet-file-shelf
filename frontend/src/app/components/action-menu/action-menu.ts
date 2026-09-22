@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, inject, input, signal } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface ActionMenuItem {
   label: string;
@@ -9,13 +10,13 @@ export interface ActionMenuItem {
 
 @Component({
   selector: 'app-action-menu',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './action-menu.html',
   styleUrl: './action-menu.scss',
 })
 export class ActionMenu {
   readonly items = input.required<ActionMenuItem[]>();
-  readonly ariaLabel = input('Actions');
+  readonly ariaLabel = input('common.edit');
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 

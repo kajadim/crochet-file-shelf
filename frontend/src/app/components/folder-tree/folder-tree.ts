@@ -18,11 +18,17 @@ export class FolderTree {
   readonly renameFolder = output<Folder>();
   readonly deleteFolder = output<Folder>();
 
+  protected readonly folderActionsLabel = 'folderTree.folderActions';
+
   protected menuItems(folder: Folder): ActionMenuItem[] {
     return [
-      { label: 'New subfolder', icon: 'pi pi-folder-plus', action: () => this.createSubfolder.emit(folder) },
-      { label: 'Rename', icon: 'pi pi-pencil', action: () => this.renameFolder.emit(folder) },
-      { label: 'Delete', icon: 'pi pi-trash', action: () => this.deleteFolder.emit(folder), danger: true },
+      {
+        label: 'folderTree.newSubfolder',
+        icon: 'pi pi-folder-plus',
+        action: () => this.createSubfolder.emit(folder),
+      },
+      { label: 'common.rename', icon: 'pi pi-pencil', action: () => this.renameFolder.emit(folder) },
+      { label: 'common.delete', icon: 'pi pi-trash', action: () => this.deleteFolder.emit(folder), danger: true },
     ];
   }
 }

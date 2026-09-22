@@ -1,0 +1,146 @@
+{
+  "common": {
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "create": "Erstellen",
+    "rename": "Umbenennen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "error": "Fehler",
+    "cannotBeUndone": "Dies kann nicht rückgängig gemacht werden.",
+    "email": "E-Mail",
+    "emailRequired": "E-Mail ist erforderlich",
+    "emailInvalid": "Bitte eine gültige E-Mail-Adresse eingeben",
+    "password": "Passwort",
+    "passwordRequired": "Passwort ist erforderlich",
+    "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen haben",
+    "passwordHint": "Mindestens 8 Zeichen",
+    "name": "Name",
+    "nameRequired": "Name ist erforderlich",
+    "currentFolder": "(aktueller Ordner)",
+    "and": "und",
+    "work": "Werk",
+    "works": "Werke",
+    "subfolder": "Unterordner",
+    "subfolders": "Unterordner",
+    "loading": "Wird geladen...",
+    "somethingWentWrong": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "cannotReachServer": "Server nicht erreichbar. Bitte versuche es später erneut."
+  },
+  "auth": {
+    "appName": "Crochet File Shelf",
+    "login": {
+      "title": "In dein Konto einloggen",
+      "resetNotice": "Dein Passwort wurde geändert. Bitte melde dich mit dem neuen Passwort an.",
+      "submit": "Anmelden",
+      "forgotPassword": "Passwort vergessen?",
+      "createAccount": "Konto erstellen"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "displayName": "Anzeigename",
+      "displayNameRequired": "Anzeigename ist erforderlich",
+      "displayNameMaxLength": "Der Anzeigename darf höchstens 100 Zeichen haben",
+      "submit": "Bestätigungscode senden",
+      "haveAccount": "Du hast bereits ein Konto?",
+      "login": "Anmelden"
+    },
+    "verifyEmail": {
+      "title": "E-Mail bestätigen",
+      "subtitle": "Gib den 6-stelligen Code ein, den wir an deine E-Mail gesendet haben. Der Code läuft in 15 Minuten ab.",
+      "code": "Bestätigungscode",
+      "codeRequired": "Code ist erforderlich",
+      "codePattern": "Der Code besteht aus genau 6 Ziffern",
+      "submit": "Bestätigen und Konto erstellen",
+      "resend": "Neuen Code senden",
+      "back": "Zurück zur Registrierung"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen?",
+      "subtitle": "Gib deine E-Mail ein und wir senden dir einen Code zum Zurücksetzen.",
+      "submit": "Reset-Code senden",
+      "back": "Zurück zur Anmeldung"
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Gib den 6-stelligen Code aus deiner E-Mail ein und wähle ein neues Passwort.",
+      "code": "Reset-Code",
+      "newPassword": "Neues Passwort",
+      "submit": "Passwort zurücksetzen",
+      "resend": "Neuen Code senden",
+      "back": "Zurück zur Anmeldung"
+    }
+  },
+  "layout": {
+    "nav": {
+      "dashboard": "Übersicht",
+      "palette": "Palette"
+    },
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "newFolder": "Neuer Ordner",
+    "newFolderIn": "Neuer Ordner in „{{name}}“",
+    "renameFolder": "Ordner umbenennen",
+    "allWorks": "Alle Werke",
+    "newWork": "Neues Werk",
+    "newWorkIn": "Neues Werk in „{{name}}“",
+    "editWork": "Werk bearbeiten",
+    "moveWork": "„{{name}}“ verschieben",
+    "emptyFolders": "Erstelle deinen ersten Ordner, um Werke hinzuzufügen.",
+    "emptyWorksInFolder": "Dieser Ordner enthält noch keine Werke.",
+    "emptyWorksNoFolder": "Du hast noch keine Werke. Wähle einen Ordner und füge dein erstes hinzu.",
+    "deleteWorkTitle": "„{{name}}“ löschen?",
+    "deleteWorkMessage": "Dieses Werk wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "deleteFolderTitle": "„{{name}}“ löschen?",
+    "deleteFolderMessageWithContents": "Dadurch werden auch {{parts}} dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "deleteFolderMessageEmpty": "Dieser Ordner ist leer. Dies kann nicht rückgängig gemacht werden."
+  },
+  "palette": {
+    "title": "Meine Palette",
+    "subtitle": "Die Garnfarben, die dir gehören. Du kannst sie in jeder deiner Matrizen verwenden.",
+    "addColor": "Farbe hinzufügen",
+    "editColor": "Farbe bearbeiten",
+    "empty": "Deine Palette ist leer. Füge die erste Garnfarbe hinzu, die du besitzt.",
+    "usedIn": "Verwendet in {{count}} {{unit}}",
+    "deleteTitle": "„{{name}}“ löschen?",
+    "deleteMessageInUse": "Diese Farbe wird in {{count}} {{unit}} verwendet. Sie wird aus deiner Palette entfernt, aber Werke, die sie bereits verwenden, behalten sie.",
+    "colorNamePlaceholder": "z. B. Sage Green",
+    "notesPlaceholder": "Marke, Färbe-Charge, Knäuelnummer..."
+  },
+  "dialogs": {
+    "folderName": {
+      "label": "Ordnername"
+    },
+    "workForm": {
+      "type": "Typ",
+      "matrix": "Matrix",
+      "video": "Video",
+      "typeLocked": "Der Typ eines bestehenden Werks kann nicht geändert werden.",
+      "description": "Beschreibung (optional)"
+    },
+    "moveWork": {
+      "chooseDestination": "Zielordner auswählen.",
+      "move": "Verschieben"
+    },
+    "yarnColor": {
+      "colorCode": "Farbcode",
+      "colorFormatHint": "Format #RRGGBB",
+      "colorFormatError": "Gib eine Farbe wie #C2694B ein",
+      "notes": "Notizen (optional)",
+      "usageNote": "Diese Farbe wird in {{count}} {{unit}} verwendet. Eine Änderung des Codes wirkt sich überall aus."
+    }
+  },
+  "folderTree": {
+    "newSubfolder": "Neuer Unterordner",
+    "folderActions": "Ordneraktionen"
+  },
+  "workCard": {
+    "matrix": "Matrix",
+    "video": "Video",
+    "moveTo": "Verschieben nach...",
+    "updated": "Aktualisiert am {{date}}",
+    "workActions": "Werkaktionen"
+  },
+  "colorActions": "Farbaktionen"
+}

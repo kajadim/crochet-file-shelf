@@ -1,25 +1,28 @@
+using backend.Resources;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Localization;
 
 namespace backend.Exceptions
 {
     public class DomainExceptionHandler : IExceptionHandler
     {
+        private readonly IStringLocalizer<ErrorMessages> _localizer;
+
+        public DomainExceptionHandler(IStringLocalizer<ErrorMessages> localizer)
+        {
+            _localizer = localizer;
+        }
+
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var statusCode = exception switch
-            {
-                NotFoundException => StatusCodes.Status404NotFound,
-                ConflictException => StatusCodes.Status409Conflict,
-                _ => (int?)null,
-            };
-
-            if (statusCode is null)
+            if (exception is not AppException appException)
             {
                 return false;
             }
 
-            httpContext.Response.StatusCode = statusCode.Value;
-            await httpContext.Response.WriteAsJsonAsync(new { message = exception.Message }, cancellationToken);
+            httpContext.Response.StatusCode = (int)appException.StatusCode;
+            var message = _localizer[appException.Code.ToString()].Value;
+            await httpContext.Response.WriteAsJsonAsync(new { message }, cancellationToken);
             return true;
         }
     }

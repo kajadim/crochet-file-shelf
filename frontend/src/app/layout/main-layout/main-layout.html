@@ -2,7 +2,7 @@
 
 <header class="flex items-center justify-between gap-4 border-b border-gray-200 px-6 py-3">
   <div class="flex items-center gap-6">
-    <span class="text-lg font-semibold">Crochet File Shelf</span>
+    <span class="text-lg font-semibold">{{ 'auth.appName' | transloco }}</span>
 
     <nav class="flex gap-4 text-sm" aria-label="Main">
       <a
@@ -11,15 +11,27 @@
         [routerLinkActiveOptions]="{ exact: true }"
         class="hover:underline"
       >
-        Dashboard
+        {{ 'layout.nav.dashboard' | transloco }}
       </a>
-      <a routerLink="/palette" routerLinkActive="font-semibold text-blue-700" class="hover:underline">Palette</a>
+      <a routerLink="/palette" routerLinkActive="font-semibold text-blue-700" class="hover:underline">
+        {{ 'layout.nav.palette' | transloco }}
+      </a>
     </nav>
   </div>
 
   <div class="flex items-center gap-3">
+    <select
+      class="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
+      aria-label="Language"
+      (change)="onLanguageChange($event)"
+    >
+      @for (option of language.options; track option.code) {
+        <option [value]="option.code" [selected]="option.code === language.current()">{{ option.label }}</option>
+      }
+    </select>
+
     <span class="text-sm text-gray-600">{{ auth.user()?.displayName }}</span>
-    <p-button label="Log out" [outlined]="true" (onClick)="auth.logout()" />
+    <p-button [label]="'layout.logout' | transloco" [outlined]="true" (onClick)="auth.logout()" />
   </div>
 </header>
 

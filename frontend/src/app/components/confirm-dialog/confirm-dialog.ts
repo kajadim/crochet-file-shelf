@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 export interface ConfirmDialogData {
@@ -11,7 +12,7 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [ButtonModule],
+  imports: [ButtonModule, TranslocoPipe],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
 })

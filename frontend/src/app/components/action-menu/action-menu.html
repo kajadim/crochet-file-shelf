@@ -1,7 +1,7 @@
 <button
   type="button"
   class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
-  [attr.aria-label]="ariaLabel()"
+  [attr.aria-label]="ariaLabel() | transloco"
   [attr.aria-expanded]="open()"
   (click)="toggle($event)"
 >
@@ -22,7 +22,7 @@
         (click)="select(item)"
       >
         <i class="{{ item.icon }} text-sm"></i>
-        {{ item.label }}
+        {{ item.label | transloco }}
       </button>
     }
   </div>

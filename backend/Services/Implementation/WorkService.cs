@@ -86,7 +86,7 @@ namespace backend.Services.Implementation
         private async Task<Work> GetOwnedWorkAsync(Guid userId, Guid workId)
         {
             var work = await _workRepository.GetByIdAsync(workId, userId);
-            return work ?? throw new NotFoundException("Work not found.");
+            return work ?? throw new NotFoundException(ErrorCode.WorkNotFound);
         }
 
         private async Task EnsureFolderOwnedAsync(Guid userId, Guid folderId)
@@ -94,7 +94,7 @@ namespace backend.Services.Implementation
             var folder = await _folderRepository.GetByIdAsync(folderId, userId);
             if (folder is null)
             {
-                throw new NotFoundException("Folder not found.");
+                throw new NotFoundException(ErrorCode.FolderNotFound);
             }
         }
 

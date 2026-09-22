@@ -2,10 +2,10 @@
   <div class="flex items-center justify-between gap-2">
     <span class="inline-flex items-center gap-1 rounded-full border border-gray-300 px-2 py-0.5 text-xs text-gray-700">
       <i class="pi {{ typeIcon() }} text-sm"></i>
-      {{ typeLabel() }}
+      {{ typeKey() | transloco }}
     </span>
 
-    <app-action-menu [items]="menuItems()" ariaLabel="Work actions" />
+    <app-action-menu [items]="menuItems()" [ariaLabel]="workActionsLabel" />
   </div>
 
   <h3 class="text-lg font-semibold break-words">{{ work().name }}</h3>
@@ -14,5 +14,7 @@
     <p class="line-clamp-3 text-sm text-gray-600 break-words">{{ work().description }}</p>
   }
 
-  <p class="mt-auto pt-2 text-xs text-gray-500">Updated {{ work().updatedAt | date: 'mediumDate' }}</p>
+  <p class="mt-auto pt-2 text-xs text-gray-500">
+    {{ 'workCard.updated' | transloco: { date: work().updatedAt | date: 'mediumDate' } }}
+  </p>
 </article>

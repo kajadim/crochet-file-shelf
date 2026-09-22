@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { translate } from '@jsverse/transloco';
 
 export function extractErrorMessage(error: unknown): string {
   if (!(error instanceof HttpErrorResponse)) {
-    return 'Something went wrong. Please try again.';
+    return translate('common.somethingWentWrong');
   }
 
   if (error.status === 0) {
-    return 'Cannot reach the server. Please try again later.';
+    return translate('common.cannotReachServer');
   }
 
   const body = error.error;
@@ -22,5 +23,5 @@ export function extractErrorMessage(error: unknown): string {
     }
   }
 
-  return 'Something went wrong. Please try again.';
+  return translate('common.somethingWentWrong');
 }

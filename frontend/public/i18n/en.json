@@ -1,0 +1,146 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "rename": "Rename",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Error",
+    "cannotBeUndone": "This cannot be undone.",
+    "email": "Email",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter a valid email address",
+    "password": "Password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must have at least 8 characters",
+    "passwordHint": "At least 8 characters",
+    "name": "Name",
+    "nameRequired": "Name is required",
+    "currentFolder": "(current folder)",
+    "and": "and",
+    "work": "work",
+    "works": "works",
+    "subfolder": "subfolder",
+    "subfolders": "subfolders",
+    "loading": "Loading...",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "cannotReachServer": "Cannot reach the server. Please try again later."
+  },
+  "auth": {
+    "appName": "Crochet File Shelf",
+    "login": {
+      "title": "Log in to your account",
+      "resetNotice": "Your password has been changed. Please log in with the new password.",
+      "submit": "Log in",
+      "forgotPassword": "Forgot password?",
+      "createAccount": "Create an account"
+    },
+    "register": {
+      "title": "Create your account",
+      "displayName": "Display name",
+      "displayNameRequired": "Display name is required",
+      "displayNameMaxLength": "Display name can have at most 100 characters",
+      "submit": "Send verification code",
+      "haveAccount": "Already have an account?",
+      "login": "Log in"
+    },
+    "verifyEmail": {
+      "title": "Verify your email",
+      "subtitle": "Enter the 6-digit code we sent to your email. The code expires in 15 minutes.",
+      "code": "Verification code",
+      "codeRequired": "Code is required",
+      "codePattern": "The code has exactly 6 digits",
+      "submit": "Verify and create account",
+      "resend": "Send a new code",
+      "back": "Back to registration"
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email and we will send you a code to reset it.",
+      "submit": "Send reset code",
+      "back": "Back to log in"
+    },
+    "resetPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter the 6-digit code from your email and choose a new password.",
+      "code": "Reset code",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "resend": "Send a new code",
+      "back": "Back to log in"
+    }
+  },
+  "layout": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "palette": "Palette"
+    },
+    "logout": "Log out"
+  },
+  "dashboard": {
+    "newFolder": "New folder",
+    "newFolderIn": "New folder in \"{{name}}\"",
+    "renameFolder": "Rename folder",
+    "allWorks": "All works",
+    "newWork": "New work",
+    "newWorkIn": "New work in \"{{name}}\"",
+    "editWork": "Edit work",
+    "moveWork": "Move \"{{name}}\"",
+    "emptyFolders": "Create your first folder to start adding works.",
+    "emptyWorksInFolder": "This folder has no works yet.",
+    "emptyWorksNoFolder": "You have no works yet. Select a folder and add your first one.",
+    "deleteWorkTitle": "Delete \"{{name}}\"?",
+    "deleteWorkMessage": "This work will be permanently deleted. This cannot be undone.",
+    "deleteFolderTitle": "Delete \"{{name}}\"?",
+    "deleteFolderMessageWithContents": "This will also permanently delete {{parts}}. This cannot be undone.",
+    "deleteFolderMessageEmpty": "This folder is empty. This cannot be undone."
+  },
+  "palette": {
+    "title": "My palette",
+    "subtitle": "The yarn colors you own. You can use them in any of your matrices.",
+    "addColor": "Add color",
+    "editColor": "Edit color",
+    "empty": "Your palette is empty. Add the first yarn color you own.",
+    "usedIn": "Used in {{count}} {{unit}}",
+    "deleteTitle": "Delete \"{{name}}\"?",
+    "deleteMessageInUse": "This color is used in {{count}} {{unit}}. It will be removed from your palette, but works that already use it will keep it.",
+    "colorNamePlaceholder": "e.g. Sage Green",
+    "notesPlaceholder": "Brand, dye lot, skein number..."
+  },
+  "dialogs": {
+    "folderName": {
+      "label": "Folder name"
+    },
+    "workForm": {
+      "type": "Type",
+      "matrix": "Matrix",
+      "video": "Video",
+      "typeLocked": "The type of an existing work cannot be changed.",
+      "description": "Description (optional)"
+    },
+    "moveWork": {
+      "chooseDestination": "Choose the destination folder.",
+      "move": "Move"
+    },
+    "yarnColor": {
+      "colorCode": "Color code",
+      "colorFormatHint": "Format #RRGGBB",
+      "colorFormatError": "Enter a color like #C2694B",
+      "notes": "Notes (optional)",
+      "usageNote": "This color is used in {{count}} {{unit}}. Changing the code updates it everywhere."
+    }
+  },
+  "folderTree": {
+    "newSubfolder": "New subfolder",
+    "folderActions": "Folder actions"
+  },
+  "workCard": {
+    "matrix": "Matrix",
+    "video": "Video",
+    "moveTo": "Move to...",
+    "updated": "Updated {{date}}",
+    "workActions": "Work actions"
+  },
+  "colorActions": "Color actions"
+}

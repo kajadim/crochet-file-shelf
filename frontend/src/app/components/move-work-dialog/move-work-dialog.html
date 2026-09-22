@@ -3,7 +3,7 @@
     <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
   }
 
-  <p class="text-sm text-gray-600">Choose the destination folder.</p>
+  <p class="text-sm text-gray-600">{{ 'dialogs.moveWork.chooseDestination' | transloco }}</p>
 
   <div class="flex flex-col gap-2">
     @for (row of data.rows; track row.folder.id) {
@@ -21,14 +21,14 @@
         />
         {{ row.folder.name }}
         @if (row.folder.id === data.work.folderId) {
-          <span class="text-xs text-gray-500">(current folder)</span>
+          <span class="text-xs text-gray-500">{{ 'common.currentFolder' | transloco }}</span>
         }
       </label>
     }
   </div>
 
   <div class="flex justify-end gap-2">
-    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
-    <p-button label="Move" type="button" [disabled]="!selectedId()" [loading]="loading()" (onClick)="submit()" />
+    <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="'dialogs.moveWork.move' | transloco" type="button" [disabled]="!selectedId()" [loading]="loading()" (onClick)="submit()" />
   </div>
 </div>

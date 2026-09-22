@@ -27,59 +27,31 @@ namespace backend.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<MessageResponse>> Register(RegisterRequest request)
         {
-            try
-            {
-                await _authService.RegisterAsync(request);
-                return Ok(new MessageResponse { Message = "Verification code sent to your email." });
-            }
-            catch (EmailAlreadyExistsException ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
+            await _authService.RegisterAsync(request);
+            return Ok(new MessageResponse { Message = "Verification code sent to your email." });
         }
 
         [HttpPost("verify-email")]
         public async Task<ActionResult<AuthResponse>> VerifyEmail(VerifyEmailRequest request)
         {
-            try
-            {
-                var (response, rawRefreshToken) = await _authService.VerifyEmailAsync(request);
-                SetRefreshTokenCookie(rawRefreshToken);
-                return Ok(response);
-            }
-            catch (InvalidOrExpiredCodeException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+            var (response, rawRefreshToken) = await _authService.VerifyEmailAsync(request);
+            SetRefreshTokenCookie(rawRefreshToken);
+            return Ok(response);
         }
 
         [HttpPost("resend-verification")]
         public async Task<ActionResult<MessageResponse>> ResendVerification(ResendVerificationRequest request)
         {
-            try
-            {
-                await _authService.ResendVerificationAsync(request);
-                return Ok(new MessageResponse { Message = "Verification code sent to your email." });
-            }
-            catch (PendingRegistrationNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            await _authService.ResendVerificationAsync(request);
+            return Ok(new MessageResponse { Message = "Verification code sent to your email." });
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
         {
-            try
-            {
-                var (response, rawRefreshToken) = await _authService.LoginAsync(request);
-                SetRefreshTokenCookie(rawRefreshToken);
-                return Ok(response);
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+            var (response, rawRefreshToken) = await _authService.LoginAsync(request);
+            SetRefreshTokenCookie(rawRefreshToken);
+            return Ok(response);
         }
 
         [HttpPost("refresh")]
@@ -88,7 +60,7 @@ namespace backend.Controllers
             var rawRefreshToken = Request.Cookies[RefreshTokenCookieName];
             if (string.IsNullOrEmpty(rawRefreshToken))
             {
-                return Unauthorized(new { message = "Refresh token is missing." });
+                throw new InvalidRefreshTokenException();
             }
 
             try
@@ -97,10 +69,10 @@ namespace backend.Controllers
                 SetRefreshTokenCookie(newRawRefreshToken);
                 return Ok(response);
             }
-            catch (InvalidRefreshTokenException ex)
+            catch (InvalidRefreshTokenException)
             {
                 ClearRefreshTokenCookie();
-                return Unauthorized(new { message = ex.Message });
+                throw;
             }
         }
 
@@ -117,7 +89,7 @@ namespace backend.Controllers
         [HttpPost("forgot-password")]
         public async Task<ActionResult<MessageResponse>> ForgotPassword(ForgotPasswordRequest request)
         {
-            // Uvek isti odgovor bez obzira da li email postoji - ne otkriva registrovane naloge.
+            
             await _authService.ForgotPasswordAsync(request);
             return Ok(new MessageResponse { Message = "If that email is registered, a reset code has been sent." });
         }
@@ -125,15 +97,8 @@ namespace backend.Controllers
         [HttpPost("reset-password")]
         public async Task<ActionResult<MessageResponse>> ResetPassword(ResetPasswordRequest request)
         {
-            try
-            {
-                await _authService.ResetPasswordAsync(request);
-                return Ok(new MessageResponse { Message = "Password has been reset. Please log in again." });
-            }
-            catch (InvalidOrExpiredCodeException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+            await _authService.ResetPasswordAsync(request);
+            return Ok(new MessageResponse { Message = "Password has been reset. Please log in again." });
         }
 
         private Guid GetUserId()

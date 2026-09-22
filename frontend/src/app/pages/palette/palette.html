@@ -1,21 +1,21 @@
 <div class="mx-auto max-w-5xl p-6">
   <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <div>
-      <h1 class="text-xl font-semibold">My palette</h1>
-      <p class="text-sm text-gray-500">The yarn colors you own. You can use them in any of your matrices.</p>
+      <h1 class="text-xl font-semibold">{{ 'palette.title' | transloco }}</h1>
+      <p class="text-sm text-gray-500">{{ 'palette.subtitle' | transloco }}</p>
     </div>
 
-    <p-button label="Add color" icon="pi pi-plus" (onClick)="openCreate()" />
+    <p-button [label]="'palette.addColor' | transloco" icon="pi pi-plus" (onClick)="openCreate()" />
   </div>
 
   @if (loadError()) {
     <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ loadError() }}</p>
   } @else if (!store.loaded()) {
-    <p class="text-gray-500">Loading...</p>
+    <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
   } @else if (store.colors().length === 0) {
     <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
-      <p class="mb-3">Your palette is empty. Add the first yarn color you own.</p>
-      <p-button label="Add color" icon="pi pi-plus" (onClick)="openCreate()" />
+      <p class="mb-3">{{ 'palette.empty' | transloco }}</p>
+      <p-button [label]="'palette.addColor' | transloco" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
   } @else {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -28,7 +28,7 @@
               <h3 class="font-semibold break-words">{{ color.name }}</h3>
 
               <div class="-mr-2 -mt-1 shrink-0">
-                <app-action-menu [items]="menuItems(color)" ariaLabel="Color actions" />
+                <app-action-menu [items]="menuItems(color)" [ariaLabel]="colorActionsLabel" />
               </div>
             </div>
 
@@ -39,9 +39,7 @@
             }
 
             @if (color.worksUsingCount > 0) {
-              <p class="mt-auto pt-2 text-xs text-gray-500">
-                Used in {{ color.worksUsingCount }} {{ color.worksUsingCount === 1 ? 'work' : 'works' }}
-              </p>
+              <p class="mt-auto pt-2 text-xs text-gray-500">{{ usedInLabel(color) }}</p>
             }
           </div>
         </article>

@@ -1,8 +1,10 @@
+using System.Net;
+
 namespace backend.Exceptions
 {
-    public class EmailAlreadyExistsException : Exception
+    public class EmailAlreadyExistsException : AppException
     {
-        public EmailAlreadyExistsException() : base("An account with this email already exists.")
-        { }
+        public override ErrorCode Code => ErrorCode.EmailAlreadyExists;
+        public override HttpStatusCode StatusCode => HttpStatusCode.Conflict;
     }
 }

@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
@@ -19,7 +20,7 @@ const HEX_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
 @Component({
   selector: 'app-yarn-color-dialog',
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, Textarea],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, Textarea, TranslocoPipe],
   templateUrl: './yarn-color-dialog.html',
   styleUrl: './yarn-color-dialog.scss',
 })
@@ -27,6 +28,7 @@ export class YarnColorDialog {
   protected readonly dialogRef = inject(DynamicDialogRef<boolean>);
   protected readonly data = inject(DynamicDialogConfig).data as YarnColorDialogData;
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly form = this.fb.group({
     name: [
@@ -47,6 +49,16 @@ export class YarnColorDialog {
 
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
+
+  protected readonly usageNote = computed(() => {
+    this.transloco.activeLang();
+    const count = this.data.color?.worksUsingCount ?? 0;
+    if (count === 0) {
+      return null;
+    }
+    const unit = this.transloco.translate(count === 1 ? 'common.work' : 'common.works');
+    return this.transloco.translate('dialogs.yarnColor.usageNote', { count, unit });
+  });
 
   protected onPickerInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
