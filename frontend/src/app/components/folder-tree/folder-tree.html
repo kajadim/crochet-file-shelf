@@ -12,7 +12,7 @@
         [attr.aria-label]="row.expanded ? 'Collapse folder' : 'Expand folder'"
         (click)="toggleFolder.emit(row.folder.id)"
       >
-        <mat-icon class="text-lg! h-5! w-5!">{{ row.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
+        <i class="pi text-xs" [class.pi-chevron-down]="row.expanded" [class.pi-chevron-right]="!row.expanded"></i>
       </button>
 
       <button
@@ -20,33 +20,11 @@
         class="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left"
         (click)="selectFolder.emit(row.folder.id)"
       >
-        <mat-icon class="text-lg! h-5! w-5! shrink-0">{{ row.expanded ? 'folder_open' : 'folder' }}</mat-icon>
+        <i class="pi text-sm shrink-0" [class.pi-folder-open]="row.expanded" [class.pi-folder]="!row.expanded"></i>
         <span class="truncate">{{ row.folder.name }}</span>
       </button>
 
-      <button
-        type="button"
-        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-500 hover:bg-gray-200"
-        aria-label="Folder actions"
-        [matMenuTriggerFor]="menu"
-      >
-        <mat-icon class="text-lg! h-5! w-5!">more_vert</mat-icon>
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item type="button" (click)="createSubfolder.emit(row.folder)">
-          <mat-icon>create_new_folder</mat-icon>
-          <span>New subfolder</span>
-        </button>
-        <button mat-menu-item type="button" (click)="renameFolder.emit(row.folder)">
-          <mat-icon>edit</mat-icon>
-          <span>Rename</span>
-        </button>
-        <button mat-menu-item type="button" (click)="deleteFolder.emit(row.folder)">
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
+      <app-action-menu [items]="menuItems(row.folder)" ariaLabel="Folder actions" />
     </div>
   }
 </nav>

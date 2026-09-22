@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { Textarea } from 'primeng/textarea';
 import { Observable } from 'rxjs';
 import { Work, WorkType } from '../../core/models/work.models';
 import { extractErrorMessage } from '../../core/utils/http-error';
@@ -16,7 +16,6 @@ export interface WorkFormValue {
 }
 
 export interface WorkFormDialogData {
-  title: string;
   submitLabel: string;
   work: Work | null;
   submit: (value: WorkFormValue) => Observable<unknown>;
@@ -24,20 +23,13 @@ export interface WorkFormDialogData {
 
 @Component({
   selector: 'app-work-form-dialog',
-  imports: [
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatRadioModule,
-    MatButtonModule,
-  ],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, Textarea, RadioButtonModule],
   templateUrl: './work-form-dialog.html',
   styleUrl: './work-form-dialog.scss',
 })
 export class WorkFormDialog {
-  protected readonly data = inject<WorkFormDialogData>(MAT_DIALOG_DATA);
-  private readonly dialogRef = inject(MatDialogRef<WorkFormDialog, boolean>);
+  protected readonly dialogRef = inject(DynamicDialogRef<boolean>);
+  protected readonly data = inject(DynamicDialogConfig).data as WorkFormDialogData;
   private readonly fb = inject(NonNullableFormBuilder);
 
   protected readonly isEdit = this.data.work !== null;

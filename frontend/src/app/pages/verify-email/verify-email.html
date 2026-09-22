@@ -10,28 +10,37 @@
       <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
     }
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" autocomplete="email" />
-        @if (form.controls.email.hasError('required')) {
-          <mat-error>Email is required</mat-error>
-        } @else if (form.controls.email.hasError('email')) {
-          <mat-error>Enter a valid email address</mat-error>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-sm text-gray-700">Email</label>
+        <input pInputText id="email" type="email" formControlName="email" autocomplete="email" class="w-full" />
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <small class="text-red-600">Email is required</small>
+        } @else if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <small class="text-red-600">Enter a valid email address</small>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Verification code</mat-label>
-        <input matInput type="text" inputmode="numeric" maxlength="6" formControlName="code" autocomplete="one-time-code" />
-        @if (form.controls.code.hasError('required')) {
-          <mat-error>Code is required</mat-error>
-        } @else if (form.controls.code.hasError('pattern')) {
-          <mat-error>The code has exactly 6 digits</mat-error>
+      <div class="flex flex-col gap-1">
+        <label for="code" class="text-sm text-gray-700">Verification code</label>
+        <input
+          pInputText
+          id="code"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+          formControlName="code"
+          autocomplete="one-time-code"
+          class="w-full"
+        />
+        @if (form.controls.code.hasError('required') && form.controls.code.touched) {
+          <small class="text-red-600">Code is required</small>
+        } @else if (form.controls.code.hasError('pattern') && form.controls.code.touched) {
+          <small class="text-red-600">The code has exactly 6 digits</small>
         }
-      </mat-form-field>
+      </div>
 
-      <button mat-flat-button type="submit" [disabled]="loading()">Verify and create account</button>
+      <p-button label="Verify and create account" type="submit" [loading]="loading()" [fluid]="true" />
     </form>
 
     <div class="mt-4 flex justify-between text-sm">

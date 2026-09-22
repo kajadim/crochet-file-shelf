@@ -1,22 +1,21 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <h2 mat-dialog-title>{{ data.title }}</h2>
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (error()) {
+    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+  }
 
-  <mat-dialog-content>
-    @if (error()) {
-      <p class="mb-3 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+  <div class="flex flex-col gap-1">
+    <label for="folder-name" class="text-sm text-gray-700">Folder name</label>
+    <input pInputText id="folder-name" type="text" formControlName="name" maxlength="150" class="w-full" />
+    @if (
+      (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
+      form.controls.name.touched
+    ) {
+      <small class="text-red-600">Folder name is required</small>
     }
+  </div>
 
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Folder name</mat-label>
-      <input matInput type="text" formControlName="name" maxlength="150" />
-      @if (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) {
-        <mat-error>Folder name is required</mat-error>
-      }
-    </mat-form-field>
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button type="button" mat-dialog-close>Cancel</button>
-    <button mat-flat-button type="submit" [disabled]="loading()">{{ data.submitLabel }}</button>
-  </mat-dialog-actions>
+  <div class="flex justify-end gap-2">
+    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
+  </div>
 </form>

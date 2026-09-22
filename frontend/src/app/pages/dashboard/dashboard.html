@@ -1,9 +1,6 @@
 <div class="flex min-h-[calc(100vh-3.5rem)]">
   <aside class="flex w-72 shrink-0 flex-col gap-3 border-r border-gray-200 p-3">
-    <button mat-stroked-button type="button" (click)="openCreateFolder(null)">
-      <mat-icon>create_new_folder</mat-icon>
-      New folder
-    </button>
+    <p-button label="New folder" icon="pi pi-folder-plus" [outlined]="true" [fluid]="true" (onClick)="openCreateFolder(null)" />
 
     <button
       type="button"
@@ -11,7 +8,7 @@
       [class.bg-gray-200]="folderStore.selectedId() === null"
       (click)="selectFolder(null)"
     >
-      <mat-icon class="text-lg! h-5! w-5!">folder_copy</mat-icon>
+      <i class="pi pi-folder text-sm"></i>
       All works
     </button>
 
@@ -44,24 +41,18 @@
           }
         </h1>
 
-        <button
-          mat-flat-button
-          type="button"
+        <p-button
+          label="New work"
+          icon="pi pi-plus"
           [disabled]="!folderStore.selectedFolder()"
-          (click)="openCreateWork()"
-        >
-          <mat-icon>add</mat-icon>
-          New work
-        </button>
+          (onClick)="openCreateWork()"
+        />
       </div>
 
       @if (folderStore.folders().length === 0) {
         <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
           <p class="mb-3">Create your first folder to start adding works.</p>
-          <button mat-flat-button type="button" (click)="openCreateFolder(null)">
-            <mat-icon>create_new_folder</mat-icon>
-            New folder
-          </button>
+          <p-button label="New folder" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
         </div>
       } @else if (workStore.error()) {
         <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ workStore.error() }}</p>

@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { Observable } from 'rxjs';
 import { FolderRow } from '../../core/models/folder.models';
 import { Work } from '../../core/models/work.models';
@@ -15,13 +16,13 @@ export interface MoveWorkDialogData {
 
 @Component({
   selector: 'app-move-work-dialog',
-  imports: [MatDialogModule, MatRadioModule, MatButtonModule],
+  imports: [FormsModule, ButtonModule, RadioButtonModule],
   templateUrl: './move-work-dialog.html',
   styleUrl: './move-work-dialog.scss',
 })
 export class MoveWorkDialog {
-  protected readonly data = inject<MoveWorkDialogData>(MAT_DIALOG_DATA);
-  private readonly dialogRef = inject(MatDialogRef<MoveWorkDialog, boolean>);
+  protected readonly dialogRef = inject(DynamicDialogRef<boolean>);
+  protected readonly data = inject(DynamicDialogConfig).data as MoveWorkDialogData;
 
   protected readonly selectedId = signal<string | null>(null);
   protected readonly loading = signal(false);

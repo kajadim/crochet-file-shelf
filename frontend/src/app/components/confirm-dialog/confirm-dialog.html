@@ -1,17 +1,8 @@
-<h2 mat-dialog-title>{{ data.title }}</h2>
-
-<mat-dialog-content>
+<div class="flex flex-col gap-4">
   <p>{{ data.message }}</p>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button type="button" [mat-dialog-close]="false">Cancel</button>
-  <button
-    mat-flat-button
-    type="button"
-    [class]="data.destructive ? 'bg-red-700! text-white!' : ''"
-    [mat-dialog-close]="true"
-  >
-    {{ data.confirmLabel }}
-  </button>
-</mat-dialog-actions>
+  <div class="flex justify-end gap-2">
+    <p-button label="Cancel" [text]="true" (onClick)="cancel()" />
+    <p-button [label]="data.confirmLabel" [severity]="data.destructive ? 'danger' : 'primary'" (onClick)="confirm()" />
+  </div>
+</div>

@@ -1,8 +1,7 @@
 import { Component, OnInit, effect, inject, signal, untracked } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ButtonModule } from 'primeng/button';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { FolderNameDialog, FolderNameDialogData } from '../../components/folder-name-dialog/folder-name-dialog';
 import { FolderTree } from '../../components/folder-tree/folder-tree';
@@ -17,15 +16,15 @@ import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatButtonModule, MatIconModule, FolderTree, WorkCard],
+  imports: [ButtonModule, FolderTree, WorkCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
   protected readonly folderStore = inject(FolderStore);
   protected readonly workStore = inject(WorkStore);
-  private readonly dialog = inject(MatDialog);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialogService = inject(DialogService);
+  private readonly messageService = inject(MessageService);
 
   protected readonly loadError = signal<string | null>(null);
 
@@ -54,10 +53,11 @@ export class Dashboard implements OnInit {
   }
 
   protected openCreateFolder(parent: Folder | null): void {
-    this.dialog.open<FolderNameDialog, FolderNameDialogData>(FolderNameDialog, {
+    this.dialogService.open<FolderNameDialog, FolderNameDialogData>(FolderNameDialog, {
+      header: parent ? `New folder in "${parent.name}"` : 'New folder',
       width: '420px',
+      modal: true,
       data: {
-        title: parent ? `New folder in “${parent.name}”` : 'New folder',
         submitLabel: 'Create',
         initialName: '',
         submit: (name) => this.folderStore.create(name, parent?.id ?? null),
@@ -66,10 +66,11 @@ export class Dashboard implements OnInit {
   }
 
   protected openRenameFolder(folder: Folder): void {
-    this.dialog.open<FolderNameDialog, FolderNameDialogData>(FolderNameDialog, {
+    this.dialogService.open<FolderNameDialog, FolderNameDialogData>(FolderNameDialog, {
+      header: 'Rename folder',
       width: '420px',
+      modal: true,
       data: {
-        title: 'Rename folder',
         submitLabel: 'Rename',
         initialName: folder.name,
         submit: (name) => this.folderStore.rename(folder.id, name),
@@ -90,10 +91,11 @@ export class Dashboard implements OnInit {
       return;
     }
 
-    this.dialog.open<WorkFormDialog, WorkFormDialogData>(WorkFormDialog, {
+    this.dialogService.open<WorkFormDialog, WorkFormDialogData>(WorkFormDialog, {
+      header: `New work in "${folder.name}"`,
       width: '480px',
+      modal: true,
       data: {
-        title: `New work in “${folder.name}”`,
         submitLabel: 'Create',
         work: null,
         submit: (value) => this.workStore.create({ ...value, folderId: folder.id }),
@@ -102,10 +104,11 @@ export class Dashboard implements OnInit {
   }
 
   protected openEditWork(work: Work): void {
-    this.dialog.open<WorkFormDialog, WorkFormDialogData>(WorkFormDialog, {
+    this.dialogService.open<WorkFormDialog, WorkFormDialogData>(WorkFormDialog, {
+      header: 'Edit work',
       width: '480px',
+      modal: true,
       data: {
-        title: 'Edit work',
         submitLabel: 'Save',
         work,
         submit: (value) => this.workStore.update(work.id, { name: value.name, description: value.description }),
@@ -114,8 +117,10 @@ export class Dashboard implements OnInit {
   }
 
   protected openMoveWork(work: Work): void {
-    this.dialog.open<MoveWorkDialog, MoveWorkDialogData>(MoveWorkDialog, {
+    this.dialogService.open<MoveWorkDialog, MoveWorkDialogData>(MoveWorkDialog, {
+      header: `Move "${work.name}"`,
       width: '420px',
+      modal: true,
       data: {
         work,
         rows: this.folderStore.allRows(),
@@ -126,21 +131,25 @@ export class Dashboard implements OnInit {
 
   protected deleteWork(work: Work): void {
     const data: ConfirmDialogData = {
-      title: `Delete “${work.name}”?`,
+      title: `Delete "${work.name}"?`,
       message: 'This work will be permanently deleted. This cannot be undone.',
       confirmLabel: 'Delete',
       destructive: true,
     };
 
-    this.dialog
-      .open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, { width: '420px', data })
-      .afterClosed()
-      .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
-        }
-        this.workStore.remove(work.id).subscribe({ error: (error) => this.showError(error) });
-      });
+    const ref = this.dialogService.open<ConfirmDialog, ConfirmDialogData>(ConfirmDialog, {
+      header: data.title,
+      width: '420px',
+      modal: true,
+      data,
+    });
+
+    ref?.onClose.subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.workStore.remove(work.id).subscribe({ error: (error) => this.showError(error) });
+    });
   }
 
   private confirmFolderDeletion(folder: Folder, summary: FolderDeletionSummary): void {
@@ -153,7 +162,7 @@ export class Dashboard implements OnInit {
     }
 
     const data: ConfirmDialogData = {
-      title: `Delete “${folder.name}”?`,
+      title: `Delete "${folder.name}"?`,
       message:
         parts.length > 0
           ? `This will also permanently delete ${parts.join(' and ')}. This cannot be undone.`
@@ -162,18 +171,22 @@ export class Dashboard implements OnInit {
       destructive: true,
     };
 
-    this.dialog
-      .open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, { width: '420px', data })
-      .afterClosed()
-      .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
-        }
-        this.folderStore.remove(folder.id).subscribe({ error: (error) => this.showError(error) });
-      });
+    const ref = this.dialogService.open<ConfirmDialog, ConfirmDialogData>(ConfirmDialog, {
+      header: data.title,
+      width: '420px',
+      modal: true,
+      data,
+    });
+
+    ref?.onClose.subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.folderStore.remove(folder.id).subscribe({ error: (error) => this.showError(error) });
+    });
   }
 
   private showError(error: unknown): void {
-    this.snackBar.open(extractErrorMessage(error), 'Close', { duration: 5000 });
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: extractErrorMessage(error) });
   }
 }

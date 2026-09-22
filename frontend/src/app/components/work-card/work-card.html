@@ -1,33 +1,11 @@
 <article class="flex h-full flex-col gap-2 rounded-lg border border-gray-300 bg-white p-4">
   <div class="flex items-center justify-between gap-2">
     <span class="inline-flex items-center gap-1 rounded-full border border-gray-300 px-2 py-0.5 text-xs text-gray-700">
-      <mat-icon class="h-4! w-4! text-sm!">{{ typeIcon() }}</mat-icon>
+      <i class="pi {{ typeIcon() }} text-sm"></i>
       {{ typeLabel() }}
     </span>
 
-    <button
-      type="button"
-      class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
-      aria-label="Work actions"
-      [matMenuTriggerFor]="menu"
-    >
-      <mat-icon>more_vert</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item type="button" (click)="edit.emit(work())">
-        <mat-icon>edit</mat-icon>
-        <span>Edit</span>
-      </button>
-      <button mat-menu-item type="button" (click)="move.emit(work())">
-        <mat-icon>drive_file_move</mat-icon>
-        <span>Move to...</span>
-      </button>
-      <button mat-menu-item type="button" (click)="remove.emit(work())">
-        <mat-icon>delete</mat-icon>
-        <span>Delete</span>
-      </button>
-    </mat-menu>
+    <app-action-menu [items]="menuItems()" ariaLabel="Work actions" />
   </div>
 
   <h3 class="text-lg font-semibold break-words">{{ work().name }}</h3>

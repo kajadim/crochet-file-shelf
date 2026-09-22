@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 export interface ConfirmDialogData {
   title: string;
@@ -11,10 +11,19 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [ButtonModule],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
 })
 export class ConfirmDialog {
-  protected readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
+  private readonly dialogRef = inject(DynamicDialogRef);
+  protected readonly data = inject(DynamicDialogConfig).data as ConfirmDialogData;
+
+  protected confirm(): void {
+    this.dialogRef.close(true);
+  }
+
+  protected cancel(): void {
+    this.dialogRef.close(false);
+  }
 }

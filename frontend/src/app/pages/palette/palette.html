@@ -5,10 +5,7 @@
       <p class="text-sm text-gray-500">The yarn colors you own. You can use them in any of your matrices.</p>
     </div>
 
-    <button mat-flat-button type="button" (click)="openCreate()">
-      <mat-icon>add</mat-icon>
-      Add color
-    </button>
+    <p-button label="Add color" icon="pi pi-plus" (onClick)="openCreate()" />
   </div>
 
   @if (loadError()) {
@@ -18,10 +15,7 @@
   } @else if (store.colors().length === 0) {
     <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
       <p class="mb-3">Your palette is empty. Add the first yarn color you own.</p>
-      <button mat-flat-button type="button" (click)="openCreate()">
-        <mat-icon>add</mat-icon>
-        Add color
-      </button>
+      <p-button label="Add color" icon="pi pi-plus" (onClick)="openCreate()" />
     </div>
   } @else {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -33,25 +27,9 @@
             <div class="flex items-start justify-between gap-2">
               <h3 class="font-semibold break-words">{{ color.name }}</h3>
 
-              <button
-                type="button"
-                class="-mr-2 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
-                aria-label="Color actions"
-                [matMenuTriggerFor]="menu"
-              >
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item type="button" (click)="openEdit(color)">
-                  <mat-icon>edit</mat-icon>
-                  <span>Edit</span>
-                </button>
-                <button mat-menu-item type="button" (click)="delete(color)">
-                  <mat-icon>delete</mat-icon>
-                  <span>Delete</span>
-                </button>
-              </mat-menu>
+              <div class="-mr-2 -mt-1 shrink-0">
+                <app-action-menu [items]="menuItems(color)" ariaLabel="Color actions" />
+              </div>
             </div>
 
             <p class="font-mono text-sm text-gray-600">{{ color.hexValue }}</p>

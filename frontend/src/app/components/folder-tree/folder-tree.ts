@@ -1,11 +1,10 @@
 import { Component, input, output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { ActionMenu, ActionMenuItem } from '../action-menu/action-menu';
 import { Folder, FolderRow } from '../../core/models/folder.models';
 
 @Component({
   selector: 'app-folder-tree',
-  imports: [MatIconModule, MatMenuModule],
+  imports: [ActionMenu],
   templateUrl: './folder-tree.html',
   styleUrl: './folder-tree.scss',
 })
@@ -18,4 +17,12 @@ export class FolderTree {
   readonly createSubfolder = output<Folder>();
   readonly renameFolder = output<Folder>();
   readonly deleteFolder = output<Folder>();
+
+  protected menuItems(folder: Folder): ActionMenuItem[] {
+    return [
+      { label: 'New subfolder', icon: 'pi pi-folder-plus', action: () => this.createSubfolder.emit(folder) },
+      { label: 'Rename', icon: 'pi pi-pencil', action: () => this.renameFolder.emit(folder) },
+      { label: 'Delete', icon: 'pi pi-trash', action: () => this.deleteFolder.emit(folder), danger: true },
+    ];
+  }
 }

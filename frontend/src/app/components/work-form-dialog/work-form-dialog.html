@@ -1,38 +1,43 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <h2 mat-dialog-title>{{ data.title }}</h2>
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (error()) {
+    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+  }
 
-  <mat-dialog-content>
-    @if (error()) {
-      <p class="mb-3 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
-    }
-
-    <div class="mb-4">
-      <p class="mb-1 text-sm text-gray-600">Type</p>
-      <mat-radio-group formControlName="type" class="flex gap-4">
-        <mat-radio-button value="Pattern">Matrix</mat-radio-button>
-        <mat-radio-button value="Video">Video</mat-radio-button>
-      </mat-radio-group>
-      @if (isEdit) {
-        <p class="mt-1 text-xs text-gray-500">The type of an existing work cannot be changed.</p>
-      }
+  <div>
+    <p class="mb-1 text-sm text-gray-600">Type</p>
+    <div class="flex gap-4">
+      <label class="flex items-center gap-2">
+        <p-radiobutton formControlName="type" value="Pattern" inputId="type-pattern" />
+        Matrix
+      </label>
+      <label class="flex items-center gap-2">
+        <p-radiobutton formControlName="type" value="Video" inputId="type-video" />
+        Video
+      </label>
     </div>
+    @if (isEdit) {
+      <p class="mt-1 text-xs text-gray-500">The type of an existing work cannot be changed.</p>
+    }
+  </div>
 
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" formControlName="name" maxlength="150" />
-      @if (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) {
-        <mat-error>Name is required</mat-error>
-      }
-    </mat-form-field>
+  <div class="flex flex-col gap-1">
+    <label for="work-name" class="text-sm text-gray-700">Name</label>
+    <input pInputText id="work-name" type="text" formControlName="name" maxlength="150" class="w-full" />
+    @if (
+      (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
+      form.controls.name.touched
+    ) {
+      <small class="text-red-600">Name is required</small>
+    }
+  </div>
 
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Description (optional)</mat-label>
-      <textarea matInput rows="3" formControlName="description" maxlength="2000"></textarea>
-    </mat-form-field>
-  </mat-dialog-content>
+  <div class="flex flex-col gap-1">
+    <label for="work-description" class="text-sm text-gray-700">Description (optional)</label>
+    <textarea pTextarea id="work-description" rows="3" formControlName="description" maxlength="2000" class="w-full"></textarea>
+  </div>
 
-  <mat-dialog-actions align="end">
-    <button mat-button type="button" mat-dialog-close>Cancel</button>
-    <button mat-flat-button type="submit" [disabled]="loading()">{{ data.submitLabel }}</button>
-  </mat-dialog-actions>
+  <div class="flex justify-end gap-2">
+    <p-button label="Cancel" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
+  </div>
 </form>

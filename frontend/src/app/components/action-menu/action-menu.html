@@ -1,0 +1,29 @@
+<button
+  type="button"
+  class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-expanded]="open()"
+  (click)="toggle($event)"
+>
+  <i class="pi pi-ellipsis-v text-sm"></i>
+</button>
+
+@if (open()) {
+  <div
+    class="fixed z-50 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg"
+    [style.top.px]="position().top"
+    [style.left.px]="position().left"
+  >
+    @for (item of items(); track item.label) {
+      <button
+        type="button"
+        class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-100"
+        [class.text-red-700]="item.danger"
+        (click)="select(item)"
+      >
+        <i class="{{ item.icon }} text-sm"></i>
+        {{ item.label }}
+      </button>
+    }
+  </div>
+}

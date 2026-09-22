@@ -1,14 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { Observable } from 'rxjs';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 export interface FolderNameDialogData {
-  title: string;
   submitLabel: string;
   initialName: string;
   submit: (name: string) => Observable<unknown>;
@@ -16,13 +14,13 @@ export interface FolderNameDialogData {
 
 @Component({
   selector: 'app-folder-name-dialog',
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule],
   templateUrl: './folder-name-dialog.html',
   styleUrl: './folder-name-dialog.scss',
 })
 export class FolderNameDialog {
-  protected readonly data = inject<FolderNameDialogData>(MAT_DIALOG_DATA);
-  private readonly dialogRef = inject(MatDialogRef<FolderNameDialog, boolean>);
+  protected readonly dialogRef = inject(DynamicDialogRef<boolean>);
+  protected readonly data = inject(DynamicDialogConfig).data as FolderNameDialogData;
   private readonly fb = inject(NonNullableFormBuilder);
 
   protected readonly form = this.fb.group({
