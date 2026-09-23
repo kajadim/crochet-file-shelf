@@ -131,6 +131,37 @@
       "usageNote": "Diese Farbe wird in {{count}} {{unit}} verwendet. Eine Änderung des Codes wirkt sich überall aus."
     }
   },
+  "matrixEditor": {
+    "positionSummary": "Reihe {{row}} / Spalte {{column}}",
+    "setupTitle": "Richte deine Matrix ein",
+    "setupSubtitle": "Wähle die Abmessungen (1-200).",
+    "width": "Breite",
+    "height": "Höhe",
+    "dimensionRange": "Muss zwischen 1 und 200 liegen",
+    "myPalette": "Meine Palette",
+    "noColor": "Keine Farbe",
+    "emptyPaletteHint": "Füge eine Farbe hinzu, um mit dem Malen zu beginnen.",
+    "legend": "Legende",
+    "emptyLegend": "Noch keine Farben verwendet.",
+    "position": "Position",
+    "row": "Reihe",
+    "column": "Spalte",
+    "markAsCurrent": "Als aktuell markieren",
+    "rightClickHint": "Rechtsklick auf eine Zelle löscht sie.",
+    "togglePalette": "Palette ein/ausblenden",
+    "zoom": "Zoom",
+    "markActiveRow": "Als aktuell bearbeitete Reihe markieren",
+    "addCells": "Felder hinzufügen",
+    "top": "Oben",
+    "bottom": "Unten",
+    "left": "Links",
+    "right": "Rechts",
+    "addCellsSubmit": "Hinzufügen",
+    "removeCells": "Felder entfernen",
+    "shrinkSubmit": "Entfernen",
+    "shrinkConfirmTitle": "Felder entfernen?",
+    "shrinkConfirmMessage": "{{count}} gefärbte Felder im entfernten Bereich werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden."
+  },
   "folderTree": {
     "newSubfolder": "Neuer Unterordner",
     "folderActions": "Ordneraktionen"

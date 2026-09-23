@@ -131,6 +131,37 @@
       "usageNote": "Cette couleur est utilisée dans {{count}} {{unit}}. Modifier le code la met à jour partout."
     }
   },
+  "matrixEditor": {
+    "positionSummary": "Ligne {{row}} / Colonne {{column}}",
+    "setupTitle": "Configure ta grille",
+    "setupSubtitle": "Choisis les dimensions (1-200).",
+    "width": "Largeur",
+    "height": "Hauteur",
+    "dimensionRange": "Doit être compris entre 1 et 200",
+    "myPalette": "Ma palette",
+    "noColor": "Aucune couleur",
+    "emptyPaletteHint": "Ajoute une couleur pour commencer à colorier.",
+    "legend": "Légende",
+    "emptyLegend": "Aucune couleur utilisée pour le moment.",
+    "position": "Position",
+    "row": "Ligne",
+    "column": "Colonne",
+    "markAsCurrent": "Marquer comme actuelle",
+    "rightClickHint": "Un clic droit sur une cellule l'efface.",
+    "togglePalette": "Afficher/masquer la palette",
+    "zoom": "Zoom",
+    "markActiveRow": "Marquer comme ligne en cours",
+    "addCells": "Ajouter des cellules",
+    "top": "Haut",
+    "bottom": "Bas",
+    "left": "Gauche",
+    "right": "Droite",
+    "addCellsSubmit": "Ajouter",
+    "removeCells": "Supprimer des cellules",
+    "shrinkSubmit": "Supprimer",
+    "shrinkConfirmTitle": "Supprimer les cellules ?",
+    "shrinkConfirmMessage": "{{count}} cellules colorées de la zone supprimée seront définitivement supprimées. Cette action est irréversible."
+  },
   "folderTree": {
     "newSubfolder": "Nouveau sous-dossier",
     "folderActions": "Actions sur le dossier"

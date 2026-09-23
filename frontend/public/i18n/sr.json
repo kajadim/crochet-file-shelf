@@ -131,6 +131,37 @@
       "usageNote": "Ova boja se koristi u {{count}} {{unit}}. Izmena koda je menja svuda."
     }
   },
+  "matrixEditor": {
+    "positionSummary": "Red {{row}} / Kolona {{column}}",
+    "setupTitle": "Podesi svoju matricu",
+    "setupSubtitle": "Izaberi dimenzije (1-200).",
+    "width": "Širina",
+    "height": "Visina",
+    "dimensionRange": "Mora biti između 1 i 200",
+    "myPalette": "Moja paleta",
+    "noColor": "Bez boje",
+    "emptyPaletteHint": "Dodaj boju da bi počela da bojiš.",
+    "legend": "Legenda",
+    "emptyLegend": "Još nijedna boja nije korišćena.",
+    "position": "Pozicija",
+    "row": "Red",
+    "column": "Kolona",
+    "markAsCurrent": "Označi kao trenutnu",
+    "rightClickHint": "Desni klik na ćeliju je briše.",
+    "togglePalette": "Prikaži/sakrij paletu",
+    "zoom": "Zum",
+    "markActiveRow": "Označi kao red na kome trenutno radiš",
+    "addCells": "Dodaj polja",
+    "top": "Gore",
+    "bottom": "Dole",
+    "left": "Levo",
+    "right": "Desno",
+    "addCellsSubmit": "Dodaj",
+    "removeCells": "Ukloni polja",
+    "shrinkSubmit": "Ukloni",
+    "shrinkConfirmTitle": "Ukloniti polja?",
+    "shrinkConfirmMessage": "Obojena polja u uklonjenom delu ({{count}}) biće trajno obrisana. Ovo ne može da se poništi."
+  },
   "folderTree": {
     "newSubfolder": "Novi podfolder",
     "folderActions": "Akcije nad folderom"

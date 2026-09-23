@@ -131,6 +131,37 @@
       "usageNote": "This color is used in {{count}} {{unit}}. Changing the code updates it everywhere."
     }
   },
+  "matrixEditor": {
+    "positionSummary": "Row {{row}} / Col {{column}}",
+    "setupTitle": "Set up your matrix",
+    "setupSubtitle": "Choose the dimensions (1-200).",
+    "width": "Width",
+    "height": "Height",
+    "dimensionRange": "Must be between 1 and 200",
+    "myPalette": "My palette",
+    "noColor": "No color",
+    "emptyPaletteHint": "Add a color to start painting.",
+    "legend": "Legend",
+    "emptyLegend": "No colors used yet.",
+    "position": "Position",
+    "row": "Row",
+    "column": "Column",
+    "markAsCurrent": "Mark as current",
+    "rightClickHint": "Right-click a cell to clear it.",
+    "togglePalette": "Show/hide palette",
+    "zoom": "Zoom",
+    "markActiveRow": "Mark as the row you're working on",
+    "addCells": "Add cells",
+    "top": "Top",
+    "bottom": "Bottom",
+    "left": "Left",
+    "right": "Right",
+    "addCellsSubmit": "Add",
+    "removeCells": "Remove cells",
+    "shrinkSubmit": "Remove",
+    "shrinkConfirmTitle": "Remove cells?",
+    "shrinkConfirmMessage": "{{count}} colored cells in the removed area will be permanently deleted. This cannot be undone."
+  },
   "folderTree": {
     "newSubfolder": "New subfolder",
     "folderActions": "Folder actions"

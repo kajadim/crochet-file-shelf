@@ -91,4 +91,22 @@
   <data name="PendingRegistrationNotFound" xml:space="preserve">
     <value>Keine ausstehende Registrierung für diese E-Mail gefunden.</value>
   </data>
+  <data name="PatternNotFound" xml:space="preserve">
+    <value>Matrix nicht gefunden.</value>
+  </data>
+  <data name="PatternAlreadyExists" xml:space="preserve">
+    <value>Dieses Werk hat bereits eine Matrix.</value>
+  </data>
+  <data name="PatternOutOfBounds" xml:space="preserve">
+    <value>Position liegt außerhalb der Matrixgrenzen.</value>
+  </data>
+  <data name="PatternTooLarge" xml:space="preserve">
+    <value>Die Matrix darf nicht größer als 200 x 200 sein.</value>
+  </data>
+  <data name="PatternTooSmall" xml:space="preserve">
+    <value>Die Matrix muss mindestens eine Reihe und eine Spalte behalten.</value>
+  </data>
+  <data name="WorkNotPatternType" xml:space="preserve">
+    <value>Dieses Werk ist keine Matrix.</value>
+  </data>
 </root>

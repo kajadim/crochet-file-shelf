@@ -91,4 +91,22 @@
   <data name="PendingRegistrationNotFound" xml:space="preserve">
     <value>Aucune inscription en attente trouvée pour cet email.</value>
   </data>
+  <data name="PatternNotFound" xml:space="preserve">
+    <value>Grille introuvable.</value>
+  </data>
+  <data name="PatternAlreadyExists" xml:space="preserve">
+    <value>Cet ouvrage a déjà une grille.</value>
+  </data>
+  <data name="PatternOutOfBounds" xml:space="preserve">
+    <value>La position est en dehors des limites de la grille.</value>
+  </data>
+  <data name="PatternTooLarge" xml:space="preserve">
+    <value>La grille ne peut pas dépasser 200 x 200.</value>
+  </data>
+  <data name="PatternTooSmall" xml:space="preserve">
+    <value>La grille doit conserver au moins une ligne et une colonne.</value>
+  </data>
+  <data name="WorkNotPatternType" xml:space="preserve">
+    <value>Cet ouvrage n'est pas une grille.</value>
+  </data>
 </root>

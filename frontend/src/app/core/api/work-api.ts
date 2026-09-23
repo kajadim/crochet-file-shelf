@@ -15,6 +15,10 @@ export class WorkApi {
     return this.http.get<Work[]>(this.baseUrl, { params });
   }
 
+  getById(id: string): Observable<Work> {
+    return this.http.get<Work>(`${this.baseUrl}/${id}`);
+  }
+
   create(request: CreateWorkRequest): Observable<Work> {
     return this.http.post<Work>(this.baseUrl, request);
   }

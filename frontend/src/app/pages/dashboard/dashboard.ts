@@ -1,4 +1,5 @@
 import { Component, OnInit, effect, inject, signal, untracked } from '@angular/core';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
@@ -27,6 +28,7 @@ export class Dashboard implements OnInit {
   private readonly dialogService = inject(DialogService);
   private readonly messageService = inject(MessageService);
   private readonly transloco = inject(TranslocoService);
+  private readonly router = inject(Router);
 
   protected readonly loadError = signal<string | null>(null);
 
@@ -48,6 +50,12 @@ export class Dashboard implements OnInit {
     this.folderStore.load().subscribe({
       error: (error) => this.loadError.set(extractErrorMessage(error)),
     });
+  }
+
+  protected openWork(work: Work): void {
+    if (work.type === 'Pattern') {
+      this.router.navigate(['/works', work.id, 'matrix']);
+    }
   }
 
   protected selectFolder(id: string | null): void {

@@ -77,6 +77,7 @@
           @for (work of workStore.works(); track work.id) {
             <app-work-card
               [work]="work"
+              (open)="openWork($event)"
               (edit)="openEditWork($event)"
               (move)="openMoveWork($event)"
               (remove)="deleteWork($event)"

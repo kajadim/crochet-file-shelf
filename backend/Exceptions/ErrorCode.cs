@@ -13,5 +13,11 @@ namespace backend.Exceptions
         InvalidRefreshToken,
         InvalidOrExpiredCode,
         PendingRegistrationNotFound,
+        PatternNotFound,
+        PatternAlreadyExists,
+        PatternOutOfBounds,
+        WorkNotPatternType,
+        PatternTooLarge,
+        PatternTooSmall,
     }
 }

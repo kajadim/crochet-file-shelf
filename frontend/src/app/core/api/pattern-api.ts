@@ -1,0 +1,50 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import {
+  CreatePatternRequest,
+  PatternEdges,
+  Pattern,
+  SetCellsRequest,
+  UpdateActiveRowRequest,
+  UpdatePositionRequest,
+} from '../models/pattern.models';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PatternApi {
+  private readonly http = inject(HttpClient);
+
+  private baseUrl(workId: string): string {
+    return `/api/works/${workId}/pattern`;
+  }
+
+  get(workId: string): Observable<Pattern> {
+    return this.http.get<Pattern>(this.baseUrl(workId));
+  }
+
+  create(workId: string, request: CreatePatternRequest): Observable<Pattern> {
+    return this.http.post<Pattern>(this.baseUrl(workId), request);
+  }
+
+  updatePosition(workId: string, request: UpdatePositionRequest): Observable<Pattern> {
+    return this.http.put<Pattern>(`${this.baseUrl(workId)}/position`, request);
+  }
+
+  setCells(workId: string, request: SetCellsRequest): Observable<Pattern> {
+    return this.http.put<Pattern>(`${this.baseUrl(workId)}/cells`, request);
+  }
+
+  expand(workId: string, request: PatternEdges): Observable<Pattern> {
+    return this.http.put<Pattern>(`${this.baseUrl(workId)}/expand`, request);
+  }
+
+  shrink(workId: string, request: PatternEdges): Observable<Pattern> {
+    return this.http.put<Pattern>(`${this.baseUrl(workId)}/shrink`, request);
+  }
+
+  updateActiveRow(workId: string, request: UpdateActiveRowRequest): Observable<Pattern> {
+    return this.http.put<Pattern>(`${this.baseUrl(workId)}/active-row`, request);
+  }
+}

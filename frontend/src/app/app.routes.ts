@@ -5,6 +5,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { Login } from './pages/login/login';
+import { MatrixEditor } from './pages/matrix-editor/matrix-editor';
 import { Palette } from './pages/palette/palette';
 import { Register } from './pages/register/register';
 import { ResetPassword } from './pages/reset-password/reset-password';
@@ -23,6 +24,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: Dashboard },
       { path: 'palette', component: Palette },
+      { path: 'works/:workId/matrix', component: MatrixEditor },
     ],
   },
 

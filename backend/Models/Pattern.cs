@@ -7,6 +7,7 @@
         public int Height { get; set; }
         public int CurrentRow { get; set; }
         public int CurrentColumn { get; set; }
+        public int? ActiveRow { get; set; }
 
         public Guid WorkId { get; set; }
         public Work Work { get; set; } = null!;

@@ -13,12 +13,20 @@ import { Work } from '../../core/models/work.models';
 export class WorkCard {
   readonly work = input.required<Work>();
 
+  readonly open = output<Work>();
   readonly edit = output<Work>();
   readonly move = output<Work>();
   readonly remove = output<Work>();
 
   protected readonly typeKey = computed(() => (this.work().type === 'Pattern' ? 'workCard.matrix' : 'workCard.video'));
   protected readonly typeIcon = computed(() => (this.work().type === 'Pattern' ? 'pi-table' : 'pi-play-circle'));
+  protected readonly isOpenable = computed(() => this.work().type === 'Pattern');
+
+  protected onCardClick(): void {
+    if (this.isOpenable()) {
+      this.open.emit(this.work());
+    }
+  }
 
   protected readonly workActionsLabel = 'workCard.workActions';
 
