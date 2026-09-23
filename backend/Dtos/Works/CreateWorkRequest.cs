@@ -19,5 +19,8 @@ namespace backend.Dtos.Works
 
         [Required]
         public Guid? FolderId { get; set; }
+
+        [MaxLength(2048)]
+        public string? Url { get; set; }
     }
 }

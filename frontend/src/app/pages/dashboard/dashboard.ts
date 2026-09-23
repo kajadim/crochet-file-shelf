@@ -53,9 +53,8 @@ export class Dashboard implements OnInit {
   }
 
   protected openWork(work: Work): void {
-    if (work.type === 'Pattern') {
-      this.router.navigate(['/works', work.id, 'matrix']);
-    }
+    const routes = { Pattern: 'matrix', Video: 'video', Site: 'site' };
+    this.router.navigate(['/works', work.id, routes[work.type]]);
   }
 
   protected selectFolder(id: string | null): void {

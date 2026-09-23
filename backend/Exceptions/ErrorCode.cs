@@ -19,5 +19,11 @@ namespace backend.Exceptions
         WorkNotPatternType,
         PatternTooLarge,
         PatternTooSmall,
+        VideoLinkRequired,
+        VideoLinkNotSupported,
+        VideoLinkNotWorking,
+        VideoNotFound,
+        SiteLinkInvalid,
+        SiteNotFound,
     }
 }

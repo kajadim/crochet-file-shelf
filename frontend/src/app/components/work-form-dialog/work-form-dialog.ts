@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -14,6 +15,7 @@ export interface WorkFormValue {
   name: string;
   description: string | null;
   type: WorkType;
+  url: string | null;
 }
 
 export interface WorkFormDialogData {
@@ -42,10 +44,27 @@ export class WorkFormDialog {
     ],
     description: [this.data.work?.description ?? '', [Validators.maxLength(2000)]],
     type: [{ value: (this.data.work?.type ?? 'Pattern') as WorkType, disabled: this.isEdit }],
+    url: [{ value: '', disabled: this.isEdit }, [Validators.maxLength(2048)]],
+  });
+
+  protected readonly selectedType = toSignal(this.form.controls.type.valueChanges, {
+    initialValue: this.form.controls.type.value,
   });
 
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
+
+  constructor() {
+    this.form.controls.type.valueChanges.subscribe((type) => {
+      const control = this.form.controls.url;
+      control.setValidators(
+        type !== 'Pattern'
+          ? [Validators.required, Validators.maxLength(2048), Validators.pattern(/\S/)]
+          : [Validators.maxLength(2048)],
+      );
+      control.updateValueAndValidity();
+    });
+  }
 
   protected submit(): void {
     if (this.form.invalid) {
@@ -60,7 +79,12 @@ export class WorkFormDialog {
     this.error.set(null);
 
     this.data
-      .submit({ name: raw.name.trim(), description: description === '' ? null : description, type: raw.type })
+      .submit({
+        name: raw.name.trim(),
+        description: description === '' ? null : description,
+        type: raw.type,
+        url: !this.isEdit && raw.type !== 'Pattern' ? raw.url.trim() : null,
+      })
       .subscribe({
         next: () => this.dialogRef.close(true),
         error: (err) => {

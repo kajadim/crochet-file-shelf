@@ -1,4 +1,4 @@
-export type WorkType = 'Pattern' | 'Video';
+export type WorkType = 'Pattern' | 'Video' | 'Site';
 
 export interface Work {
   id: string;
@@ -15,6 +15,7 @@ export interface CreateWorkRequest {
   description: string | null;
   type: WorkType;
   folderId: string;
+  url?: string | null;
 }
 
 export interface UpdateWorkRequest {

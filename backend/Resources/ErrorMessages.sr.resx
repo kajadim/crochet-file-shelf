@@ -106,6 +106,24 @@
   <data name="PatternTooSmall" xml:space="preserve">
     <value>Matrica mora zadržati bar jedan red i jednu kolonu.</value>
   </data>
+  <data name="VideoLinkRequired" xml:space="preserve">
+    <value>Za video radove je obavezan link.</value>
+  </data>
+  <data name="VideoLinkNotSupported" xml:space="preserve">
+    <value>Ovaj link nije podržan. Podržane platforme: YouTube, TikTok, Instagram, Pinterest.</value>
+  </data>
+  <data name="VideoLinkNotWorking" xml:space="preserve">
+    <value>Link ne radi.</value>
+  </data>
+  <data name="VideoNotFound" xml:space="preserve">
+    <value>Video nije pronađen.</value>
+  </data>
+  <data name="SiteLinkInvalid" xml:space="preserve">
+    <value>Unesi ispravnu veb adresu koja počinje sa http:// ili https://.</value>
+  </data>
+  <data name="SiteNotFound" xml:space="preserve">
+    <value>Sajt nije pronađen.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Ovaj rad nije tipa matrica.</value>
   </data>

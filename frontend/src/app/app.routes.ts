@@ -10,6 +10,8 @@ import { Palette } from './pages/palette/palette';
 import { Register } from './pages/register/register';
 import { ResetPassword } from './pages/reset-password/reset-password';
 import { VerifyEmail } from './pages/verify-email/verify-email';
+import { SiteWork } from './pages/site-work/site-work';
+import { VideoWork } from './pages/video-work/video-work';
 
 export const routes: Routes = [
   { path: 'login', component: Login, canActivate: [guestGuard] },
@@ -25,6 +27,8 @@ export const routes: Routes = [
       { path: '', component: Dashboard },
       { path: 'palette', component: Palette },
       { path: 'works/:workId/matrix', component: MatrixEditor },
+      { path: 'works/:workId/video', component: VideoWork },
+      { path: 'works/:workId/site', component: SiteWork },
     ],
   },
 

@@ -1,3 +1,4 @@
+using backend.Dtos.Videos;
 using backend.Dtos.Works;
 using backend.Exceptions;
 using backend.Models;
@@ -10,11 +11,13 @@ namespace backend.Services.Implementation
     {
         private readonly IWorkRepository _workRepository;
         private readonly IFolderRepository _folderRepository;
+        private readonly IVideoLinkService _videoLinkService;
 
-        public WorkService(IWorkRepository workRepository, IFolderRepository folderRepository)
+        public WorkService(IWorkRepository workRepository, IFolderRepository folderRepository, IVideoLinkService videoLinkService)
         {
             _workRepository = workRepository;
             _folderRepository = folderRepository;
+            _videoLinkService = videoLinkService;
         }
 
         public async Task<List<WorkResponse>> GetAsync(Guid userId, Guid? folderId)
@@ -33,6 +36,26 @@ namespace backend.Services.Implementation
         {
             await EnsureFolderOwnedAsync(userId, request.FolderId!.Value);
 
+            VideoLinkInfo? link = null;
+            if (request.Type == WorkType.Video)
+            {
+                if (string.IsNullOrWhiteSpace(request.Url))
+                {
+                    throw new BadRequestException(ErrorCode.VideoLinkRequired);
+                }
+                link = await _videoLinkService.ResolveAsync(request.Url);
+            }
+
+            string? siteUrl = null;
+            if (request.Type == WorkType.Site)
+            {
+                if (string.IsNullOrWhiteSpace(request.Url))
+                {
+                    throw new BadRequestException(ErrorCode.SiteLinkInvalid);
+                }
+                siteUrl = SiteLinkNormalizer.Normalize(request.Url);
+            }
+
             var now = DateTime.UtcNow;
             var work = new Work
             {
@@ -45,6 +68,23 @@ namespace backend.Services.Implementation
                 CreatedAt = now,
                 UpdatedAt = now,
             };
+
+            if (link is not null)
+            {
+                work.VideoReference = new VideoReference
+                {
+                    Id = Guid.NewGuid(),
+                    Platform = link.Platform,
+                    OriginalUrl = link.OriginalUrl,
+                    NormalizedUrl = link.NormalizedUrl,
+                    TimestampSeconds = link.TimestampSeconds,
+                };
+            }
+
+            if (siteUrl is not null)
+            {
+                work.SiteReference = new SiteReference { Id = Guid.NewGuid(), Url = siteUrl };
+            }
 
             await _workRepository.AddAsync(work);
             await _workRepository.SaveChangesAsync();

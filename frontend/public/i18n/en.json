@@ -117,7 +117,13 @@
       "matrix": "Matrix",
       "video": "Video",
       "typeLocked": "The type of an existing work cannot be changed.",
-      "description": "Description (optional)"
+      "description": "Description (optional)",
+      "videoUrl": "Video link",
+      "videoUrlHint": "YouTube, TikTok, Instagram or Pinterest link",
+      "videoUrlRequired": "A link is required",
+      "site": "Site",
+      "siteUrl": "Web address",
+      "siteUrlHint": "A blog, article or any web page"
     },
     "moveWork": {
       "chooseDestination": "Choose the destination folder.",
@@ -171,7 +177,28 @@
     "video": "Video",
     "moveTo": "Move to...",
     "updated": "Updated {{date}}",
-    "workActions": "Work actions"
+    "workActions": "Work actions",
+    "site": "Site"
   },
-  "colorActions": "Color actions"
+  "colorActions": "Color actions",
+  "videoWork": {
+    "linkNotWorking": "Link is not working.",
+    "openOriginal": "Open original",
+    "noPreview": "Preview is not available for this link.",
+    "startTime": "Start time",
+    "startTimeInvalid": "Enter a valid time",
+    "link": "Link",
+    "updateLink": "Update link",
+    "hours": "h",
+    "minutes": "min",
+    "seconds": "s",
+    "startTimeTooLong": "The start time must be before the end of the video ({{duration}}).",
+    "reminderNote": "This platform does not allow a video to start at a set time, so this time is only saved as a reminder of where you stopped."
+  },
+  "siteWork": {
+    "openSite": "Open site",
+    "notes": "Notes",
+    "link": "Link",
+    "updateLink": "Update link"
+  }
 }

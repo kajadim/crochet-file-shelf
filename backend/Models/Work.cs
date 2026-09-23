@@ -17,6 +17,7 @@
 
         public Pattern? Pattern { get; set; }
         public VideoReference? VideoReference { get; set; }
+        public SiteReference? SiteReference { get; set; }
         public WorkInvitation? Invitation { get; set; }
 
         public ICollection<WorkComment> Comments { get; set; } = new List<WorkComment>();

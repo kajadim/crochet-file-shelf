@@ -115,6 +115,16 @@ builder.Services.AddScoped<IYarnColorRepository, YarnColorRepository>();
 builder.Services.AddScoped<IYarnColorService, YarnColorService>();
 builder.Services.AddScoped<IPatternRepository, PatternRepository>();
 builder.Services.AddScoped<IPatternService, PatternService>();
+builder.Services.AddScoped<IVideoRepository, VideoRepository>();
+builder.Services.AddScoped<IVideoLinkService, VideoLinkService>();
+builder.Services.AddScoped<IVideoService, VideoService>();
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddHttpClient(VideoLinkService.HttpClientName, client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(5);
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; CrochetFileShelf/1.0)");
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
 
 
 var app = builder.Build();

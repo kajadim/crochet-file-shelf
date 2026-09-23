@@ -106,6 +106,24 @@
   <data name="PatternTooSmall" xml:space="preserve">
     <value>La grille doit conserver au moins une ligne et une colonne.</value>
   </data>
+  <data name="VideoLinkRequired" xml:space="preserve">
+    <value>Un lien est requis pour les ouvrages vidéo.</value>
+  </data>
+  <data name="VideoLinkNotSupported" xml:space="preserve">
+    <value>Ce lien n'est pas pris en charge. Plateformes prises en charge : YouTube, TikTok, Instagram, Pinterest.</value>
+  </data>
+  <data name="VideoLinkNotWorking" xml:space="preserve">
+    <value>Le lien ne fonctionne pas.</value>
+  </data>
+  <data name="VideoNotFound" xml:space="preserve">
+    <value>Vidéo introuvable.</value>
+  </data>
+  <data name="SiteLinkInvalid" xml:space="preserve">
+    <value>Saisis une adresse web valide commençant par http:// ou https://.</value>
+  </data>
+  <data name="SiteNotFound" xml:space="preserve">
+    <value>Site introuvable.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Cet ouvrage n'est pas une grille.</value>
   </data>

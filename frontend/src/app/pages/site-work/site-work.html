@@ -1,0 +1,57 @@
+<div class="mx-auto flex max-w-2xl flex-col gap-5 p-4">
+  <div class="flex items-center gap-3">
+    <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
+      <i class="pi pi-arrow-left"></i>
+    </a>
+    <h1 class="text-lg font-semibold">{{ workName() }}</h1>
+  </div>
+
+  @if (siteStore.loading()) {
+    <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+  } @else if (siteStore.error()) {
+    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ siteStore.error() }}</p>
+  } @else if (siteStore.site(); as site) {
+    <div class="flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-5">
+      <div class="flex items-center gap-3">
+        <i class="pi pi-globe text-2xl text-gray-500"></i>
+        <div class="min-w-0">
+          <p class="text-lg font-semibold text-gray-800">{{ domain() }}</p>
+          <p class="truncate text-sm text-gray-500">{{ site.url }}</p>
+        </div>
+      </div>
+
+      <div>
+        <p-button
+          [label]="'siteWork.openSite' | transloco"
+          icon="pi pi-external-link"
+          (onClick)="openSite(site.url)"
+        />
+      </div>
+    </div>
+
+    @if (workDescription()) {
+      <div>
+        <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'siteWork.notes' | transloco }}</p>
+        <p class="whitespace-pre-wrap text-gray-700">{{ workDescription() }}</p>
+      </div>
+    }
+
+    <div>
+      <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'siteWork.link' | transloco }}</p>
+
+      @if (linkError()) {
+        <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ linkError() }}</p>
+      }
+
+      <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="flex items-start gap-2">
+        <div class="flex flex-1 flex-col gap-1">
+          <input pInputText type="text" formControlName="url" maxlength="2048" class="w-full" />
+          @if (linkForm.controls.url.invalid && linkForm.controls.url.touched) {
+            <small class="text-red-600">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
+          }
+        </div>
+        <p-button [label]="'siteWork.updateLink' | transloco" type="submit" [outlined]="true" [loading]="saving()" />
+      </form>
+    </div>
+  }
+</div>

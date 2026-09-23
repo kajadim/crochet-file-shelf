@@ -117,7 +117,13 @@
       "matrix": "Matrica",
       "video": "Video",
       "typeLocked": "Tip postojećeg rada ne može da se menja.",
-      "description": "Opis (opciono)"
+      "description": "Opis (opciono)",
+      "videoUrl": "Link do videa",
+      "videoUrlHint": "YouTube, TikTok, Instagram ili Pinterest link",
+      "videoUrlRequired": "Link je obavezan",
+      "site": "Sajt",
+      "siteUrl": "Veb adresa",
+      "siteUrlHint": "Blog, članak ili bilo koja veb stranica"
     },
     "moveWork": {
       "chooseDestination": "Izaberi odredišni folder.",
@@ -171,7 +177,28 @@
     "video": "Video",
     "moveTo": "Premesti u...",
     "updated": "Ažurirano {{date}}",
-    "workActions": "Akcije nad radom"
+    "workActions": "Akcije nad radom",
+    "site": "Sajt"
   },
-  "colorActions": "Akcije nad bojom"
+  "colorActions": "Akcije nad bojom",
+  "videoWork": {
+    "linkNotWorking": "Link ne radi.",
+    "openOriginal": "Otvori original",
+    "noPreview": "Pregled nije dostupan za ovaj link.",
+    "startTime": "Početno vreme",
+    "startTimeInvalid": "Unesi ispravno vreme",
+    "link": "Link",
+    "updateLink": "Izmeni link",
+    "hours": "č",
+    "minutes": "min",
+    "seconds": "s",
+    "startTimeTooLong": "Početno vreme mora biti pre kraja videa ({{duration}}).",
+    "reminderNote": "Ova platforma ne dozvoljava da video krene od određenog vremena, pa se ovo vreme samo čuva kao podsetnik gde si stala."
+  },
+  "siteWork": {
+    "openSite": "Otvori sajt",
+    "notes": "Beleške",
+    "link": "Link",
+    "updateLink": "Izmeni link"
+  }
 }

@@ -18,14 +18,13 @@ export class WorkCard {
   readonly move = output<Work>();
   readonly remove = output<Work>();
 
-  protected readonly typeKey = computed(() => (this.work().type === 'Pattern' ? 'workCard.matrix' : 'workCard.video'));
-  protected readonly typeIcon = computed(() => (this.work().type === 'Pattern' ? 'pi-table' : 'pi-play-circle'));
-  protected readonly isOpenable = computed(() => this.work().type === 'Pattern');
+  private static readonly typeKeys = { Pattern: 'workCard.matrix', Video: 'workCard.video', Site: 'workCard.site' };
+  private static readonly typeIcons = { Pattern: 'pi-table', Video: 'pi-play-circle', Site: 'pi-globe' };
 
+  protected readonly typeKey = computed(() => WorkCard.typeKeys[this.work().type]);
+  protected readonly typeIcon = computed(() => WorkCard.typeIcons[this.work().type]);
   protected onCardClick(): void {
-    if (this.isOpenable()) {
-      this.open.emit(this.work());
-    }
+    this.open.emit(this.work());
   }
 
   protected readonly workActionsLabel = 'workCard.workActions';

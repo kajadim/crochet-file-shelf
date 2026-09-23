@@ -16,6 +16,7 @@ namespace backend.Data
         public DbSet<YarnColor> YarnColors => Set<YarnColor>();
         public DbSet<WorkComment> WorkComments => Set<WorkComment>();
         public DbSet<VideoReference> VideoReferences => Set<VideoReference>();
+        public DbSet<SiteReference> SiteReferences => Set<SiteReference>();
         public DbSet<WorkMember> WorkMembers => Set<WorkMember>();
         public DbSet<WorkInvitation> WorkInvitations => Set<WorkInvitation>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();

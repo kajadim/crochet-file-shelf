@@ -117,7 +117,13 @@
       "matrix": "Matrix",
       "video": "Video",
       "typeLocked": "Der Typ eines bestehenden Werks kann nicht geändert werden.",
-      "description": "Beschreibung (optional)"
+      "description": "Beschreibung (optional)",
+      "videoUrl": "Video-Link",
+      "videoUrlHint": "YouTube-, TikTok-, Instagram- oder Pinterest-Link",
+      "videoUrlRequired": "Ein Link ist erforderlich",
+      "site": "Website",
+      "siteUrl": "Webadresse",
+      "siteUrlHint": "Ein Blog, Artikel oder eine beliebige Webseite"
     },
     "moveWork": {
       "chooseDestination": "Zielordner auswählen.",
@@ -171,7 +177,28 @@
     "video": "Video",
     "moveTo": "Verschieben nach...",
     "updated": "Aktualisiert am {{date}}",
-    "workActions": "Werkaktionen"
+    "workActions": "Werkaktionen",
+    "site": "Website"
   },
-  "colorActions": "Farbaktionen"
+  "colorActions": "Farbaktionen",
+  "videoWork": {
+    "linkNotWorking": "Der Link funktioniert nicht.",
+    "openOriginal": "Original öffnen",
+    "noPreview": "Für diesen Link ist keine Vorschau verfügbar.",
+    "startTime": "Startzeit",
+    "startTimeInvalid": "Gib eine gültige Zeit ein",
+    "link": "Link",
+    "updateLink": "Link ändern",
+    "hours": "Std.",
+    "minutes": "Min.",
+    "seconds": "Sek.",
+    "startTimeTooLong": "Die Startzeit muss vor dem Ende des Videos liegen ({{duration}}).",
+    "reminderNote": "Diese Plattform erlaubt keinen Start des Videos zu einer bestimmten Zeit, daher wird diese Zeit nur als Erinnerung gespeichert, wo du aufgehört hast."
+  },
+  "siteWork": {
+    "openSite": "Website öffnen",
+    "notes": "Notizen",
+    "link": "Link",
+    "updateLink": "Link ändern"
+  }
 }

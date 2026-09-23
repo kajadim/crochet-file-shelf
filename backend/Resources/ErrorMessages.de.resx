@@ -106,6 +106,24 @@
   <data name="PatternTooSmall" xml:space="preserve">
     <value>Die Matrix muss mindestens eine Reihe und eine Spalte behalten.</value>
   </data>
+  <data name="VideoLinkRequired" xml:space="preserve">
+    <value>Für Video-Werke ist ein Link erforderlich.</value>
+  </data>
+  <data name="VideoLinkNotSupported" xml:space="preserve">
+    <value>Dieser Link wird nicht unterstützt. Unterstützte Plattformen: YouTube, TikTok, Instagram, Pinterest.</value>
+  </data>
+  <data name="VideoLinkNotWorking" xml:space="preserve">
+    <value>Der Link funktioniert nicht.</value>
+  </data>
+  <data name="VideoNotFound" xml:space="preserve">
+    <value>Video nicht gefunden.</value>
+  </data>
+  <data name="SiteLinkInvalid" xml:space="preserve">
+    <value>Gib eine gültige Webadresse ein, die mit http:// oder https:// beginnt.</value>
+  </data>
+  <data name="SiteNotFound" xml:space="preserve">
+    <value>Website nicht gefunden.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Dieses Werk ist keine Matrix.</value>
   </data>

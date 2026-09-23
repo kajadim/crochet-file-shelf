@@ -117,7 +117,13 @@
       "matrix": "Grille",
       "video": "Vidéo",
       "typeLocked": "Le type d'un ouvrage existant ne peut pas être modifié.",
-      "description": "Description (facultatif)"
+      "description": "Description (facultatif)",
+      "videoUrl": "Lien de la vidéo",
+      "videoUrlHint": "Lien YouTube, TikTok, Instagram ou Pinterest",
+      "videoUrlRequired": "Un lien est requis",
+      "site": "Site",
+      "siteUrl": "Adresse web",
+      "siteUrlHint": "Un blog, un article ou n'importe quelle page web"
     },
     "moveWork": {
       "chooseDestination": "Choisis le dossier de destination.",
@@ -171,7 +177,28 @@
     "video": "Vidéo",
     "moveTo": "Déplacer vers...",
     "updated": "Mis à jour le {{date}}",
-    "workActions": "Actions sur l'ouvrage"
+    "workActions": "Actions sur l'ouvrage",
+    "site": "Site"
   },
-  "colorActions": "Actions sur la couleur"
+  "colorActions": "Actions sur la couleur",
+  "videoWork": {
+    "linkNotWorking": "Le lien ne fonctionne pas.",
+    "openOriginal": "Ouvrir l'original",
+    "noPreview": "L'aperçu n'est pas disponible pour ce lien.",
+    "startTime": "Heure de début",
+    "startTimeInvalid": "Saisis une heure valide",
+    "link": "Lien",
+    "updateLink": "Modifier le lien",
+    "hours": "h",
+    "minutes": "min",
+    "seconds": "s",
+    "startTimeTooLong": "L'heure de début doit précéder la fin de la vidéo ({{duration}}).",
+    "reminderNote": "Cette plateforme ne permet pas de lancer une vidéo à un moment précis : cette heure est donc seulement enregistrée comme rappel de l'endroit où tu t'es arrêtée."
+  },
+  "siteWork": {
+    "openSite": "Ouvrir le site",
+    "notes": "Notes",
+    "link": "Lien",
+    "updateLink": "Modifier le lien"
+  }
 }

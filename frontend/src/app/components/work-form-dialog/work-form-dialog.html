@@ -14,11 +14,30 @@
         <p-radiobutton formControlName="type" value="Video" inputId="type-video" />
         {{ 'dialogs.workForm.video' | transloco }}
       </label>
+      <label class="flex items-center gap-2">
+        <p-radiobutton formControlName="type" value="Site" inputId="type-site" />
+        {{ 'dialogs.workForm.site' | transloco }}
+      </label>
     </div>
     @if (isEdit) {
       <p class="mt-1 text-xs text-gray-500">{{ 'dialogs.workForm.typeLocked' | transloco }}</p>
     }
   </div>
+
+  @if (!isEdit && selectedType() !== 'Pattern') {
+    <div class="flex flex-col gap-1">
+      <label for="work-url" class="text-sm text-gray-700">
+        {{ (selectedType() === 'Video' ? 'dialogs.workForm.videoUrl' : 'dialogs.workForm.siteUrl') | transloco }}
+      </label>
+      <input pInputText id="work-url" type="text" formControlName="url" maxlength="2048" class="w-full" />
+      <small class="text-gray-500">
+        {{ (selectedType() === 'Video' ? 'dialogs.workForm.videoUrlHint' : 'dialogs.workForm.siteUrlHint') | transloco }}
+      </small>
+      @if (form.controls.url.invalid && form.controls.url.touched) {
+        <small class="text-red-600">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
+      }
+    </div>
+  }
 
   <div class="flex flex-col gap-1">
     <label for="work-name" class="text-sm text-gray-700">{{ 'common.name' | transloco }}</label>

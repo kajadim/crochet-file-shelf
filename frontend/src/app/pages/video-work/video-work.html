@@ -1,0 +1,89 @@
+<div class="mx-auto flex max-w-3xl flex-col gap-5 p-4">
+  <div class="flex items-center gap-3">
+    <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
+      <i class="pi pi-arrow-left"></i>
+    </a>
+    <h1 class="text-lg font-semibold">{{ workName() }}</h1>
+  </div>
+
+  @if (videoStore.loading()) {
+    <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+  } @else if (videoStore.error()) {
+    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ videoStore.error() }}</p>
+  } @else if (videoStore.video(); as video) {
+    <div class="flex items-center gap-3">
+      <span class="rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">{{ video.platform }}</span>
+      <p-button
+        [label]="'videoWork.openOriginal' | transloco"
+        icon="pi pi-external-link"
+        [outlined]="true"
+        (onClick)="openOriginal(video.normalizedUrl)"
+      />
+    </div>
+
+    @if (videoStore.available() === false) {
+      <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ 'videoWork.linkNotWorking' | transloco }}</p>
+    } @else if (embedSources().length > 0) {
+      @for (source of embedSources(); track source.raw) {
+        <iframe
+          #player
+          [src]="source.safe"
+          [class]="frameClass() + ' rounded border border-gray-200 bg-white'"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"
+          [title]="workName() ?? ''"
+        ></iframe>
+      }
+    } @else {
+      <p class="text-sm text-gray-500">{{ 'videoWork.noPreview' | transloco }}</p>
+    }
+
+    <div>
+      <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.startTime' | transloco }}</p>
+
+      @if (timeError()) {
+        <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ timeError() }}</p>
+      }
+
+      <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="flex items-start gap-2">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2">
+            <input pInputText type="number" min="0" max="99" formControlName="hours" placeholder="0" class="w-20" />
+            <span class="text-sm text-gray-500">{{ 'videoWork.hours' | transloco }}</span>
+            <input pInputText type="number" min="0" max="59" formControlName="minutes" placeholder="0" class="w-20" />
+            <span class="text-sm text-gray-500">{{ 'videoWork.minutes' | transloco }}</span>
+            <input pInputText type="number" min="0" max="59" formControlName="seconds" placeholder="0" class="w-20" />
+            <span class="text-sm text-gray-500">{{ 'videoWork.seconds' | transloco }}</span>
+          </div>
+          @if (timeForm.invalid && timeForm.touched) {
+            <small class="text-red-600">{{ 'videoWork.startTimeInvalid' | transloco }}</small>
+          }
+        </div>
+        <p-button [label]="'common.save' | transloco" type="submit" [outlined]="true" [loading]="timeSaving()" />
+      </form>
+
+      @if (video.platform !== 'YouTube') {
+        <p class="mt-2 text-xs text-gray-500">{{ 'videoWork.reminderNote' | transloco }}</p>
+      }
+    </div>
+
+    <div>
+      <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.link' | transloco }}</p>
+
+      @if (linkError()) {
+        <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ linkError() }}</p>
+      }
+
+      <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="flex items-start gap-2">
+        <div class="flex flex-1 flex-col gap-1">
+          <input pInputText type="text" formControlName="url" maxlength="2048" class="w-full" />
+          @if (linkForm.controls.url.invalid && linkForm.controls.url.touched) {
+            <small class="text-red-600">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
+          }
+        </div>
+        <p-button [label]="'videoWork.updateLink' | transloco" type="submit" [outlined]="true" [loading]="linkSaving()" />
+      </form>
+    </div>
+  }
+</div>
