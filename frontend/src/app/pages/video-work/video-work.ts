@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkApi } from '../../core/api/work-api';
 import { VideoStore } from '../../core/services/video-store';
 import { YouTubePlayerService } from '../../core/services/youtube-player';
@@ -13,7 +14,7 @@ import { formatTimestamp, splitTimestamp } from '../../core/utils/time';
 
 @Component({
   selector: 'app-video-work',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments],
   templateUrl: './video-work.html',
   styleUrl: './video-work.scss',
 })
@@ -27,7 +28,7 @@ export class VideoWork implements OnInit {
 
   protected readonly videoStore = inject(VideoStore);
 
-  private readonly workId = this.route.snapshot.paramMap.get('workId')!;
+  protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
   protected readonly workName = signal<string | null>(null);
 
   private readonly player = viewChild<ElementRef<HTMLIFrameElement>>('player');

@@ -5,12 +5,25 @@
     </a>
     <h1 class="text-lg font-semibold">{{ workName() }}</h1>
 
-    @if (patternStore.pattern(); as pattern) {
-      <span class="ml-auto rounded border border-gray-300 px-3 py-1 text-sm text-gray-700">
-        {{ 'matrixEditor.positionSummary' | transloco: { row: pattern.currentRow, column: pattern.currentColumn } }}
-      </span>
-    }
+    <div class="ml-auto flex items-center gap-3">
+      @if (patternStore.pattern(); as pattern) {
+        <span class="rounded border border-gray-300 px-3 py-1 text-sm text-gray-700">
+          {{ 'matrixEditor.positionSummary' | transloco: { row: pattern.currentRow, column: pattern.currentColumn } }}
+        </span>
+      }
+      <p-button
+        icon="pi pi-comments"
+        [label]="'comments.title' | transloco"
+        [outlined]="true"
+        size="small"
+        (onClick)="commentsOpen = true"
+      />
+    </div>
   </div>
+
+  <p-drawer [(visible)]="commentsOpen" position="right" [style]="{ width: '28rem' }" [header]="'comments.title' | transloco">
+    <app-work-comments [workId]="workId" />
+  </p-drawer>
 
   @if (patternStore.notFound()) {
     <div class="mx-auto w-full max-w-md p-6">

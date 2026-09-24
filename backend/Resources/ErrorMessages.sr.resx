@@ -124,6 +124,15 @@
   <data name="SiteNotFound" xml:space="preserve">
     <value>Sajt nije pronađen.</value>
   </data>
+  <data name="CommentNotFound" xml:space="preserve">
+    <value>Komentar nije pronađen.</value>
+  </data>
+  <data name="CommentEmpty" xml:space="preserve">
+    <value>Komentar ne može biti prazan.</value>
+  </data>
+  <data name="CommentTooLong" xml:space="preserve">
+    <value>Komentar je predugačak.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Ovaj rad nije tipa matrica.</value>
   </data>

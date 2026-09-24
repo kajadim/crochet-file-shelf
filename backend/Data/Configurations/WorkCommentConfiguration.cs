@@ -10,6 +10,7 @@ namespace backend.Data.Configurations
         {
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Text).IsRequired();
+            builder.Property(c => c.PlainText).IsRequired();
 
             builder.HasOne(c => c.Work)
                 .WithMany(w => w.Comments)

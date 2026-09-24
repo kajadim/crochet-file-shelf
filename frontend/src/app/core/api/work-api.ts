@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateWorkRequest, MoveWorkRequest, UpdateWorkRequest, Work } from '../models/work.models';
+import { CreateWorkRequest, MoveWorkRequest, UpdateWorkRequest, Work, WorkQuery } from '../models/work.models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,23 @@ export class WorkApi {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api/works';
 
-  getAll(folderId: string | null): Observable<Work[]> {
-    const params = folderId ? new HttpParams().set('folderId', folderId) : undefined;
+  getAll(query: WorkQuery): Observable<Work[]> {
+    let params = new HttpParams();
+    if (query.folderId) {
+      params = params.set('folderId', query.folderId);
+    }
+    if (query.search) {
+      params = params.set('search', query.search);
+    }
+    if (query.type) {
+      params = params.set('type', query.type);
+    }
+    if (query.colorId) {
+      params = params.set('colorId', query.colorId);
+    }
+    if (query.platform) {
+      params = params.set('platform', query.platform);
+    }
     return this.http.get<Work[]>(this.baseUrl, { params });
   }
 

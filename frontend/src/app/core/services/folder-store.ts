@@ -70,6 +70,23 @@ export class FolderStore {
     );
   }
 
+  pathFor(folderId: string): string {
+    const folders = this.foldersState();
+    const names: string[] = [];
+    let currentId: string | null = folderId;
+
+    while (currentId) {
+      const folder: Folder | undefined = folders.find((candidate) => candidate.id === currentId);
+      if (!folder) {
+        break;
+      }
+      names.unshift(folder.name);
+      currentId = folder.parentFolderId;
+    }
+
+    return names.join(' / ');
+  }
+
   select(id: string | null): void {
     this.selectedIdState.set(id);
   }

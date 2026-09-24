@@ -120,6 +120,8 @@ builder.Services.AddScoped<IVideoLinkService, VideoLinkService>();
 builder.Services.AddScoped<IVideoService, VideoService>();
 builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddHttpClient(VideoLinkService.HttpClientName, client =>
 {
     client.Timeout = TimeSpan.FromSeconds(5);

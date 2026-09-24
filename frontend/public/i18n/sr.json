@@ -94,7 +94,14 @@
     "deleteWorkMessage": "Ovaj rad će biti trajno obrisan. Ovo ne može da se poništi.",
     "deleteFolderTitle": "Obriši „{{name}}”?",
     "deleteFolderMessageWithContents": "Ovo će trajno obrisati i {{parts}}. Ovo ne može da se poništi.",
-    "deleteFolderMessageEmpty": "Ovaj folder je prazan. Ovo ne može da se poništi."
+    "deleteFolderMessageEmpty": "Ovaj folder je prazan. Ovo ne može da se poništi.",
+    "searchPlaceholder": "Pretraži radove i komentare...",
+    "filterType": "Tip",
+    "filterColor": "Boja",
+    "filterPlatform": "Platforma",
+    "resetFilters": "Resetuj",
+    "noResults": "Nijedan rad ne odgovara pretrazi.",
+    "searchResults": "Rezultati pretrage"
   },
   "palette": {
     "title": "Moja paleta",
@@ -200,5 +207,20 @@
     "notes": "Beleške",
     "link": "Link",
     "updateLink": "Izmeni link"
+  },
+  "comments": {
+    "title": "Komentari",
+    "placeholder": "Napiši komentar...",
+    "add": "Dodaj komentar",
+    "empty": "Još nema komentara.",
+    "edited": "izmenjeno",
+    "deleteTitle": "Obrisati ovaj komentar?",
+    "bold": "Podebljano",
+    "italic": "Kurziv",
+    "underline": "Podvučeno",
+    "orderedList": "Numerisana lista",
+    "bulletList": "Lista sa tačkama",
+    "link": "Link",
+    "clean": "Ukloni formatiranje"
   }
 }

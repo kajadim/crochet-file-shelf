@@ -20,9 +20,10 @@ namespace backend.Services.Implementation
             _videoLinkService = videoLinkService;
         }
 
-        public async Task<List<WorkResponse>> GetAsync(Guid userId, Guid? folderId)
+        public async Task<List<WorkResponse>> GetAsync(Guid userId, WorkQueryRequest query)
         {
-            var works = await _workRepository.GetByOwnerAsync(userId, folderId);
+            var works = await _workRepository.GetByOwnerAsync(
+                userId, query.FolderId, query.Search, query.Type, query.ColorId, query.Platform);
             return works.Select(ToResponse).ToList();
         }
 

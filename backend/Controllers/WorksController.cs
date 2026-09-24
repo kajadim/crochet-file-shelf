@@ -19,9 +19,9 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<WorkResponse>>> Get([FromQuery] Guid? folderId)
+        public async Task<ActionResult<List<WorkResponse>>> Get([FromQuery] WorkQueryRequest query)
         {
-            return Ok(await _workService.GetAsync(User.GetUserId(), folderId));
+            return Ok(await _workService.GetAsync(User.GetUserId(), query));
         }
 
         [HttpGet("{id:guid}")]

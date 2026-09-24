@@ -13,6 +13,13 @@
 
   <h3 class="text-lg font-semibold break-words">{{ work().name }}</h3>
 
+  @if (folderPath()) {
+    <p class="flex items-center gap-1 text-xs text-gray-500">
+      <i class="pi pi-folder text-xs"></i>
+      {{ folderPath() }}
+    </p>
+  }
+
   @if (work().description) {
     <p class="line-clamp-3 text-sm text-gray-600 break-words">{{ work().description }}</p>
   }

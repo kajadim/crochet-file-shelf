@@ -18,6 +18,14 @@ export interface CreateWorkRequest {
   url?: string | null;
 }
 
+export interface WorkQuery {
+  folderId?: string | null;
+  search?: string;
+  type?: WorkType | null;
+  colorId?: string | null;
+  platform?: string | null;
+}
+
 export interface UpdateWorkRequest {
   name: string;
   description: string | null;

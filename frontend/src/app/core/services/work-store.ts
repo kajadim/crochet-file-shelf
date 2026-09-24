@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { WorkApi } from '../api/work-api';
-import { CreateWorkRequest, UpdateWorkRequest, Work } from '../models/work.models';
+import { CreateWorkRequest, UpdateWorkRequest, Work, WorkQuery } from '../models/work.models';
 import { extractErrorMessage } from '../utils/http-error';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class WorkStore {
   private readonly loadingState = signal(false);
   private readonly errorState = signal<string | null>(null);
 
-  private currentFolderId: string | null = null;
+  private currentQuery: WorkQuery = {};
   private requestId = 0;
 
   readonly works = this.worksState.asReadonly();
@@ -23,19 +23,19 @@ export class WorkStore {
 
   reset(): void {
     this.requestId++;
-    this.currentFolderId = null;
+    this.currentQuery = {};
     this.worksState.set([]);
     this.loadingState.set(false);
     this.errorState.set(null);
   }
 
-  load(folderId: string | null): void {
+  load(query: WorkQuery): void {
     const requestId = ++this.requestId;
-    this.currentFolderId = folderId;
+    this.currentQuery = query;
     this.loadingState.set(true);
     this.errorState.set(null);
 
-    this.api.getAll(folderId).subscribe({
+    this.api.getAll(query).subscribe({
       next: (works) => {
         if (requestId !== this.requestId) {
           return;
@@ -56,7 +56,9 @@ export class WorkStore {
   create(request: CreateWorkRequest): Observable<Work> {
     return this.api.create(request).pipe(
       tap((work) => {
-        if (this.isVisibleInCurrentView(work)) {
+        if (this.isFiltered()) {
+          this.load(this.currentQuery);
+        } else if (this.isVisibleInCurrentView(work)) {
           this.worksState.update((works) => this.sorted([...works, work]));
         }
       }),
@@ -70,7 +72,7 @@ export class WorkStore {
   move(id: string, folderId: string): Observable<Work> {
     return this.api.move(id, { folderId }).pipe(
       tap((work) => {
-        if (this.isVisibleInCurrentView(work)) {
+        if (this.isFiltered() || this.isVisibleInCurrentView(work)) {
           this.replace(work);
         } else {
           this.worksState.update((works) => works.filter((existing) => existing.id !== id));
@@ -85,8 +87,14 @@ export class WorkStore {
       .pipe(tap(() => this.worksState.update((works) => works.filter((work) => work.id !== id))));
   }
 
+  private isFiltered(): boolean {
+    const query = this.currentQuery;
+    return !!(query.search || query.type || query.colorId || query.platform);
+  }
+
   private isVisibleInCurrentView(work: Work): boolean {
-    return this.currentFolderId === null || this.currentFolderId === work.folderId;
+    const folderId = this.currentQuery.folderId ?? null;
+    return folderId === null || folderId === work.folderId;
   }
 
   private replace(updated: Work): void {

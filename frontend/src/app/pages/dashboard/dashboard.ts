@@ -1,6 +1,9 @@
-import { Component, OnInit, effect, inject, signal, untracked } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -11,20 +14,23 @@ import { MoveWorkDialog, MoveWorkDialogData } from '../../components/move-work-d
 import { WorkCard } from '../../components/work-card/work-card';
 import { WorkFormDialog, WorkFormDialogData } from '../../components/work-form-dialog/work-form-dialog';
 import { Folder, FolderDeletionSummary } from '../../core/models/folder.models';
-import { Work } from '../../core/models/work.models';
+import { Work, WorkType } from '../../core/models/work.models';
 import { FolderStore } from '../../core/services/folder-store';
 import { WorkStore } from '../../core/services/work-store';
+import { YarnColorStore } from '../../core/services/yarn-color-store';
+import { loadDashboardFilters, PLATFORM_OPTIONS, saveDashboardFilters } from '../../core/utils/dashboard-filters-storage';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ButtonModule, FolderTree, WorkCard, TranslocoPipe],
+  imports: [FormsModule, ButtonModule, InputTextModule, SelectModule, FolderTree, WorkCard, TranslocoPipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
   protected readonly folderStore = inject(FolderStore);
   protected readonly workStore = inject(WorkStore);
+  protected readonly colorStore = inject(YarnColorStore);
   private readonly dialogService = inject(DialogService);
   private readonly messageService = inject(MessageService);
   private readonly transloco = inject(TranslocoService);
@@ -32,19 +38,90 @@ export class Dashboard implements OnInit {
 
   protected readonly loadError = signal<string | null>(null);
 
+  protected readonly typeOptions: { value: WorkType; label: string }[] = [
+    { value: 'Pattern', label: 'workCard.matrix' },
+    { value: 'Video', label: 'workCard.video' },
+    { value: 'Site', label: 'workCard.site' },
+  ];
+  protected readonly platformOptions = PLATFORM_OPTIONS;
+
+  private readonly storedFilters = loadDashboardFilters();
+
+  protected readonly searchInput = signal(this.storedFilters.search);
+  protected readonly search = signal(this.storedFilters.search.trim());
+  protected readonly typeFilter = signal<WorkType | null>(this.storedFilters.type);
+  protected readonly colorFilter = signal<string | null>(this.storedFilters.colorId);
+  protected readonly platformFilter = signal<string | null>(this.storedFilters.platform);
+
+  protected readonly filtersActive = computed(
+    () => !!(this.search() || this.typeFilter() || this.colorFilter() || this.platformFilter()),
+  );
+
+  private searchTimer: ReturnType<typeof setTimeout> | null = null;
+
   constructor() {
+    effect(() =>
+      saveDashboardFilters({
+        search: this.search(),
+        type: this.typeFilter(),
+        colorId: this.colorFilter(),
+        platform: this.platformFilter(),
+      }),
+    );
+
     effect(() => {
       if (!this.folderStore.loaded()) {
         return;
       }
       const folderId = this.folderStore.selectedId();
-      untracked(() => this.workStore.load(folderId));
+      const search = this.search();
+      const type = this.typeFilter();
+      const colorId = this.colorFilter();
+      const platform = this.platformFilter();
+
+      untracked(() => {
+        if (this.filtersActive()) {
+          this.workStore.load({ search, type, colorId, platform });
+        } else {
+          this.workStore.load({ folderId });
+        }
+      });
     });
+  }
+
+  protected onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchInput.set(value);
+
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+    }
+    this.searchTimer = setTimeout(() => this.search.set(value.trim()), 300);
+  }
+
+  protected resetFilters(): void {
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
+    }
+    this.searchInput.set('');
+    this.search.set('');
+    this.typeFilter.set(null);
+    this.colorFilter.set(null);
+    this.platformFilter.set(null);
   }
 
   ngOnInit(): void {
     this.folderStore.reset();
     this.workStore.reset();
+    this.colorStore.reset();
+    this.colorStore.load().subscribe({
+      next: (colors) => {
+        const colorId = this.colorFilter();
+        if (colorId && !colors.some((color) => color.id === colorId)) {
+          this.colorFilter.set(null);
+        }
+      },
+    });
     this.loadError.set(null);
 
     this.folderStore.load().subscribe({

@@ -94,7 +94,14 @@
     "deleteWorkMessage": "Dieses Werk wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
     "deleteFolderTitle": "„{{name}}“ löschen?",
     "deleteFolderMessageWithContents": "Dadurch werden auch {{parts}} dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
-    "deleteFolderMessageEmpty": "Dieser Ordner ist leer. Dies kann nicht rückgängig gemacht werden."
+    "deleteFolderMessageEmpty": "Dieser Ordner ist leer. Dies kann nicht rückgängig gemacht werden.",
+    "searchPlaceholder": "Werke und Kommentare durchsuchen...",
+    "filterType": "Typ",
+    "filterColor": "Farbe",
+    "filterPlatform": "Plattform",
+    "resetFilters": "Zurücksetzen",
+    "noResults": "Keine Werke entsprechen deiner Suche.",
+    "searchResults": "Suchergebnisse"
   },
   "palette": {
     "title": "Meine Palette",
@@ -200,5 +207,20 @@
     "notes": "Notizen",
     "link": "Link",
     "updateLink": "Link ändern"
+  },
+  "comments": {
+    "title": "Kommentare",
+    "placeholder": "Schreibe einen Kommentar...",
+    "add": "Kommentar hinzufügen",
+    "empty": "Noch keine Kommentare.",
+    "edited": "bearbeitet",
+    "deleteTitle": "Diesen Kommentar löschen?",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "orderedList": "Nummerierte Liste",
+    "bulletList": "Aufzählung",
+    "link": "Link",
+    "clean": "Formatierung entfernen"
   }
 }

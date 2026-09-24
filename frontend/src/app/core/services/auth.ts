@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, finalize, firstValueFrom, map, of, shareReplay, tap, throwError } from 'rxjs';
 import { AuthApi } from '../api/auth-api';
+import { clearDashboardFilters } from '../utils/dashboard-filters-storage';
 import {
   AuthResponse,
   LoginRequest,
@@ -92,6 +93,7 @@ export class Auth {
   clearSession(): void {
     this.accessTokenState.set(null);
     this.userState.set(null);
+    clearDashboardFilters();
   }
 
   private setSession(response: AuthResponse): void {

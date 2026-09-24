@@ -4,8 +4,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogService } from 'primeng/dynamicdialog';
+import { DrawerModule } from 'primeng/drawer';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
+import { WorkComments } from '../../components/work-comments/work-comments';
 import { YarnColorDialog, YarnColorDialogData } from '../../components/yarn-color-dialog/yarn-color-dialog';
 import { WorkApi } from '../../core/api/work-api';
 import { PatternStore } from '../../core/services/pattern-store';
@@ -16,7 +18,7 @@ type PaintTool = string | 'eraser' | null;
 
 @Component({
   selector: 'app-matrix-editor',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, DrawerModule, InputTextModule, TranslocoPipe, WorkComments],
   templateUrl: './matrix-editor.html',
   styleUrl: './matrix-editor.scss',
 })
@@ -30,7 +32,8 @@ export class MatrixEditor implements OnInit {
   protected readonly patternStore = inject(PatternStore);
   protected readonly colorStore = inject(YarnColorStore);
 
-  private readonly workId = this.route.snapshot.paramMap.get('workId')!;
+  protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
+  protected commentsOpen = false;
   protected readonly workName = signal<string | null>(null);
 
   protected readonly rows = computed(() => {

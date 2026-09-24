@@ -25,5 +25,8 @@ namespace backend.Exceptions
         VideoNotFound,
         SiteLinkInvalid,
         SiteNotFound,
+        CommentNotFound,
+        CommentEmpty,
+        CommentTooLong,
     }
 }

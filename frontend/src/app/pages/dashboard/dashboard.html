@@ -35,7 +35,9 @@
     } @else if (folderStore.loaded()) {
       <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-xl font-semibold">
-          @if (folderStore.breadcrumb().length > 0) {
+          @if (filtersActive()) {
+            {{ 'dashboard.searchResults' | transloco }}
+          } @else if (folderStore.breadcrumb().length > 0) {
             @for (folder of folderStore.breadcrumb(); track folder.id; let last = $last) {
               <span [class.text-gray-500]="!last">{{ folder.name }}</span>
               @if (!last) {
@@ -55,6 +57,72 @@
         />
       </div>
 
+      <div class="mb-6 flex flex-wrap items-center gap-2">
+        <span class="relative">
+          <i class="pi pi-search pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm text-gray-400"></i>
+          <input
+            pInputText
+            type="text"
+            class="w-64 pl-9"
+            maxlength="200"
+            [value]="searchInput()"
+            [placeholder]="'dashboard.searchPlaceholder' | transloco"
+            (input)="onSearchInput($event)"
+          />
+        </span>
+
+        <p-select
+          [options]="typeOptions"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="typeFilter()"
+          (ngModelChange)="typeFilter.set($event)"
+          [showClear]="true"
+          [placeholder]="'dashboard.filterType' | transloco"
+          styleClass="w-44"
+        >
+          <ng-template #selectedItem let-option>{{ option.label | transloco }}</ng-template>
+          <ng-template #item let-option>{{ option.label | transloco }}</ng-template>
+        </p-select>
+
+        <p-select
+          [options]="colorStore.colors()"
+          optionLabel="name"
+          optionValue="id"
+          [ngModel]="colorFilter()"
+          (ngModelChange)="colorFilter.set($event)"
+          [showClear]="true"
+          [placeholder]="'dashboard.filterColor' | transloco"
+          styleClass="w-48"
+        >
+          <ng-template #selectedItem let-option>
+            <span class="flex items-center gap-2">
+              <span class="h-3.5 w-3.5 rounded border border-gray-300" [style.background-color]="option.hexValue"></span>
+              {{ option.name }}
+            </span>
+          </ng-template>
+          <ng-template #item let-option>
+            <span class="flex items-center gap-2">
+              <span class="h-3.5 w-3.5 rounded border border-gray-300" [style.background-color]="option.hexValue"></span>
+              {{ option.name }}
+            </span>
+          </ng-template>
+        </p-select>
+
+        <p-select
+          [options]="platformOptions"
+          [ngModel]="platformFilter()"
+          (ngModelChange)="platformFilter.set($event)"
+          [showClear]="true"
+          [placeholder]="'dashboard.filterPlatform' | transloco"
+          styleClass="w-44"
+        />
+
+        @if (filtersActive() || searchInput()) {
+          <p-button [label]="'dashboard.resetFilters' | transloco" icon="pi pi-times" [text]="true" (onClick)="resetFilters()" />
+        }
+      </div>
+
       @if (folderStore.folders().length === 0) {
         <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
           <p class="mb-3">{{ 'dashboard.emptyFolders' | transloco }}</p>
@@ -66,7 +134,9 @@
         <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
         <p class="text-gray-500">
-          @if (folderStore.selectedFolder()) {
+          @if (filtersActive()) {
+            {{ 'dashboard.noResults' | transloco }}
+          } @else if (folderStore.selectedFolder()) {
             {{ 'dashboard.emptyWorksInFolder' | transloco }}
           } @else {
             {{ 'dashboard.emptyWorksNoFolder' | transloco }}
@@ -77,6 +147,7 @@
           @for (work of workStore.works(); track work.id) {
             <app-work-card
               [work]="work"
+              [folderPath]="filtersActive() ? folderStore.pathFor(work.folderId) : null"
               (open)="openWork($event)"
               (edit)="openEditWork($event)"
               (move)="openMoveWork($event)"

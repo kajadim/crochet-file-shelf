@@ -12,6 +12,7 @@ import { Work } from '../../core/models/work.models';
 })
 export class WorkCard {
   readonly work = input.required<Work>();
+  readonly folderPath = input<string | null>(null);
 
   readonly open = output<Work>();
   readonly edit = output<Work>();

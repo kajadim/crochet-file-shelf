@@ -94,7 +94,14 @@
     "deleteWorkMessage": "Cet ouvrage sera définitivement supprimé. Cette action est irréversible.",
     "deleteFolderTitle": "Supprimer « {{name}} » ?",
     "deleteFolderMessageWithContents": "Cela supprimera également définitivement {{parts}}. Cette action est irréversible.",
-    "deleteFolderMessageEmpty": "Ce dossier est vide. Cette action est irréversible."
+    "deleteFolderMessageEmpty": "Ce dossier est vide. Cette action est irréversible.",
+    "searchPlaceholder": "Rechercher des ouvrages et des commentaires...",
+    "filterType": "Type",
+    "filterColor": "Couleur",
+    "filterPlatform": "Plateforme",
+    "resetFilters": "Réinitialiser",
+    "noResults": "Aucun ouvrage ne correspond à ta recherche.",
+    "searchResults": "Résultats de la recherche"
   },
   "palette": {
     "title": "Ma palette",
@@ -200,5 +207,20 @@
     "notes": "Notes",
     "link": "Lien",
     "updateLink": "Modifier le lien"
+  },
+  "comments": {
+    "title": "Commentaires",
+    "placeholder": "Écris un commentaire...",
+    "add": "Ajouter un commentaire",
+    "empty": "Aucun commentaire pour le moment.",
+    "edited": "modifié",
+    "deleteTitle": "Supprimer ce commentaire ?",
+    "bold": "Gras",
+    "italic": "Italique",
+    "underline": "Souligné",
+    "orderedList": "Liste numérotée",
+    "bulletList": "Liste à puces",
+    "link": "Lien",
+    "clean": "Effacer la mise en forme"
   }
 }

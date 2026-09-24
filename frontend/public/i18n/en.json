@@ -94,7 +94,14 @@
     "deleteWorkMessage": "This work will be permanently deleted. This cannot be undone.",
     "deleteFolderTitle": "Delete \"{{name}}\"?",
     "deleteFolderMessageWithContents": "This will also permanently delete {{parts}}. This cannot be undone.",
-    "deleteFolderMessageEmpty": "This folder is empty. This cannot be undone."
+    "deleteFolderMessageEmpty": "This folder is empty. This cannot be undone.",
+    "searchPlaceholder": "Search works and comments...",
+    "filterType": "Type",
+    "filterColor": "Color",
+    "filterPlatform": "Platform",
+    "resetFilters": "Reset",
+    "noResults": "No works match your search.",
+    "searchResults": "Search results"
   },
   "palette": {
     "title": "My palette",
@@ -200,5 +207,20 @@
     "notes": "Notes",
     "link": "Link",
     "updateLink": "Update link"
+  },
+  "comments": {
+    "title": "Comments",
+    "placeholder": "Write a comment...",
+    "add": "Add comment",
+    "empty": "No comments yet.",
+    "edited": "edited",
+    "deleteTitle": "Delete this comment?",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "orderedList": "Numbered list",
+    "bulletList": "Bulleted list",
+    "link": "Link",
+    "clean": "Clear formatting"
   }
 }

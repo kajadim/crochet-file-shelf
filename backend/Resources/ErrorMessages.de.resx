@@ -124,6 +124,15 @@
   <data name="SiteNotFound" xml:space="preserve">
     <value>Website nicht gefunden.</value>
   </data>
+  <data name="CommentNotFound" xml:space="preserve">
+    <value>Kommentar nicht gefunden.</value>
+  </data>
+  <data name="CommentEmpty" xml:space="preserve">
+    <value>Der Kommentar darf nicht leer sein.</value>
+  </data>
+  <data name="CommentTooLong" xml:space="preserve">
+    <value>Der Kommentar ist zu lang.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Dieses Werk ist keine Matrix.</value>
   </data>

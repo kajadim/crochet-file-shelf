@@ -4,13 +4,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkApi } from '../../core/api/work-api';
 import { SiteStore } from '../../core/services/site-store';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
   selector: 'app-site-work',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments],
   templateUrl: './site-work.html',
   styleUrl: './site-work.scss',
 })
@@ -21,7 +22,7 @@ export class SiteWork implements OnInit {
 
   protected readonly siteStore = inject(SiteStore);
 
-  private readonly workId = this.route.snapshot.paramMap.get('workId')!;
+  protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
   protected readonly workName = signal<string | null>(null);
   protected readonly workDescription = signal<string | null>(null);
 
