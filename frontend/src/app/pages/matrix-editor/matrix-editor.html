@@ -11,6 +11,16 @@
           {{ 'matrixEditor.positionSummary' | transloco: { row: pattern.currentRow, column: pattern.currentColumn } }}
         </span>
       }
+      @if (patternStore.pattern()) {
+        <p-button
+          icon="pi pi-file-excel"
+          [label]="'matrixEditor.exportExcel' | transloco"
+          [outlined]="true"
+          size="small"
+          [loading]="exporting()"
+          (onClick)="exportToExcel()"
+        />
+      }
       <p-button
         icon="pi pi-comments"
         [label]="'comments.title' | transloco"
@@ -34,6 +44,52 @@
         <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ setupError() }}</p>
       }
 
+      @if (importError()) {
+        <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ importError() }}</p>
+      }
+
+      @if (importPreview(); as preview) {
+        <div class="flex flex-col gap-4">
+          <div>
+            <p class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.importPreviewTitle' | transloco }}</p>
+            <p class="text-sm text-gray-600">
+              {{ 'matrixEditor.importSummary' | transloco: { width: preview.width, height: preview.height, count: preview.coloredCells } }}
+            </p>
+          </div>
+
+          <ul class="flex flex-col gap-1.5">
+            @for (color of preview.colors; track color.hex) {
+              <li class="flex items-center gap-2 text-sm">
+                <span class="h-4 w-4 shrink-0 rounded border border-gray-300" [style.background-color]="color.hex"></span>
+                <span class="font-mono">{{ color.hex }}</span>
+                <span class="text-gray-500">{{ color.count }}</span>
+                @if (color.existingName) {
+                  <span class="ml-auto text-xs text-gray-500">{{ color.existingName }}</span>
+                } @else {
+                  <span class="ml-auto rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-800">{{ 'matrixEditor.importNewColor' | transloco }}</span>
+                }
+              </li>
+            }
+          </ul>
+          <p class="text-xs text-gray-500">{{ 'matrixEditor.importColorsHint' | transloco }}</p>
+
+          @if (preview.skippedCells > 0) {
+            <div class="rounded bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              <p class="mb-1">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
+              <ul class="list-disc pl-5 text-xs">
+                @for (warning of preview.warnings; track warning.cell) {
+                  <li>{{ warning.cell }}: {{ warningKey(warning.reason) | transloco }}</li>
+                }
+              </ul>
+            </div>
+          }
+
+          <div class="flex gap-2">
+            <p-button [label]="'matrixEditor.importConfirm' | transloco" [loading]="importBusy()" (onClick)="confirmImport()" />
+            <p-button [label]="'common.cancel' | transloco" [text]="true" (onClick)="cancelImport()" />
+          </div>
+        </div>
+      } @else {
       <form [formGroup]="setupForm" (ngSubmit)="createPattern()" class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label for="width" class="text-sm text-gray-700">{{ 'matrixEditor.width' | transloco }}</label>
@@ -53,6 +109,23 @@
 
         <p-button [label]="'common.create' | transloco" type="submit" [loading]="creating()" [fluid]="true" />
       </form>
+
+      <div class="my-5 flex items-center gap-3 text-xs text-gray-400">
+        <span class="h-px flex-1 bg-gray-200"></span>
+        {{ 'matrixEditor.importOr' | transloco }}
+        <span class="h-px flex-1 bg-gray-200"></span>
+      </div>
+
+      <input #importInput type="file" accept=".xlsx" class="hidden" (change)="onImportFileSelected($event)" />
+      <p-button
+        icon="pi pi-file-excel"
+        [label]="'matrixEditor.importExcel' | transloco"
+        [outlined]="true"
+        [fluid]="true"
+        [loading]="importBusy()"
+        (onClick)="importInput.click()"
+      />
+      }
     </div>
   } @else if (patternStore.loading()) {
     <p class="p-6 text-gray-500">{{ 'common.loading' | transloco }}</p>

@@ -173,7 +173,18 @@
     "removeCells": "Remove cells",
     "shrinkSubmit": "Remove",
     "shrinkConfirmTitle": "Remove cells?",
-    "shrinkConfirmMessage": "{{count}} colored cells in the removed area will be permanently deleted. This cannot be undone."
+    "shrinkConfirmMessage": "{{count}} colored cells in the removed area will be permanently deleted. This cannot be undone.",
+    "exportExcel": "Export to Excel",
+    "importOr": "or",
+    "importExcel": "Import from Excel",
+    "importPreviewTitle": "Import preview",
+    "importSummary": "{{width}} x {{height}} cells, {{count}} colored",
+    "importNewColor": "new color",
+    "importColorsHint": "Colors that are not in your palette are added automatically, named by their color code.",
+    "importSkipped": "{{count}} cells could not be read and will be skipped:",
+    "importConfirm": "Import",
+    "importWarningUnresolvedColor": "unsupported color",
+    "importWarningUnsupportedFill": "unsupported fill pattern"
   },
   "folderTree": {
     "newSubfolder": "New subfolder",

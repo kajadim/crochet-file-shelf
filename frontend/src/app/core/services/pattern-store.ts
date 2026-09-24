@@ -1,7 +1,14 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { PatternApi } from '../api/pattern-api';
-import { CellChange, CreatePatternRequest, PatternEdges, Pattern, PatternCell } from '../models/pattern.models';
+import {
+  CellChange,
+  CreatePatternRequest,
+  ImportPreview,
+  PatternEdges,
+  Pattern,
+  PatternCell,
+} from '../models/pattern.models';
 import { extractErrorMessage } from '../utils/http-error';
 
 export interface LegendEntry {
@@ -160,6 +167,18 @@ export class PatternStore {
       }
     }
     return count;
+  }
+
+  exportFile(): Observable<Blob> {
+    return this.api.exportFile(this.workId!);
+  }
+
+  previewImport(file: File): Observable<ImportPreview> {
+    return this.api.previewImport(this.workId!, file);
+  }
+
+  importFile(file: File): Observable<Pattern> {
+    return this.api.importFile(this.workId!, file).pipe(tap((pattern) => this.applyPattern(pattern)));
   }
 
   updateActiveRow(row: number | null): void {

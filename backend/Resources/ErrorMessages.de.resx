@@ -133,6 +133,18 @@
   <data name="CommentTooLong" xml:space="preserve">
     <value>Der Kommentar ist zu lang.</value>
   </data>
+  <data name="ExcelFileInvalid" xml:space="preserve">
+    <value>Die Datei ist keine gültige Excel-Datei (.xlsx).</value>
+  </data>
+  <data name="ExcelFileTooLarge" xml:space="preserve">
+    <value>Die Datei ist zu groß. Die maximale Größe beträgt 2 MB.</value>
+  </data>
+  <data name="ExcelEmptyMatrix" xml:space="preserve">
+    <value>Die Datei enthält keine gefärbten Zellen zum Importieren.</value>
+  </data>
+  <data name="ExcelMatrixTooLarge" xml:space="preserve">
+    <value>Der gefärbte Bereich ist größer als 200 x 200 Zellen.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Dieses Werk ist keine Matrix.</value>
   </data>

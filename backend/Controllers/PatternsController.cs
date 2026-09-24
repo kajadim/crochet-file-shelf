@@ -11,11 +11,15 @@ namespace backend.Controllers
     [Route("api/works/{workId:guid}/pattern")]
     public class PatternsController : ControllerBase
     {
-        private readonly IPatternService _patternService;
+        private const long MaxUploadBytes = 3 * 1024 * 1024;
 
-        public PatternsController(IPatternService patternService)
+        private readonly IPatternService _patternService;
+        private readonly IPatternExcelService _excelService;
+
+        public PatternsController(IPatternService patternService, IPatternExcelService excelService)
         {
             _patternService = patternService;
+            _excelService = excelService;
         }
 
         [HttpGet]
@@ -53,6 +57,28 @@ namespace backend.Controllers
         public async Task<ActionResult<PatternResponse>> Shrink(Guid workId, PatternEdgesRequest request)
         {
             return Ok(await _patternService.ShrinkAsync(User.GetUserId(), workId, request));
+        }
+
+        [HttpGet("export")]
+        public async Task<IActionResult> Export(Guid workId)
+        {
+            var file = await _excelService.ExportAsync(User.GetUserId(), workId);
+            return File(file.Content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", file.FileName);
+        }
+
+        [HttpPost("import/preview")]
+        [RequestSizeLimit(MaxUploadBytes)]
+        public async Task<ActionResult<ImportPreviewResponse>> PreviewImport(Guid workId, IFormFile file)
+        {
+            return Ok(await _excelService.PreviewImportAsync(User.GetUserId(), workId, file));
+        }
+
+        [HttpPost("import")]
+        [RequestSizeLimit(MaxUploadBytes)]
+        public async Task<ActionResult<PatternResponse>> Import(Guid workId, IFormFile file)
+        {
+            var pattern = await _excelService.ImportAsync(User.GetUserId(), workId, file);
+            return StatusCode(StatusCodes.Status201Created, pattern);
         }
 
         [HttpPut("cells")]

@@ -31,6 +31,26 @@ export interface PatternEdges {
   right: number;
 }
 
+export interface ImportPreviewColor {
+  hex: string;
+  existingName: string | null;
+  count: number;
+}
+
+export interface ImportPreviewWarning {
+  cell: string;
+  reason: string;
+}
+
+export interface ImportPreview {
+  width: number;
+  height: number;
+  coloredCells: number;
+  skippedCells: number;
+  colors: ImportPreviewColor[];
+  warnings: ImportPreviewWarning[];
+}
+
 export interface UpdateActiveRowRequest {
   row: number | null;
 }

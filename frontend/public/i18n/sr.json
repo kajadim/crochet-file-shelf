@@ -173,7 +173,18 @@
     "removeCells": "Ukloni polja",
     "shrinkSubmit": "Ukloni",
     "shrinkConfirmTitle": "Ukloniti polja?",
-    "shrinkConfirmMessage": "Obojena polja u uklonjenom delu ({{count}}) biće trajno obrisana. Ovo ne može da se poništi."
+    "shrinkConfirmMessage": "Obojena polja u uklonjenom delu ({{count}}) biće trajno obrisana. Ovo ne može da se poništi.",
+    "exportExcel": "Izvezi u Excel",
+    "importOr": "ili",
+    "importExcel": "Uvezi iz Excela",
+    "importPreviewTitle": "Pregled uvoza",
+    "importSummary": "{{width}} x {{height}} ćelija, {{count}} obojenih",
+    "importNewColor": "nova boja",
+    "importColorsHint": "Boje kojih nema u tvojoj paleti dodaju se automatski, a naziv im je njihov kod boje.",
+    "importSkipped": "{{count}} ćelija nije moglo da se pročita i biće preskočeno:",
+    "importConfirm": "Uvezi",
+    "importWarningUnresolvedColor": "boja nije podržana",
+    "importWarningUnsupportedFill": "uzorak popune nije podržan"
   },
   "folderTree": {
     "newSubfolder": "Novi podfolder",

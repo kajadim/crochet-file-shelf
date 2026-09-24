@@ -173,7 +173,18 @@
     "removeCells": "Supprimer des cellules",
     "shrinkSubmit": "Supprimer",
     "shrinkConfirmTitle": "Supprimer les cellules ?",
-    "shrinkConfirmMessage": "{{count}} cellules colorées de la zone supprimée seront définitivement supprimées. Cette action est irréversible."
+    "shrinkConfirmMessage": "{{count}} cellules colorées de la zone supprimée seront définitivement supprimées. Cette action est irréversible.",
+    "exportExcel": "Exporter vers Excel",
+    "importOr": "ou",
+    "importExcel": "Importer depuis Excel",
+    "importPreviewTitle": "Aperçu de l'importation",
+    "importSummary": "{{width}} x {{height}} cellules, {{count}} colorées",
+    "importNewColor": "nouvelle couleur",
+    "importColorsHint": "Les couleurs absentes de ta palette sont ajoutées automatiquement, nommées selon leur code couleur.",
+    "importSkipped": "{{count}} cellules n'ont pas pu être lues et seront ignorées :",
+    "importConfirm": "Importer",
+    "importWarningUnresolvedColor": "couleur non prise en charge",
+    "importWarningUnsupportedFill": "motif de remplissage non pris en charge"
   },
   "folderTree": {
     "newSubfolder": "Nouveau sous-dossier",

@@ -115,6 +115,7 @@ builder.Services.AddScoped<IYarnColorRepository, YarnColorRepository>();
 builder.Services.AddScoped<IYarnColorService, YarnColorService>();
 builder.Services.AddScoped<IPatternRepository, PatternRepository>();
 builder.Services.AddScoped<IPatternService, PatternService>();
+builder.Services.AddScoped<IPatternExcelService, PatternExcelService>();
 builder.Services.AddScoped<IVideoRepository, VideoRepository>();
 builder.Services.AddScoped<IVideoLinkService, VideoLinkService>();
 builder.Services.AddScoped<IVideoService, VideoService>();

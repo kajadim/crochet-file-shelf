@@ -28,5 +28,9 @@ namespace backend.Exceptions
         CommentNotFound,
         CommentEmpty,
         CommentTooLong,
+        ExcelFileInvalid,
+        ExcelFileTooLarge,
+        ExcelEmptyMatrix,
+        ExcelMatrixTooLarge,
     }
 }

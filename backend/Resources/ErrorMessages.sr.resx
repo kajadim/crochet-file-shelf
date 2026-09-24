@@ -133,6 +133,18 @@
   <data name="CommentTooLong" xml:space="preserve">
     <value>Komentar je predugačak.</value>
   </data>
+  <data name="ExcelFileInvalid" xml:space="preserve">
+    <value>Fajl nije ispravan Excel (.xlsx) fajl.</value>
+  </data>
+  <data name="ExcelFileTooLarge" xml:space="preserve">
+    <value>Fajl je prevelik. Najveća dozvoljena veličina je 2 MB.</value>
+  </data>
+  <data name="ExcelEmptyMatrix" xml:space="preserve">
+    <value>Fajl nema obojenih ćelija za uvoz.</value>
+  </data>
+  <data name="ExcelMatrixTooLarge" xml:space="preserve">
+    <value>Obojeni deo je veći od 200 x 200 ćelija.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Ovaj rad nije tipa matrica.</value>
   </data>

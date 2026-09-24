@@ -173,7 +173,18 @@
     "removeCells": "Felder entfernen",
     "shrinkSubmit": "Entfernen",
     "shrinkConfirmTitle": "Felder entfernen?",
-    "shrinkConfirmMessage": "{{count}} gefärbte Felder im entfernten Bereich werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden."
+    "shrinkConfirmMessage": "{{count}} gefärbte Felder im entfernten Bereich werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "exportExcel": "Nach Excel exportieren",
+    "importOr": "oder",
+    "importExcel": "Aus Excel importieren",
+    "importPreviewTitle": "Import-Vorschau",
+    "importSummary": "{{width}} x {{height}} Zellen, {{count}} gefärbt",
+    "importNewColor": "neue Farbe",
+    "importColorsHint": "Farben, die nicht in deiner Palette sind, werden automatisch hinzugefügt und nach ihrem Farbcode benannt.",
+    "importSkipped": "{{count}} Zellen konnten nicht gelesen werden und werden übersprungen:",
+    "importConfirm": "Importieren",
+    "importWarningUnresolvedColor": "nicht unterstützte Farbe",
+    "importWarningUnsupportedFill": "nicht unterstütztes Füllmuster"
   },
   "folderTree": {
     "newSubfolder": "Neuer Unterordner",

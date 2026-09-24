@@ -240,7 +240,7 @@ namespace backend.Services.Implementation
             return pattern ?? throw new NotFoundException(ErrorCode.PatternNotFound);
         }
 
-        private static PatternResponse ToResponse(Pattern pattern, List<PatternCell> cells) => new()
+        internal static PatternResponse ToResponse(Pattern pattern, List<PatternCell> cells) => new()
         {
             Width = pattern.Width,
             Height = pattern.Height,

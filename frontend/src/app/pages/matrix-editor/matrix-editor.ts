@@ -8,10 +8,12 @@ import { DrawerModule } from 'primeng/drawer';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { WorkComments } from '../../components/work-comments/work-comments';
+import { ImportPreview } from '../../core/models/pattern.models';
 import { YarnColorDialog, YarnColorDialogData } from '../../components/yarn-color-dialog/yarn-color-dialog';
 import { WorkApi } from '../../core/api/work-api';
 import { PatternStore } from '../../core/services/pattern-store';
 import { YarnColorStore } from '../../core/services/yarn-color-store';
+import { saveBlob } from '../../core/utils/download';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 type PaintTool = string | 'eraser' | null;
@@ -81,6 +83,11 @@ export class MatrixEditor implements OnInit {
   });
   protected readonly shrinking = signal(false);
   protected readonly shrinkError = signal<string | null>(null);
+  protected readonly importFile = signal<File | null>(null);
+  protected readonly importPreview = signal<ImportPreview | null>(null);
+  protected readonly importBusy = signal(false);
+  protected readonly importError = signal<string | null>(null);
+  protected readonly exporting = signal(false);
   protected readonly expanding = signal(false);
   protected readonly expandError = signal<string | null>(null);
 
@@ -190,6 +197,74 @@ export class MatrixEditor implements OnInit {
     }
     const { row, column } = this.positionForm.getRawValue();
     this.patternStore.updatePosition(row, column);
+  }
+
+  protected exportToExcel(): void {
+    this.exporting.set(true);
+    this.patternStore.exportFile().subscribe({
+      next: (blob) => {
+        saveBlob(blob, `${this.workName() || 'matrix'}.xlsx`);
+        this.exporting.set(false);
+      },
+      error: () => this.exporting.set(false),
+    });
+  }
+
+  protected onImportFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    input.value = '';
+    if (!file) {
+      return;
+    }
+
+    this.importFile.set(file);
+    this.importError.set(null);
+    this.importBusy.set(true);
+
+    this.patternStore.previewImport(file).subscribe({
+      next: (preview) => {
+        this.importPreview.set(preview);
+        this.importBusy.set(false);
+      },
+      error: (err) => {
+        this.importFile.set(null);
+        this.importError.set(extractErrorMessage(err));
+        this.importBusy.set(false);
+      },
+    });
+  }
+
+  protected cancelImport(): void {
+    this.importFile.set(null);
+    this.importPreview.set(null);
+    this.importError.set(null);
+  }
+
+  protected confirmImport(): void {
+    const file = this.importFile();
+    if (!file) {
+      return;
+    }
+
+    this.importBusy.set(true);
+    this.importError.set(null);
+
+    this.patternStore.importFile(file).subscribe({
+      next: () => {
+        this.cancelImport();
+        this.importBusy.set(false);
+        this.colorStore.load().subscribe();
+      },
+      error: (err) => {
+        this.importError.set(extractErrorMessage(err));
+        this.importBusy.set(false);
+      },
+    });
+  }
+
+  protected warningKey(reason: string): string {
+    return reason === 'unsupportedFill' ? 'matrixEditor.importWarningUnsupportedFill' : 'matrixEditor.importWarningUnresolvedColor';
   }
 
   protected expandPattern(): void {
