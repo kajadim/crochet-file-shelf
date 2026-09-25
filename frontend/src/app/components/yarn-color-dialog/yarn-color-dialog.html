@@ -1,10 +1,10 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
   @if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   }
 
-  <div class="flex flex-col gap-1">
-    <label for="color-name" class="text-sm text-gray-700">{{ 'common.name' | transloco }}</label>
+  <div class="field">
+    <label for="color-name" class="field__label">{{ 'common.name' | transloco }}</label>
     <input
       pInputText
       id="color-name"
@@ -12,37 +12,36 @@
       formControlName="name"
       maxlength="100"
       [placeholder]="'palette.colorNamePlaceholder' | transloco"
-      class="w-full"
     />
     @if (
       (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
       form.controls.name.touched
     ) {
-      <small class="text-red-600">{{ 'common.nameRequired' | transloco }}</small>
+      <small class="field__error">{{ 'common.nameRequired' | transloco }}</small>
     }
   </div>
 
-  <div class="flex items-start gap-3">
+  <div class="color-dialog__row">
     <input
       type="color"
-      class="mt-1 h-12 w-14 shrink-0 cursor-pointer rounded border border-gray-300 bg-white p-1"
+      class="color-dialog__picker"
       aria-label="Pick a color"
       [value]="pickerValue()"
       (input)="onPickerInput($event)"
     />
 
-    <div class="flex flex-1 flex-col gap-1">
-      <label for="color-hex" class="text-sm text-gray-700">{{ 'dialogs.yarnColor.colorCode' | transloco }}</label>
-      <input pInputText id="color-hex" type="text" formControlName="hexValue" maxlength="7" placeholder="#RRGGBB" class="w-full" />
-      <small class="text-gray-500">{{ 'dialogs.yarnColor.colorFormatHint' | transloco }}</small>
+    <div class="field color-dialog__hex">
+      <label for="color-hex" class="field__label">{{ 'dialogs.yarnColor.colorCode' | transloco }}</label>
+      <input pInputText id="color-hex" type="text" formControlName="hexValue" maxlength="7" placeholder="#RRGGBB" />
+      <small class="field__hint">{{ 'dialogs.yarnColor.colorFormatHint' | transloco }}</small>
       @if (form.controls.hexValue.invalid && form.controls.hexValue.touched) {
-        <small class="text-red-600">{{ 'dialogs.yarnColor.colorFormatError' | transloco }}</small>
+        <small class="field__error">{{ 'dialogs.yarnColor.colorFormatError' | transloco }}</small>
       }
     </div>
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="color-notes" class="text-sm text-gray-700">{{ 'dialogs.yarnColor.notes' | transloco }}</label>
+  <div class="field">
+    <label for="color-notes" class="field__label">{{ 'dialogs.yarnColor.notes' | transloco }}</label>
     <textarea
       pTextarea
       id="color-notes"
@@ -50,20 +49,19 @@
       formControlName="notes"
       maxlength="500"
       [placeholder]="'palette.notesPlaceholder' | transloco"
-      class="w-full"
     ></textarea>
   </div>
 
   @if (data.color && data.color.worksUsingCount > 0) {
-    <div class="flex flex-col gap-1">
-      <p class="text-xs text-gray-500">{{ usageNote() }}</p>
-      <div class="max-h-48 overflow-y-auto rounded border border-gray-200 p-1">
+    <div class="field">
+      <p class="field__hint">{{ usageNote() }}</p>
+      <div class="color-dialog__works">
         <app-color-works-list [colorId]="data.color.id" (opened)="dialogRef.close()" />
       </div>
     </div>
   }
 
-  <div class="flex justify-end gap-2">
+  <div class="form-actions">
     <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
   </div>

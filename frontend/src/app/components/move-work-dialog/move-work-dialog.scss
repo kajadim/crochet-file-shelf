@@ -1,0 +1,22 @@
+.move-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.move-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &--current {
+    opacity: 0.55;
+  }
+
+  &__tag {
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+  }
+}

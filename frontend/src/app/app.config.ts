@@ -13,8 +13,8 @@ import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
 import { TranslocoService, provideTransloco } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import Aura from '@primeuix/themes/aura';
 
+import { CrochetTheme } from './core/theme/crochet-theme';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { connectionIdInterceptor } from './core/interceptors/connection-id-interceptor';
@@ -44,7 +44,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAppInitializer(() => inject(Auth).restoreSession()),
     provideAnimationsAsync(),
-    providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: false } } }),
+    providePrimeNG({ theme: { preset: CrochetTheme, options: { darkModeSelector: false } } }),
     DialogService,
     MessageService,
   ],

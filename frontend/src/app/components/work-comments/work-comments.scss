@@ -1,5 +1,116 @@
-:host ::ng-deep .comment-body {
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  &__composer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-align: left;
+    color: var(--c-text-soft);
+
+    &:hover {
+      color: var(--c-primary-dark);
+    }
+  }
+
+  &__chevron {
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+  }
+
+  &__submit {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__note {
+    font-size: 0.875rem;
+    color: var(--c-text-muted);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.comment {
+  padding: 0.75rem 0.9rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+
+  &__edit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__edit-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  &__author-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__name {
+    font-weight: 700;
+    color: var(--c-text-soft);
+  }
+
+  &__username {
+    margin-left: 0.25rem;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 0.25rem;
+  }
+}
+
+:host ::ng-deep .comment__body {
   overflow-wrap: anywhere;
+  color: var(--c-text);
 
   p {
     margin: 0 0 0.5rem;
@@ -10,19 +121,19 @@
   }
 
   ul {
-    list-style: disc;
     padding-left: 1.5rem;
     margin: 0 0 0.5rem;
+    list-style: disc;
   }
 
   ol {
-    list-style: decimal;
     padding-left: 1.5rem;
     margin: 0 0 0.5rem;
+    list-style: decimal;
   }
 
   a {
-    color: #2563eb;
+    color: var(--c-primary-dark);
     text-decoration: underline;
   }
 }

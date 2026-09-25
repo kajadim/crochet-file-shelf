@@ -1,24 +1,24 @@
-<div class="flex h-full">
-  <div class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50">
-    <div class="flex items-center justify-between gap-3 px-4 py-3">
-      <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
+<div class="video">
+  <div class="video__stage">
+    <div class="video__topbar">
+      <a routerLink="/" class="video__back">
         <i class="pi pi-arrow-left"></i>
       </a>
       <app-work-presence [workId]="workId" />
     </div>
 
-    <div class="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 p-4">
+    <div class="video__content">
       @if (videoStore.loading()) {
-        <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+        <p class="video__note">{{ 'common.loading' | transloco }}</p>
       } @else if (videoStore.error()) {
-        <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ videoStore.error() }}</p>
+        <p class="alert alert--error">{{ videoStore.error() }}</p>
       } @else if (videoStore.video()) {
         @if (videoStore.available() === false) {
-          <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ 'videoWork.linkNotWorking' | transloco }}</p>
+          <p class="alert alert--error">{{ 'videoWork.linkNotWorking' | transloco }}</p>
         } @else if (videoStore.embeddable() === false) {
-          <div class="flex max-w-md flex-col items-center gap-3 rounded-lg border border-gray-300 bg-white p-6 text-center">
-            <i class="pi pi-lock text-2xl text-gray-500"></i>
-            <p class="text-sm text-gray-700">{{ 'videoWork.embedBlocked' | transloco }}</p>
+          <div class="video__blocked">
+            <i class="pi pi-lock video__blocked-icon"></i>
+            <p class="video__blocked-text">{{ 'videoWork.embedBlocked' | transloco }}</p>
             <p-button
               [label]="'videoWork.openOriginal' | transloco"
               icon="pi pi-external-link"
@@ -30,7 +30,8 @@
             <iframe
               #player
               [src]="source.safe"
-              [class]="frameClass() + ' rounded border border-gray-200 bg-white'"
+              class="video__frame"
+              [class]="frameClass()"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
               allowfullscreen
               referrerpolicy="strict-origin-when-cross-origin"
@@ -38,22 +39,22 @@
             ></iframe>
           }
         } @else {
-          <p class="text-sm text-gray-500">{{ 'videoWork.noPreview' | transloco }}</p>
+          <p class="video__note">{{ 'videoWork.noPreview' | transloco }}</p>
         }
       }
     </div>
   </div>
 
-  <aside class="flex w-80 shrink-0 flex-col gap-5 overflow-y-auto border-l border-gray-200 p-4">
-    <h1 class="text-lg font-semibold break-words">{{ workName() }}</h1>
+  <aside class="video__sidebar">
+    <h1 class="video__name">{{ workName() }}</h1>
 
     @if (role() === 'Viewer') {
-      <span class="self-start rounded bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">{{ 'matrixEditor.viewOnlyBadge' | transloco }}</span>
+      <span class="badge badge--view-only">{{ 'matrixEditor.viewOnlyBadge' | transloco }}</span>
     }
 
     @if (videoStore.video(); as video) {
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">{{ video.platform }}</span>
+      <div class="video__actions">
+        <span class="video__platform">{{ video.platform }}</span>
         <p-button
           [label]="'videoWork.openOriginal' | transloco"
           icon="pi pi-external-link"
@@ -72,52 +73,52 @@
 
       @if (canEdit()) {
         <div>
-          <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.startTime' | transloco }}</p>
+          <p class="section-label video__section-label">{{ 'videoWork.startTime' | transloco }}</p>
 
           @if (timeError()) {
-            <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ timeError() }}</p>
+            <p class="alert alert--error video__alert">{{ timeError() }}</p>
           }
 
-          <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="flex flex-col gap-1">
-            <div class="flex items-end gap-2">
-              <div class="flex w-14 flex-col gap-1">
-                <label for="time-hours" class="truncate text-[11px] text-gray-500">{{ 'videoWork.hours' | transloco }}</label>
-                <input pInputText id="time-hours" type="number" min="0" max="99" formControlName="hours" placeholder="0" class="w-full" />
+          <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="video__form">
+            <div class="video__time">
+              <div class="field video__time-field">
+                <label for="time-hours" class="field__hint">{{ 'videoWork.hours' | transloco }}</label>
+                <input pInputText id="time-hours" type="number" min="0" max="99" formControlName="hours" placeholder="0" />
               </div>
-              <div class="flex w-14 flex-col gap-1">
-                <label for="time-minutes" class="truncate text-[11px] text-gray-500">{{ 'videoWork.minutes' | transloco }}</label>
-                <input pInputText id="time-minutes" type="number" min="0" max="59" formControlName="minutes" placeholder="0" class="w-full" />
+              <div class="field video__time-field">
+                <label for="time-minutes" class="field__hint">{{ 'videoWork.minutes' | transloco }}</label>
+                <input pInputText id="time-minutes" type="number" min="0" max="59" formControlName="minutes" placeholder="0" />
               </div>
-              <div class="flex w-14 flex-col gap-1">
-                <label for="time-seconds" class="truncate text-[11px] text-gray-500">{{ 'videoWork.seconds' | transloco }}</label>
-                <input pInputText id="time-seconds" type="number" min="0" max="59" formControlName="seconds" placeholder="0" class="w-full" />
+              <div class="field video__time-field">
+                <label for="time-seconds" class="field__hint">{{ 'videoWork.seconds' | transloco }}</label>
+                <input pInputText id="time-seconds" type="number" min="0" max="59" formControlName="seconds" placeholder="0" />
               </div>
-              <p-button class="ml-auto" [label]="'common.save' | transloco" type="submit" [outlined]="true" [loading]="timeSaving()" />
+              <p-button class="video__save" [label]="'common.save' | transloco" type="submit" [outlined]="true" [loading]="timeSaving()" />
             </div>
             @if (timeForm.invalid && timeForm.touched) {
-              <small class="text-red-600">{{ 'videoWork.startTimeInvalid' | transloco }}</small>
+              <small class="field__error">{{ 'videoWork.startTimeInvalid' | transloco }}</small>
             }
           </form>
 
           @if (video.platform !== 'YouTube') {
-            <p class="mt-2 text-xs text-gray-500">{{ 'videoWork.reminderNote' | transloco }}</p>
+            <p class="video__hint">{{ 'videoWork.reminderNote' | transloco }}</p>
           }
         </div>
       }
 
       @if (isOwner()) {
         <div>
-          <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.link' | transloco }}</p>
+          <p class="section-label video__section-label">{{ 'videoWork.link' | transloco }}</p>
 
           @if (linkError()) {
-            <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ linkError() }}</p>
+            <p class="alert alert--error video__alert">{{ linkError() }}</p>
           }
 
-          <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="flex flex-col gap-2">
-            <div class="flex flex-col gap-1">
-              <input pInputText type="text" formControlName="url" maxlength="2048" class="w-full" />
+          <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="video__form">
+            <div class="field">
+              <input pInputText type="text" formControlName="url" maxlength="2048" />
               @if (linkForm.controls.url.invalid && linkForm.controls.url.touched) {
-                <small class="text-red-600">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
+                <small class="field__error">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
               }
             </div>
             <div>

@@ -1,0 +1,17 @@
+<span
+  class="avatar"
+  [class.avatar--tone-0]="tone() === 0"
+  [class.avatar--tone-1]="tone() === 1"
+  [class.avatar--tone-2]="tone() === 2"
+  [class.avatar--tone-3]="tone() === 3"
+  [style.width.px]="size()"
+  [style.height.px]="size()"
+  [style.font-size.px]="size() * 0.38"
+  aria-hidden="true"
+>
+  @if (url(); as src) {
+    <img [src]="src" alt="" class="avatar__image" />
+  } @else {
+    {{ initials() }}
+  }
+</span>

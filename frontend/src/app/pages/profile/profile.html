@@ -1,17 +1,17 @@
-<div class="mx-auto flex max-w-3xl flex-col gap-6 p-6">
+<div class="profile">
   @if (loading()) {
-    <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+    <p class="profile__note">{{ 'common.loading' | transloco }}</p>
   } @else if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   } @else if (profile(); as p) {
-    <section class="flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-5">
-      <div class="flex items-center gap-4">
+    <section class="profile__card">
+      <div class="profile__identity">
         <app-avatar [userId]="p.id" [name]="p.displayName" [version]="p.avatarVersion" [size]="80" />
-        <div class="min-w-0 flex-1">
-          <h1 class="truncate text-xl font-semibold text-gray-800">{{ p.displayName }}</h1>
-          <p class="truncate text-sm text-gray-600">&#64;{{ p.username }}</p>
-          <p class="truncate text-sm text-gray-600">{{ p.email }}</p>
-          <p class="text-xs text-gray-500">
+        <div class="profile__names">
+          <h1 class="profile__name">{{ p.displayName }}</h1>
+          <p class="profile__meta">&#64;{{ p.username }}</p>
+          <p class="profile__meta">{{ p.email }}</p>
+          <p class="profile__since">
             {{ 'profile.memberSince' | transloco: { date: (p.createdAt | date: 'mediumDate') } }}
           </p>
         </div>
@@ -27,15 +27,15 @@
 
       @if (!editing()) {
         @if (p.bio) {
-          <p class="text-sm whitespace-pre-line text-gray-700">{{ p.bio }}</p>
+          <p class="profile__bio">{{ p.bio }}</p>
         }
       } @else {
-        <div class="flex flex-col gap-3 border-t border-gray-200 pt-4">
+        <div class="profile__edit">
           @if (avatarError()) {
-            <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ avatarError() }}</p>
+            <p class="alert alert--error">{{ avatarError() }}</p>
           }
-          <div class="flex flex-wrap items-center gap-2">
-            <input #avatarInput type="file" accept="image/*" class="hidden" (change)="onAvatarSelected($event)" />
+          <div class="profile__avatar-actions">
+            <input #avatarInput type="file" accept="image/*" class="profile__file" (change)="onAvatarSelected($event)" />
             <p-button
               [label]="'profile.changePhoto' | transloco"
               icon="pi pi-image"
@@ -58,53 +58,53 @@
           </div>
 
           @if (editError()) {
-            <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ editError() }}</p>
+            <p class="alert alert--error">{{ editError() }}</p>
           }
 
-          <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-3">
-            <div class="grid gap-3 sm:grid-cols-2">
-              <div class="flex flex-col gap-1">
-                <label for="profile-firstName" class="text-sm text-gray-700">{{ 'auth.register.firstName' | transloco }}</label>
-                <input pInputText id="profile-firstName" type="text" formControlName="firstName" autocomplete="given-name" class="w-full" />
+          <form [formGroup]="form" (ngSubmit)="save()" class="profile__form">
+            <div class="profile__name-grid">
+              <div class="field">
+                <label for="profile-firstName" class="field__label">{{ 'auth.register.firstName' | transloco }}</label>
+                <input pInputText id="profile-firstName" type="text" formControlName="firstName" autocomplete="given-name" />
                 @if (form.controls.firstName.hasError('required') && form.controls.firstName.touched) {
-                  <small class="text-red-600">{{ 'auth.register.firstNameRequired' | transloco }}</small>
+                  <small class="field__error">{{ 'auth.register.firstNameRequired' | transloco }}</small>
                 } @else if (form.controls.firstName.hasError('maxlength')) {
-                  <small class="text-red-600">{{ 'auth.register.firstNameMaxLength' | transloco }}</small>
+                  <small class="field__error">{{ 'auth.register.firstNameMaxLength' | transloco }}</small>
                 }
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="profile-lastName" class="text-sm text-gray-700">{{ 'auth.register.lastName' | transloco }}</label>
-                <input pInputText id="profile-lastName" type="text" formControlName="lastName" autocomplete="family-name" class="w-full" />
+              <div class="field">
+                <label for="profile-lastName" class="field__label">{{ 'auth.register.lastName' | transloco }}</label>
+                <input pInputText id="profile-lastName" type="text" formControlName="lastName" autocomplete="family-name" />
                 @if (form.controls.lastName.hasError('required') && form.controls.lastName.touched) {
-                  <small class="text-red-600">{{ 'auth.register.lastNameRequired' | transloco }}</small>
+                  <small class="field__error">{{ 'auth.register.lastNameRequired' | transloco }}</small>
                 } @else if (form.controls.lastName.hasError('maxlength')) {
-                  <small class="text-red-600">{{ 'auth.register.lastNameMaxLength' | transloco }}</small>
+                  <small class="field__error">{{ 'auth.register.lastNameMaxLength' | transloco }}</small>
                 }
               </div>
             </div>
 
-            <div class="flex flex-col gap-1">
-              <label for="profile-username" class="text-sm text-gray-700">{{ 'auth.register.username' | transloco }}</label>
-              <input pInputText id="profile-username" type="text" formControlName="username" autocapitalize="none" class="w-full" />
-              <small class="text-gray-500">{{ 'auth.register.usernameHint' | transloco }}</small>
+            <div class="field">
+              <label for="profile-username" class="field__label">{{ 'auth.register.username' | transloco }}</label>
+              <input pInputText id="profile-username" type="text" formControlName="username" autocapitalize="none" />
+              <small class="field__hint">{{ 'auth.register.usernameHint' | transloco }}</small>
               @if (form.controls.username.hasError('required')) {
-                <small class="text-red-600">{{ 'auth.register.usernameRequired' | transloco }}</small>
+                <small class="field__error">{{ 'auth.register.usernameRequired' | transloco }}</small>
               } @else if (form.controls.username.hasError('pattern')) {
-                <small class="text-red-600">{{ 'auth.register.usernamePattern' | transloco }}</small>
+                <small class="field__error">{{ 'auth.register.usernamePattern' | transloco }}</small>
               } @else if (form.controls.username.hasError('usernameTaken')) {
-                <small class="text-red-600">{{ 'auth.register.usernameTaken' | transloco }}</small>
+                <small class="field__error">{{ 'auth.register.usernameTaken' | transloco }}</small>
               } @else if (form.controls.username.pending) {
-                <small class="text-gray-500">{{ 'auth.register.usernameChecking' | transloco }}</small>
+                <small class="field__hint">{{ 'auth.register.usernameChecking' | transloco }}</small>
               }
             </div>
 
-            <div class="flex flex-col gap-1">
-              <label for="profile-bio" class="text-sm text-gray-700">{{ 'profile.bio' | transloco }}</label>
-              <textarea pTextarea id="profile-bio" rows="3" formControlName="bio" maxlength="500" class="w-full"></textarea>
-              <small class="self-end text-gray-500">{{ form.controls.bio.value.length }} / 500</small>
+            <div class="field">
+              <label for="profile-bio" class="field__label">{{ 'profile.bio' | transloco }}</label>
+              <textarea pTextarea id="profile-bio" rows="3" formControlName="bio" maxlength="500"></textarea>
+              <small class="profile__counter">{{ form.controls.bio.value.length }} / 500</small>
             </div>
 
-            <div class="flex gap-2">
+            <div class="profile__form-actions">
               <p-button [label]="'common.save' | transloco" type="submit" [loading]="saving()" [disabled]="form.pending" />
               <p-button [label]="'common.cancel' | transloco" [text]="true" (onClick)="cancelEdit()" />
             </div>
@@ -113,46 +113,46 @@
       }
     </section>
 
-    <section class="flex flex-col gap-3">
-      <div class="flex items-baseline justify-between">
-        <h2 class="text-base font-semibold text-gray-800">{{ 'profile.myWorks' | transloco }}</h2>
-        <span class="text-sm text-gray-500">{{ 'profile.total' | transloco: { count: totalWorks() } }}</span>
+    <section class="profile__section">
+      <div class="profile__section-head">
+        <h2 class="profile__section-title">{{ 'profile.myWorks' | transloco }}</h2>
+        <span class="profile__total">{{ 'profile.total' | transloco: { count: totalWorks() } }}</span>
       </div>
-      <div class="grid grid-cols-3 gap-3">
+      <div class="profile__tiles">
         @for (tile of tiles(); track tile.key) {
-          <div class="flex flex-col items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-4">
-            <i class="pi {{ tile.icon }} text-xl text-gray-500"></i>
-            <span class="text-2xl font-semibold text-gray-800">{{ tile.count }}</span>
-            <span class="text-xs text-gray-500">{{ tile.key | transloco }}</span>
+          <div class="tile">
+            <i class="pi {{ tile.icon }} tile__icon"></i>
+            <span class="tile__count">{{ tile.count }}</span>
+            <span class="tile__label">{{ tile.key | transloco }}</span>
           </div>
         }
       </div>
     </section>
 
-    <section class="flex flex-col gap-3">
-      <h2 class="text-base font-semibold text-gray-800">{{ 'profile.sharedByMe' | transloco }}</h2>
+    <section class="profile__section">
+      <h2 class="profile__section-title">{{ 'profile.sharedByMe' | transloco }}</h2>
       @if (p.sharedByMe.length === 0) {
-        <p class="text-sm text-gray-500">{{ 'profile.sharedByMeEmpty' | transloco }}</p>
+        <p class="profile__note">{{ 'profile.sharedByMeEmpty' | transloco }}</p>
       } @else {
-        <ul class="flex flex-col gap-3">
+        <ul class="profile__list">
           @for (person of p.sharedByMe; track person.userId) {
-            <li class="flex flex-col gap-2 rounded-lg border border-gray-300 bg-white p-4">
-              <div class="flex items-center gap-3">
+            <li class="collab">
+              <div class="collab__person">
                 <app-avatar [userId]="person.userId" [name]="person.displayName" [version]="person.avatarVersion" [size]="36" />
-                <span class="min-w-0 truncate">
-                  <span class="font-medium text-gray-800">{{ person.displayName }}</span>
-                  <span class="ml-1 text-xs text-gray-500">&#64;{{ person.username }}</span>
+                <span class="collab__label">
+                  <span class="collab__name">{{ person.displayName }}</span>
+                  <span class="collab__username">&#64;{{ person.username }}</span>
                 </span>
               </div>
-              <div class="flex flex-wrap gap-2">
+              <div class="collab__works">
                 @for (work of person.works; track work.workId) {
                   <button
                     type="button"
-                    class="flex max-w-full items-center gap-2 rounded-full border border-gray-300 px-3 py-1 text-xs text-gray-700 hover:bg-gray-100"
+                    class="work-chip"
                     (click)="openWork(work)"
                   >
-                    <span class="truncate">{{ work.name }}</span>
-                    <span class="shrink-0 text-gray-500">· {{ permissionKey(work) | transloco }}</span>
+                    <span class="work-chip__name">{{ work.name }}</span>
+                    <span class="work-chip__role">· {{ permissionKey(work) | transloco }}</span>
                   </button>
                 }
               </div>
@@ -162,30 +162,30 @@
       }
     </section>
 
-    <section class="flex flex-col gap-3">
-      <h2 class="text-base font-semibold text-gray-800">{{ 'profile.sharedWithMe' | transloco }}</h2>
+    <section class="profile__section">
+      <h2 class="profile__section-title">{{ 'profile.sharedWithMe' | transloco }}</h2>
       @if (p.sharedWithMe.length === 0) {
-        <p class="text-sm text-gray-500">{{ 'profile.sharedWithMeEmpty' | transloco }}</p>
+        <p class="profile__note">{{ 'profile.sharedWithMeEmpty' | transloco }}</p>
       } @else {
-        <ul class="flex flex-col gap-3">
+        <ul class="profile__list">
           @for (person of p.sharedWithMe; track person.userId) {
-            <li class="flex flex-col gap-2 rounded-lg border border-gray-300 bg-white p-4">
-              <div class="flex items-center gap-3">
+            <li class="collab">
+              <div class="collab__person">
                 <app-avatar [userId]="person.userId" [name]="person.displayName" [version]="person.avatarVersion" [size]="36" />
-                <span class="min-w-0 truncate">
-                  <span class="font-medium text-gray-800">{{ person.displayName }}</span>
-                  <span class="ml-1 text-xs text-gray-500">&#64;{{ person.username }}</span>
+                <span class="collab__label">
+                  <span class="collab__name">{{ person.displayName }}</span>
+                  <span class="collab__username">&#64;{{ person.username }}</span>
                 </span>
               </div>
-              <div class="flex flex-wrap gap-2">
+              <div class="collab__works">
                 @for (work of person.works; track work.workId) {
                   <button
                     type="button"
-                    class="flex max-w-full items-center gap-2 rounded-full border border-gray-300 px-3 py-1 text-xs text-gray-700 hover:bg-gray-100"
+                    class="work-chip"
                     (click)="openWork(work)"
                   >
-                    <span class="truncate">{{ work.name }}</span>
-                    <span class="shrink-0 text-gray-500">· {{ permissionKey(work) | transloco }}</span>
+                    <span class="work-chip__name">{{ work.name }}</span>
+                    <span class="work-chip__role">· {{ permissionKey(work) | transloco }}</span>
                   </button>
                 }
               </div>
@@ -195,14 +195,14 @@
       }
     </section>
 
-    <section class="flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-5">
-      <h2 class="text-base font-semibold text-gray-800">{{ 'profile.account' | transloco }}</h2>
+    <section class="profile__card">
+      <h2 class="profile__section-title">{{ 'profile.account' | transloco }}</h2>
 
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <label for="profile-language" class="text-sm text-gray-700">{{ 'profile.language' | transloco }}</label>
+      <div class="profile__row">
+        <label for="profile-language" class="field__label">{{ 'profile.language' | transloco }}</label>
         <select
           id="profile-language"
-          class="rounded border border-gray-300 bg-white px-2 py-1.5 text-sm"
+          class="native-select"
           (change)="onLanguageChange($event)"
         >
           @for (option of language.options; track option.code) {
@@ -212,10 +212,10 @@
       </div>
 
       @if (resetError()) {
-        <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ resetError() }}</p>
+        <p class="alert alert--error">{{ resetError() }}</p>
       }
 
-      <div class="flex flex-wrap gap-2">
+      <div class="profile__buttons">
         <p-button
           [label]="'profile.resetPassword' | transloco"
           icon="pi pi-key"

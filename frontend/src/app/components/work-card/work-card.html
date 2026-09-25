@@ -1,16 +1,13 @@
-<article
-  class="flex h-full cursor-pointer flex-col gap-2 rounded-lg border border-gray-300 bg-white p-4"
-  (click)="onCardClick()"
->
-  <div class="flex items-center justify-between gap-2">
-    <span class="inline-flex items-center gap-1 rounded-full border border-gray-300 px-2 py-0.5 text-xs text-gray-700">
-      <i class="pi {{ typeIcon() }} text-sm"></i>
+<article class="work-card" (click)="onCardClick()">
+  <div class="work-card__top">
+    <span class="work-card__type">
+      <i class="pi {{ typeIcon() }}"></i>
       {{ typeKey() | transloco }}
     </span>
 
     @if (isOwner() && work().isShared) {
-      <span class="mr-auto inline-flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-xs text-teal-800">
-        <i class="pi pi-users text-xs"></i>
+      <span class="work-card__shared">
+        <i class="pi pi-users"></i>
         {{ 'workCard.shared' | transloco }}
       </span>
     }
@@ -18,27 +15,27 @@
     <app-action-menu [items]="menuItems()" [ariaLabel]="workActionsLabel" />
   </div>
 
-  <h3 class="text-lg font-semibold break-words">{{ work().name }}</h3>
+  <h3 class="work-card__title">{{ work().name }}</h3>
 
   @if (folderPath()) {
-    <p class="flex min-w-0 items-center gap-1 text-xs text-gray-500" [title]="folderPath()">
-      <i class="pi pi-folder shrink-0 text-xs"></i>
-      <span class="truncate">{{ folderPath() }}</span>
+    <p class="work-card__meta" [title]="folderPath()">
+      <i class="pi pi-folder"></i>
+      <span class="work-card__meta-text">{{ folderPath() }}</span>
     </p>
   }
 
   @if (!isOwner()) {
-    <p class="flex items-center gap-1 text-xs text-gray-500">
-      <i class="pi pi-users text-xs"></i>
+    <p class="work-card__meta">
+      <i class="pi pi-users"></i>
       {{ 'workCard.sharedBy' | transloco: { name: work().ownerName } }} · {{ roleKey() | transloco }}
     </p>
   }
 
   @if (work().description) {
-    <p class="line-clamp-3 text-sm text-gray-600 break-words">{{ work().description }}</p>
+    <p class="work-card__description">{{ work().description }}</p>
   }
 
-  <p class="mt-auto pt-2 text-xs text-gray-500">
+  <p class="work-card__updated">
     {{ 'workCard.updated' | transloco: { date: work().updatedAt | date: 'mediumDate' } }}
   </p>
 </article>

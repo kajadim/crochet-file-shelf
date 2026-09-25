@@ -1,0 +1,83 @@
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    &--tight {
+      gap: 0.5rem;
+    }
+  }
+
+  &__note {
+    font-size: 0.875rem;
+    color: var(--c-text-muted);
+
+    &--small {
+      font-size: 0.75rem;
+    }
+  }
+
+  &__code-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--c-surface-soft);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+  }
+
+  &__code {
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--c-primary-dark);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__members {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__member {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+  }
+
+  &__member-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__member-username {
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--c-text-muted);
+  }
+}

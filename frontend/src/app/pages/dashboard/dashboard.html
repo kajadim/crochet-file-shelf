@@ -1,5 +1,5 @@
-<div class="flex h-full">
-  <aside class="flex w-72 shrink-0 flex-col gap-3 overflow-y-auto border-r border-gray-200 p-3">
+<div class="dashboard">
+  <aside class="dashboard__sidebar">
     <p-button
       [label]="'dashboard.newFolder' | transloco"
       icon="pi pi-folder-plus"
@@ -18,21 +18,16 @@
 
     <button
       type="button"
-      class="flex items-center gap-2 rounded-md px-3 py-1.5 text-left hover:bg-gray-100"
-      [class.bg-gray-200]="folderStore.selectedId() === null && !sharedView()"
+      class="dashboard__nav-item"
+      [class.is-active]="folderStore.selectedId() === null && !sharedView()"
       (click)="selectFolder(null)"
     >
-      <i class="pi pi-folder text-sm"></i>
+      <i class="pi pi-folder"></i>
       {{ 'dashboard.allWorks' | transloco }}
     </button>
 
-    <button
-      type="button"
-      class="flex items-center gap-2 rounded-md px-3 py-1.5 text-left hover:bg-gray-100"
-      [class.bg-gray-200]="sharedView()"
-      (click)="selectShared()"
-    >
-      <i class="pi pi-users text-sm"></i>
+    <button type="button" class="dashboard__nav-item" [class.is-active]="sharedView()" (click)="selectShared()">
+      <i class="pi pi-users"></i>
       {{ 'dashboard.sharedWithMe' | transloco }}
     </button>
 
@@ -48,21 +43,21 @@
     />
   </aside>
 
-  <main class="min-w-0 flex-1 overflow-y-auto p-6">
+  <main class="dashboard__main">
     @if (loadError()) {
-      <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ loadError() }}</p>
+      <p class="alert alert--error">{{ loadError() }}</p>
     } @else if (folderStore.loaded()) {
-      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 class="text-xl font-semibold">
+      <div class="dashboard__head">
+        <h1 class="dashboard__title">
           @if (sharedView()) {
             {{ 'dashboard.sharedWithMe' | transloco }}
           } @else if (filtersActive() && !folderStore.selectedFolder()) {
             {{ 'dashboard.searchResults' | transloco }}
           } @else if (folderStore.breadcrumb().length > 0) {
             @for (folder of folderStore.breadcrumb(); track folder.id; let last = $last) {
-              <span [class.text-gray-500]="!last">{{ folder.name }}</span>
+              <span [class.dashboard__crumb--parent]="!last">{{ folder.name }}</span>
               @if (!last) {
-                <span class="text-gray-400"> / </span>
+                <span class="dashboard__crumb-separator"> / </span>
               }
             }
           } @else {
@@ -71,7 +66,7 @@
         </h1>
 
         <span
-          class="inline-block"
+          class="dashboard__new-work"
           [title]="sharedView() || !folderStore.selectedFolder() ? ('dashboard.selectFolderFirst' | transloco) : ''"
         >
           <p-button
@@ -83,13 +78,13 @@
         </span>
       </div>
 
-      <div class="mb-6 flex flex-wrap items-center gap-2">
-        <span class="relative">
-          <i class="pi pi-search pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm text-gray-400"></i>
+      <div class="dashboard__filters">
+        <span class="dashboard__search">
+          <i class="pi pi-search dashboard__search-icon"></i>
           <input
             pInputText
             type="text"
-            class="w-64 pl-9"
+            class="dashboard__search-input"
             maxlength="200"
             [value]="searchInput()"
             [placeholder]="'dashboard.searchPlaceholder' | transloco"
@@ -98,6 +93,7 @@
         </span>
 
         <p-select
+          class="filter-select"
           [options]="typeOptions"
           optionLabel="label"
           optionValue="value"
@@ -105,7 +101,6 @@
           (ngModelChange)="typeFilter.set($event)"
           [showClear]="true"
           [placeholder]="'dashboard.filterType' | transloco"
-          styleClass="w-44"
         >
           <ng-template #selectedItem let-option>{{ option.label | transloco }}</ng-template>
           <ng-template #item let-option>{{ option.label | transloco }}</ng-template>
@@ -113,6 +108,7 @@
 
         @if (!sharedView()) {
           <p-select
+            class="filter-select"
             [options]="sharingOptions"
             optionLabel="label"
             optionValue="value"
@@ -120,7 +116,6 @@
             (ngModelChange)="sharingFilter.set($event)"
             [showClear]="true"
             [placeholder]="'dashboard.filterSharing' | transloco"
-            styleClass="w-44"
           >
             <ng-template #selectedItem let-option>{{ option.label | transloco }}</ng-template>
             <ng-template #item let-option>{{ option.label | transloco }}</ng-template>
@@ -128,6 +123,7 @@
         }
 
         <p-select
+          class="filter-select filter-select--wide"
           [options]="colorStore.colors()"
           optionLabel="name"
           optionValue="id"
@@ -135,29 +131,28 @@
           (ngModelChange)="colorFilter.set($event)"
           [showClear]="true"
           [placeholder]="'dashboard.filterColor' | transloco"
-          styleClass="w-48"
         >
           <ng-template #selectedItem let-option>
-            <span class="flex items-center gap-2">
-              <span class="h-3.5 w-3.5 rounded border border-gray-300" [style.background-color]="option.hexValue"></span>
+            <span class="filter-option">
+              <span class="filter-option__swatch" [style.background-color]="option.hexValue"></span>
               {{ option.name }}
             </span>
           </ng-template>
           <ng-template #item let-option>
-            <span class="flex items-center gap-2">
-              <span class="h-3.5 w-3.5 rounded border border-gray-300" [style.background-color]="option.hexValue"></span>
+            <span class="filter-option">
+              <span class="filter-option__swatch" [style.background-color]="option.hexValue"></span>
               {{ option.name }}
             </span>
           </ng-template>
         </p-select>
 
         <p-select
+          class="filter-select"
           [options]="platformOptions"
           [ngModel]="platformFilter()"
           (ngModelChange)="platformFilter.set($event)"
           [showClear]="true"
           [placeholder]="'dashboard.filterPlatform' | transloco"
-          styleClass="w-44"
         />
 
         @if (filtersActive() || searchInput()) {
@@ -166,17 +161,13 @@
       </div>
 
       @if (visibleFolders().length > 0) {
-        <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="dashboard__folders">
           @for (folder of visibleFolders(); track folder.id) {
-            <button
-              type="button"
-              class="flex items-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-left hover:bg-gray-50"
-              (click)="selectFolder(folder.id)"
-            >
-              <i class="pi pi-folder text-xl text-amber-600"></i>
-              <span class="min-w-0">
-                <span class="block truncate font-medium text-gray-800">{{ folder.name }}</span>
-                <span class="block truncate text-xs text-gray-500">{{ folderSummary(folder.id) }}</span>
+            <button type="button" class="folder-card" (click)="selectFolder(folder.id)">
+              <i class="pi pi-folder folder-card__icon"></i>
+              <span class="folder-card__body">
+                <span class="folder-card__name">{{ folder.name }}</span>
+                <span class="folder-card__meta">{{ folderSummary(folder.id) }}</span>
               </span>
             </button>
           }
@@ -184,16 +175,16 @@
       }
 
       @if (folderStore.folders().length === 0 && !sharedView()) {
-        <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
-          <p class="mb-3">{{ 'dashboard.emptyFolders' | transloco }}</p>
+        <div class="dashboard__empty">
+          <p class="dashboard__empty-text">{{ 'dashboard.emptyFolders' | transloco }}</p>
           <p-button [label]="'dashboard.newFolder' | transloco" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
         </div>
       } @else if (workStore.error()) {
-        <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ workStore.error() }}</p>
+        <p class="alert alert--error">{{ workStore.error() }}</p>
       } @else if (workStore.loading()) {
-        <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+        <p class="dashboard__note">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
-        <p class="text-gray-500">
+        <p class="dashboard__note">
           @if (filtersActive()) {
             {{ 'dashboard.noResults' | transloco }}
           } @else if (sharedView()) {
@@ -205,7 +196,7 @@
           }
         </p>
       } @else {
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="dashboard__grid">
           @for (work of workStore.works(); track work.id) {
             <app-work-card
               [work]="work"

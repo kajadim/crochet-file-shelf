@@ -1,7 +1,7 @@
-<div class="flex h-full">
-  <div class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50">
-  <div class="flex items-center justify-between gap-3 px-4 py-3">
-    <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
+<div class="matrix">
+  <div class="matrix__stage">
+  <div class="matrix__topbar">
+    <a routerLink="/" class="matrix__back">
       <i class="pi pi-arrow-left"></i>
     </a>
     <app-work-presence [workId]="workId" />
@@ -12,51 +12,51 @@
   </p-drawer>
 
   @if (patternStore.notFound() && role() === null) {
-    <p class="p-6 text-gray-500">{{ 'common.loading' | transloco }}</p>
+    <p class="matrix__note">{{ 'common.loading' | transloco }}</p>
   } @else if (patternStore.notFound() && role() !== 'Owner') {
-    <p class="p-6 text-gray-600">{{ 'matrixEditor.notSetUpYet' | transloco }}</p>
+    <p class="matrix__note">{{ 'matrixEditor.notSetUpYet' | transloco }}</p>
   } @else if (patternStore.notFound()) {
-    <div class="mx-auto w-full max-w-md p-6">
-      <h2 class="mb-1 text-lg font-semibold">{{ 'matrixEditor.setupTitle' | transloco }}</h2>
-      <p class="mb-4 text-sm text-gray-500">{{ 'matrixEditor.setupSubtitle' | transloco }}</p>
+    <div class="matrix__setup">
+      <h2 class="matrix__setup-title">{{ 'matrixEditor.setupTitle' | transloco }}</h2>
+      <p class="matrix__setup-subtitle">{{ 'matrixEditor.setupSubtitle' | transloco }}</p>
 
       @if (setupError()) {
-        <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ setupError() }}</p>
+        <p class="alert alert--error matrix__alert">{{ setupError() }}</p>
       }
 
       @if (importError()) {
-        <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ importError() }}</p>
+        <p class="alert alert--error matrix__alert">{{ importError() }}</p>
       }
 
       @if (importPreview(); as preview) {
-        <div class="flex flex-col gap-4">
+        <div class="matrix__preview">
           <div>
-            <p class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.importPreviewTitle' | transloco }}</p>
-            <p class="text-sm text-gray-600">
+            <p class="section-label">{{ 'matrixEditor.importPreviewTitle' | transloco }}</p>
+            <p class="form-hint">
               {{ 'matrixEditor.importSummary' | transloco: { width: preview.width, height: preview.height, count: preview.coloredCells } }}
             </p>
           </div>
 
-          <ul class="flex flex-col gap-1.5">
+          <ul class="matrix__colors">
             @for (color of preview.colors; track color.hex) {
-              <li class="flex items-center gap-2 text-sm">
-                <span class="h-4 w-4 shrink-0 rounded border border-gray-300" [style.background-color]="color.hex"></span>
-                <span class="font-mono">{{ color.hex }}</span>
-                <span class="text-gray-500">{{ color.count }}</span>
+              <li class="matrix__color-row">
+                <span class="matrix__swatch" [style.background-color]="color.hex"></span>
+                <span class="matrix__mono">{{ color.hex }}</span>
+                <span class="matrix__muted">{{ color.count }}</span>
                 @if (color.existingName) {
-                  <span class="ml-auto text-xs text-gray-500">{{ color.existingName }}</span>
+                  <span class="matrix__color-tag">{{ color.existingName }}</span>
                 } @else {
-                  <span class="ml-auto rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-800">{{ 'matrixEditor.importNewColor' | transloco }}</span>
+                  <span class="matrix__color-tag matrix__color-tag--new">{{ 'matrixEditor.importNewColor' | transloco }}</span>
                 }
               </li>
             }
           </ul>
-          <p class="text-xs text-gray-500">{{ 'matrixEditor.importColorsHint' | transloco }}</p>
+          <p class="matrix__hint">{{ 'matrixEditor.importColorsHint' | transloco }}</p>
 
           @if (preview.skippedCells > 0) {
-            <div class="rounded bg-amber-50 px-3 py-2 text-sm text-amber-900">
-              <p class="mb-1">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
-              <ul class="list-disc pl-5 text-xs">
+            <div class="alert alert--warning">
+              <p class="matrix__warn-title">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
+              <ul class="matrix__warn-list">
                 @for (warning of preview.warnings; track warning.cell) {
                   <li>{{ warning.cell }}: {{ warningKey(warning.reason) | transloco }}</li>
                 }
@@ -64,39 +64,39 @@
             </div>
           }
 
-          <div class="flex gap-2">
+          <div class="matrix__actions">
             <p-button [label]="'matrixEditor.importConfirm' | transloco" [loading]="importBusy()" (onClick)="confirmImport()" />
             <p-button [label]="'common.cancel' | transloco" [text]="true" (onClick)="cancelImport()" />
           </div>
         </div>
       } @else {
-      <form [formGroup]="setupForm" (ngSubmit)="createPattern()" class="flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
-          <label for="width" class="text-sm text-gray-700">{{ 'matrixEditor.width' | transloco }}</label>
-          <input pInputText id="width" type="number" formControlName="width" min="1" max="200" class="w-full" />
+      <form [formGroup]="setupForm" (ngSubmit)="createPattern()" class="form-stack">
+        <div class="field">
+          <label for="width" class="field__label">{{ 'matrixEditor.width' | transloco }}</label>
+          <input pInputText id="width" type="number" formControlName="width" min="1" max="200" />
           @if (setupForm.controls.width.invalid && setupForm.controls.width.touched) {
-            <small class="text-red-600">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
+            <small class="field__error">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
           }
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="height" class="text-sm text-gray-700">{{ 'matrixEditor.height' | transloco }}</label>
-          <input pInputText id="height" type="number" formControlName="height" min="1" max="200" class="w-full" />
+        <div class="field">
+          <label for="height" class="field__label">{{ 'matrixEditor.height' | transloco }}</label>
+          <input pInputText id="height" type="number" formControlName="height" min="1" max="200" />
           @if (setupForm.controls.height.invalid && setupForm.controls.height.touched) {
-            <small class="text-red-600">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
+            <small class="field__error">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
           }
         </div>
 
         <p-button [label]="'common.create' | transloco" type="submit" [loading]="creating()" [fluid]="true" />
       </form>
 
-      <div class="my-5 flex items-center gap-3 text-xs text-gray-400">
-        <span class="h-px flex-1 bg-gray-200"></span>
+      <div class="matrix__divider">
+        <span class="matrix__divider-line"></span>
         {{ 'matrixEditor.importOr' | transloco }}
-        <span class="h-px flex-1 bg-gray-200"></span>
+        <span class="matrix__divider-line"></span>
       </div>
 
-      <input #importInput type="file" accept=".xlsx" class="hidden" (change)="onImportFileSelected($event)" />
+      <input #importInput type="file" accept=".xlsx" class="matrix__file" (change)="onImportFileSelected($event)" />
       <p-button
         icon="pi pi-file-excel"
         [label]="'matrixEditor.importExcel' | transloco"
@@ -108,63 +108,57 @@
       }
     </div>
   } @else if (patternStore.loading()) {
-    <p class="p-6 text-gray-500">{{ 'common.loading' | transloco }}</p>
+    <p class="matrix__note">{{ 'common.loading' | transloco }}</p>
   } @else if (patternStore.error()) {
-    <p class="m-6 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ patternStore.error() }}</p>
+    <p class="alert alert--error matrix__alert matrix__alert--page">{{ patternStore.error() }}</p>
   } @else if (patternStore.pattern(); as pattern) {
-    <div class="min-h-0 flex-1 overflow-auto p-4">
-        <div class="mx-auto w-max">
+    <div class="matrix__scroll">
+        <div class="matrix__board">
         <div
-          class="inline-grid border border-gray-300 bg-white select-none"
+          class="matrix__grid"
           [style.grid-template-columns]="edgeSize() + 'px repeat(' + pattern.width + ', ' + cellSize() + 'px) ' + edgeSize() + 'px'"
           [style.grid-template-rows]="headerSize() + 'px repeat(' + pattern.height + ', ' + cellSize() + 'px) ' + headerSize() + 'px'"
         >
           <div></div>
           @for (col of columns(); track col) {
-            <div class="flex items-center justify-center text-[10px] text-gray-500">{{ col + 1 }}</div>
+            <div class="matrix__index">{{ col + 1 }}</div>
           }
           <div></div>
 
           @for (row of rows(); track row) {
             <button
               type="button"
-              class="flex items-center justify-center gap-0.5 text-[10px] hover:bg-gray-100"
-              [class.bg-amber-100]="row === pattern.activeRow"
-              [class.text-amber-800]="row === pattern.activeRow"
-              [class.font-semibold]="row === pattern.activeRow"
-              [class.text-gray-500]="row !== pattern.activeRow"
+              class="matrix__row-button"
+              [class.is-active]="row === pattern.activeRow"
               [attr.aria-label]="'matrixEditor.markActiveRow' | transloco"
               [title]="'matrixEditor.markActiveRow' | transloco"
               [disabled]="!canEdit()"
               (click)="onRowArrowClick(row)"
             >
               @if (row === pattern.activeRow) {
-                <i class="pi pi-caret-right text-[8px]"></i>
+                <i class="pi pi-caret-right matrix__caret"></i>
               }
               {{ row + 1 }}
             </button>
             @for (col of columns(); track col) {
               <div
-                class="border border-gray-100 box-border"
+                class="matrix__cell"
                 [style.height.px]="cellSize()"
                 [style.width.px]="cellSize()"
-                [class.outline]="row === pattern.currentRow && col === pattern.currentColumn"
-                [class.outline-2]="row === pattern.currentRow && col === pattern.currentColumn"
-                [class.-outline-offset-2]="row === pattern.currentRow && col === pattern.currentColumn"
-                [class.outline-orange-600]="row === pattern.currentRow && col === pattern.currentColumn"
+                [class.is-current]="row === pattern.currentRow && col === pattern.currentColumn"
+                [class.is-active-row]="row === pattern.activeRow"
                 [style.background-color]="patternStore.cellAt(row, col)?.hexValue ?? '#ffffff'"
-                [style.box-shadow]="row === pattern.activeRow ? 'inset 0 0 0 999px rgba(217,119,6,0.2)' : null"
                 (mousedown)="onCellMouseDown(row, col, $event)"
                 (mouseenter)="onCellMouseEnter(row, col)"
                 (contextmenu)="onCellContextMenu(row, col, $event)"
               ></div>
             }
-            <div class="flex items-center justify-center text-[10px] text-gray-500">{{ row + 1 }}</div>
+            <div class="matrix__index">{{ row + 1 }}</div>
           }
 
           <div></div>
           @for (col of columns(); track col) {
-            <div class="flex items-center justify-center text-[10px] text-gray-500">{{ col + 1 }}</div>
+            <div class="matrix__index">{{ col + 1 }}</div>
           }
           <div></div>
         </div>
@@ -175,10 +169,10 @@
 
   @if (!patternStore.notFound() && !patternStore.loading() && !patternStore.error() && patternStore.pattern()) {
       @if (sidebarCollapsed()) {
-        <div class="flex w-10 shrink-0 flex-col items-center gap-1 border-l border-gray-200 py-2 text-gray-500">
+        <div class="matrix__rail">
           <button
             type="button"
-            class="flex h-9 w-9 items-center justify-center rounded hover:bg-gray-100"
+            class="matrix__rail-button"
             [attr.aria-label]="'matrixEditor.togglePalette' | transloco"
             (click)="toggleSidebar()"
           >
@@ -186,7 +180,7 @@
           </button>
           <button
             type="button"
-            class="flex h-9 w-9 items-center justify-center rounded hover:bg-gray-100"
+            class="matrix__rail-button"
             [attr.aria-label]="'comments.title' | transloco"
             [title]="'comments.title' | transloco"
             (click)="commentsOpen = true"
@@ -195,12 +189,12 @@
           </button>
         </div>
       } @else {
-      <aside class="flex w-80 shrink-0 flex-col gap-5 overflow-y-auto border-l border-gray-200 p-4">
-        <div class="flex items-start justify-between gap-2">
-          <h1 class="min-w-0 text-lg font-semibold break-words">{{ workName() }}</h1>
+      <aside class="matrix__sidebar">
+        <div class="matrix__sidebar-head">
+          <h1 class="matrix__name">{{ workName() }}</h1>
           <button
             type="button"
-            class="flex shrink-0 items-center gap-1 py-1 text-xs text-gray-500 hover:text-gray-700"
+            class="matrix__collapse"
             [attr.aria-label]="'matrixEditor.togglePalette' | transloco"
             (click)="toggleSidebar()"
           >
@@ -209,10 +203,10 @@
         </div>
 
         @if (role() === 'Viewer') {
-          <span class="self-start rounded bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">{{ 'matrixEditor.viewOnlyBadge' | transloco }}</span>
+          <span class="badge badge--view-only">{{ 'matrixEditor.viewOnlyBadge' | transloco }}</span>
         }
 
-        <div class="flex flex-wrap gap-2">
+        <div class="matrix__buttons">
           <p-button
             icon="pi pi-file-excel"
             [label]="'matrixEditor.exportExcel' | transloco"
@@ -230,8 +224,8 @@
           />
         </div>
 
-        <div class="flex items-center gap-2">
-          <i class="pi pi-search-minus text-xs text-gray-400"></i>
+        <div class="matrix__zoom">
+          <i class="pi pi-search-minus matrix__zoom-icon"></i>
           <input
             type="range"
             min="10"
@@ -239,70 +233,68 @@
             step="10"
             [value]="zoom()"
             (input)="onZoomInput($event)"
-            class="min-w-0 flex-1"
+            class="matrix__zoom-range"
             [attr.aria-label]="'matrixEditor.zoom' | transloco"
           />
-          <i class="pi pi-search-plus text-xs text-gray-400"></i>
-          <span class="w-10 text-right text-xs text-gray-500">{{ zoom() }}%</span>
+          <i class="pi pi-search-plus matrix__zoom-icon"></i>
+          <span class="matrix__zoom-value">{{ zoom() }}%</span>
         </div>
 
         @if (canEdit()) {
         <div>
-          <p class="mb-2 text-sm font-semibold text-gray-700">{{ 'matrixEditor.position' | transloco }}</p>
-          <form [formGroup]="positionForm" (ngSubmit)="markAsCurrent()" class="flex items-end gap-2">
-            <div class="flex w-16 flex-col gap-1">
-              <label for="position-row" class="text-xs text-gray-500">{{ 'matrixEditor.row' | transloco }}</label>
-              <input pInputText id="position-row" type="number" formControlName="row" min="1" class="w-full" />
+          <p class="section-label matrix__section-label">{{ 'matrixEditor.position' | transloco }}</p>
+          <form [formGroup]="positionForm" (ngSubmit)="markAsCurrent()" class="matrix__position">
+            <div class="field matrix__position-field">
+              <label for="position-row" class="field__hint">{{ 'matrixEditor.row' | transloco }}</label>
+              <input pInputText id="position-row" type="number" formControlName="row" min="1" />
             </div>
-            <div class="flex w-16 flex-col gap-1">
-              <label for="position-column" class="text-xs text-gray-500">{{ 'matrixEditor.column' | transloco }}</label>
-              <input pInputText id="position-column" type="number" formControlName="column" min="1" class="w-full" />
+            <div class="field matrix__position-field">
+              <label for="position-column" class="field__hint">{{ 'matrixEditor.column' | transloco }}</label>
+              <input pInputText id="position-column" type="number" formControlName="column" min="1" />
             </div>
-            <p-button [label]="'matrixEditor.markAsCurrent' | transloco" type="submit" [outlined]="true" styleClass="whitespace-nowrap" />
+            <p-button [label]="'matrixEditor.markAsCurrent' | transloco" type="submit" [outlined]="true" />
           </form>
         </div>
 
         <div>
-          <div class="flex items-center justify-between gap-2">
+          <div class="matrix__section-head">
             <button
               type="button"
-              class="flex flex-1 items-center gap-2 py-1 text-left"
+              class="matrix__toggle"
               [attr.aria-expanded]="isOpen('palette')"
               (click)="toggleSection('palette')"
             >
-              <i class="pi text-xs text-gray-500" [class.pi-chevron-down]="isOpen('palette')" [class.pi-chevron-right]="!isOpen('palette')"></i>
-              <span class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.myPalette' | transloco }}</span>
+              <i class="pi matrix__chevron" [class.pi-chevron-down]="isOpen('palette')" [class.pi-chevron-right]="!isOpen('palette')"></i>
+              <span class="matrix__toggle-label">{{ 'matrixEditor.myPalette' | transloco }}</span>
             </button>
             <button
               type="button"
-              class="flex h-7 w-7 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
+              class="matrix__icon-button"
               [attr.aria-label]="'palette.addColor' | transloco"
               (click)="openAddColor()"
             >
-              <i class="pi pi-plus text-sm"></i>
+              <i class="pi pi-plus"></i>
             </button>
           </div>
 
           @if (isOpen('palette')) {
-            <div class="mt-2 flex flex-wrap gap-2">
+            <div class="matrix__tools">
               <button
                 type="button"
-                class="flex h-8 w-8 items-center justify-center rounded border-2 bg-white"
-                [class.border-gray-800]="selectedTool() === 'eraser'"
-                [class.border-gray-300]="selectedTool() !== 'eraser'"
+                class="matrix__tool matrix__tool--eraser"
+                [class.is-selected]="selectedTool() === 'eraser'"
                 [attr.aria-label]="'matrixEditor.noColor' | transloco"
                 [title]="'matrixEditor.noColor' | transloco"
                 (click)="selectTool('eraser')"
               >
-                <i class="pi pi-ban text-xs text-gray-400"></i>
+                <i class="pi pi-ban"></i>
               </button>
 
               @for (color of colorStore.colors(); track color.id) {
                 <button
                   type="button"
-                  class="h-8 w-8 rounded border-2"
-                  [class.border-gray-800]="selectedTool() === color.id"
-                  [class.border-transparent]="selectedTool() !== color.id"
+                  class="matrix__tool"
+                  [class.is-selected]="selectedTool() === color.id"
                   [style.background-color]="color.hexValue"
                   [title]="color.name"
                   (click)="selectTool(color.id)"
@@ -311,21 +303,21 @@
             </div>
 
             @if (colorStore.colors().length === 0) {
-              <p class="mt-2 text-xs text-gray-500">{{ 'matrixEditor.emptyPaletteHint' | transloco }}</p>
+              <p class="matrix__hint matrix__hint--spaced">{{ 'matrixEditor.emptyPaletteHint' | transloco }}</p>
             }
           }
         </div>
         }
 
         <div>
-          <p class="mb-2 text-sm font-semibold text-gray-700">{{ 'matrixEditor.legend' | transloco }}</p>
+          <p class="section-label matrix__section-label">{{ 'matrixEditor.legend' | transloco }}</p>
           @if (patternStore.legend().length === 0) {
-            <p class="text-xs text-gray-500">{{ 'matrixEditor.emptyLegend' | transloco }}</p>
+            <p class="matrix__hint">{{ 'matrixEditor.emptyLegend' | transloco }}</p>
           } @else {
-            <div class="flex flex-col gap-1.5">
+            <div class="matrix__legend">
               @for (entry of patternStore.legend(); track entry.colorId) {
-                <div class="flex items-center gap-2 text-sm">
-                  <span class="h-3.5 w-3.5 shrink-0 rounded border border-gray-300" [style.background-color]="entry.hexValue"></span>
+                <div class="matrix__legend-row">
+                  <span class="matrix__swatch matrix__swatch--small" [style.background-color]="entry.hexValue"></span>
                   <span>{{ entry.count }}</span>
                 </div>
               }
@@ -335,40 +327,40 @@
 
         @if (canEdit()) {
         <div>
-          <div class="flex items-center justify-between gap-2">
+          <div class="matrix__section-head">
             <button
               type="button"
-              class="flex flex-1 items-center gap-2 py-1 text-left"
+              class="matrix__toggle"
               [attr.aria-expanded]="isOpen('add')"
               (click)="toggleSection('add')"
             >
-              <i class="pi text-xs text-gray-500" [class.pi-chevron-down]="isOpen('add')" [class.pi-chevron-right]="!isOpen('add')"></i>
-              <span class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.addCells' | transloco }}</span>
+              <i class="pi matrix__chevron" [class.pi-chevron-down]="isOpen('add')" [class.pi-chevron-right]="!isOpen('add')"></i>
+              <span class="matrix__toggle-label">{{ 'matrixEditor.addCells' | transloco }}</span>
             </button>
           </div>
 
           @if (isOpen('add')) {
             @if (expandError()) {
-              <p class="mt-2 rounded bg-red-50 px-3 py-2 text-xs text-red-800">{{ expandError() }}</p>
+              <p class="alert alert--error matrix__alert-inline">{{ expandError() }}</p>
             }
 
-            <form [formGroup]="expandForm" (ngSubmit)="expandPattern()" class="mt-2 flex flex-col gap-2">
-              <div class="grid grid-cols-2 gap-2">
-              <div class="flex flex-col gap-1">
-                <label for="expand-top" class="text-xs text-gray-500">{{ 'matrixEditor.top' | transloco }}</label>
-                <input pInputText id="expand-top" type="number" formControlName="top" min="0" max="200" class="w-full" />
+            <form [formGroup]="expandForm" (ngSubmit)="expandPattern()" class="matrix__cells-form">
+              <div class="matrix__edges">
+              <div class="field">
+                <label for="expand-top" class="field__hint">{{ 'matrixEditor.top' | transloco }}</label>
+                <input pInputText id="expand-top" type="number" formControlName="top" min="0" max="200" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="expand-bottom" class="text-xs text-gray-500">{{ 'matrixEditor.bottom' | transloco }}</label>
-                <input pInputText id="expand-bottom" type="number" formControlName="bottom" min="0" max="200" class="w-full" />
+              <div class="field">
+                <label for="expand-bottom" class="field__hint">{{ 'matrixEditor.bottom' | transloco }}</label>
+                <input pInputText id="expand-bottom" type="number" formControlName="bottom" min="0" max="200" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="expand-left" class="text-xs text-gray-500">{{ 'matrixEditor.left' | transloco }}</label>
-                <input pInputText id="expand-left" type="number" formControlName="left" min="0" max="200" class="w-full" />
+              <div class="field">
+                <label for="expand-left" class="field__hint">{{ 'matrixEditor.left' | transloco }}</label>
+                <input pInputText id="expand-left" type="number" formControlName="left" min="0" max="200" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="expand-right" class="text-xs text-gray-500">{{ 'matrixEditor.right' | transloco }}</label>
-                <input pInputText id="expand-right" type="number" formControlName="right" min="0" max="200" class="w-full" />
+              <div class="field">
+                <label for="expand-right" class="field__hint">{{ 'matrixEditor.right' | transloco }}</label>
+                <input pInputText id="expand-right" type="number" formControlName="right" min="0" max="200" />
               </div>
               </div>
               <p-button [label]="'matrixEditor.addCellsSubmit' | transloco" type="submit" [outlined]="true" [loading]="expanding()" [fluid]="true" />
@@ -377,40 +369,40 @@
         </div>
 
         <div>
-          <div class="flex items-center justify-between gap-2">
+          <div class="matrix__section-head">
             <button
               type="button"
-              class="flex flex-1 items-center gap-2 py-1 text-left"
+              class="matrix__toggle"
               [attr.aria-expanded]="isOpen('remove')"
               (click)="toggleSection('remove')"
             >
-              <i class="pi text-xs text-gray-500" [class.pi-chevron-down]="isOpen('remove')" [class.pi-chevron-right]="!isOpen('remove')"></i>
-              <span class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.removeCells' | transloco }}</span>
+              <i class="pi matrix__chevron" [class.pi-chevron-down]="isOpen('remove')" [class.pi-chevron-right]="!isOpen('remove')"></i>
+              <span class="matrix__toggle-label">{{ 'matrixEditor.removeCells' | transloco }}</span>
             </button>
           </div>
 
           @if (isOpen('remove')) {
             @if (shrinkError()) {
-              <p class="mt-2 rounded bg-red-50 px-3 py-2 text-xs text-red-800">{{ shrinkError() }}</p>
+              <p class="alert alert--error matrix__alert-inline">{{ shrinkError() }}</p>
             }
 
-            <form [formGroup]="shrinkForm" (ngSubmit)="shrinkPattern()" class="mt-2 flex flex-col gap-2">
-              <div class="grid grid-cols-2 gap-2">
-              <div class="flex flex-col gap-1">
-                <label for="shrink-top" class="text-xs text-gray-500">{{ 'matrixEditor.top' | transloco }}</label>
-                <input pInputText id="shrink-top" type="number" formControlName="top" min="0" max="199" class="w-full" />
+            <form [formGroup]="shrinkForm" (ngSubmit)="shrinkPattern()" class="matrix__cells-form">
+              <div class="matrix__edges">
+              <div class="field">
+                <label for="shrink-top" class="field__hint">{{ 'matrixEditor.top' | transloco }}</label>
+                <input pInputText id="shrink-top" type="number" formControlName="top" min="0" max="199" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="shrink-bottom" class="text-xs text-gray-500">{{ 'matrixEditor.bottom' | transloco }}</label>
-                <input pInputText id="shrink-bottom" type="number" formControlName="bottom" min="0" max="199" class="w-full" />
+              <div class="field">
+                <label for="shrink-bottom" class="field__hint">{{ 'matrixEditor.bottom' | transloco }}</label>
+                <input pInputText id="shrink-bottom" type="number" formControlName="bottom" min="0" max="199" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="shrink-left" class="text-xs text-gray-500">{{ 'matrixEditor.left' | transloco }}</label>
-                <input pInputText id="shrink-left" type="number" formControlName="left" min="0" max="199" class="w-full" />
+              <div class="field">
+                <label for="shrink-left" class="field__hint">{{ 'matrixEditor.left' | transloco }}</label>
+                <input pInputText id="shrink-left" type="number" formControlName="left" min="0" max="199" />
               </div>
-              <div class="flex flex-col gap-1">
-                <label for="shrink-right" class="text-xs text-gray-500">{{ 'matrixEditor.right' | transloco }}</label>
-                <input pInputText id="shrink-right" type="number" formControlName="right" min="0" max="199" class="w-full" />
+              <div class="field">
+                <label for="shrink-right" class="field__hint">{{ 'matrixEditor.right' | transloco }}</label>
+                <input pInputText id="shrink-right" type="number" formControlName="right" min="0" max="199" />
               </div>
               </div>
               <p-button [label]="'matrixEditor.shrinkSubmit' | transloco" type="submit" severity="danger" [outlined]="true" [loading]="shrinking()" [fluid]="true" />
@@ -420,7 +412,7 @@
         }
 
         @if (canEdit()) {
-          <p class="text-xs text-gray-400">{{ 'matrixEditor.rightClickHint' | transloco }}</p>
+          <p class="matrix__hint matrix__hint--faint">{{ 'matrixEditor.rightClickHint' | transloco }}</p>
         }
       </aside>
       }

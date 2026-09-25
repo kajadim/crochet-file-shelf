@@ -1,35 +1,35 @@
 <p-toast />
 
 @if (realtime.state() === 'reconnecting' || realtime.state() === 'disconnected') {
-  <div class="shrink-0 bg-amber-100 px-6 py-1 text-center text-xs text-amber-900">{{ 'realtime.reconnecting' | transloco }}</div>
+  <div class="banner">{{ 'realtime.reconnecting' | transloco }}</div>
 }
 
-<header class="flex shrink-0 items-center justify-between gap-4 border-b border-gray-200 px-6 py-3">
-  <div class="flex items-center gap-6">
-    <span class="text-lg font-semibold">{{ 'auth.appName' | transloco }}</span>
+<header class="topbar">
+  <div class="topbar__left">
+    <span class="topbar__brand">{{ 'auth.appName' | transloco }}</span>
 
-    <nav class="flex gap-4 text-sm" aria-label="Main">
+    <nav class="topbar__nav" aria-label="Main">
       <a
         routerLink="/"
-        routerLinkActive="font-semibold text-blue-700"
+        routerLinkActive="is-active"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="hover:underline"
+        class="topbar__link"
       >
         {{ 'layout.nav.dashboard' | transloco }}
       </a>
-      <a routerLink="/palette" routerLinkActive="font-semibold text-blue-700" class="hover:underline">
+      <a routerLink="/palette" routerLinkActive="is-active" class="topbar__link">
         {{ 'layout.nav.palette' | transloco }}
       </a>
     </nav>
   </div>
 
-  <div class="flex items-center gap-3">
+  <div class="topbar__right">
     <app-notification-bell />
 
     <a
       routerLink="/profile"
-      routerLinkActive="bg-gray-100"
-      class="flex items-center gap-2 rounded-full py-1 pr-3 pl-1 text-sm text-gray-700 hover:bg-gray-100"
+      routerLinkActive="is-active"
+      class="topbar__profile"
       [attr.aria-label]="'profile.title' | transloco"
     >
       @if (auth.user(); as user) {
@@ -40,6 +40,6 @@
   </div>
 </header>
 
-<main class="min-h-0 flex-1 overflow-y-auto">
+<main class="content">
   <router-outlet />
 </main>

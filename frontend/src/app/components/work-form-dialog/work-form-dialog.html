@@ -1,34 +1,34 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
   @if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   }
 
   <div>
-    <p class="mb-1 text-sm text-gray-600">{{ 'dialogs.workForm.type' | transloco }}</p>
-    <div class="flex gap-4">
-      <label class="flex items-center gap-2">
+    <p class="work-form__label">{{ 'dialogs.workForm.type' | transloco }}</p>
+    <div class="work-form__types">
+      <label class="work-form__type">
         <p-radiobutton formControlName="type" value="Pattern" inputId="type-pattern" />
         {{ 'dialogs.workForm.matrix' | transloco }}
       </label>
-      <label class="flex items-center gap-2">
+      <label class="work-form__type">
         <p-radiobutton formControlName="type" value="Video" inputId="type-video" />
         {{ 'dialogs.workForm.video' | transloco }}
       </label>
-      <label class="flex items-center gap-2">
+      <label class="work-form__type">
         <p-radiobutton formControlName="type" value="Site" inputId="type-site" />
         {{ 'dialogs.workForm.site' | transloco }}
       </label>
     </div>
     @if (isEdit) {
-      <p class="mt-1 text-xs text-gray-500">{{ 'dialogs.workForm.typeLocked' | transloco }}</p>
+      <p class="work-form__note">{{ 'dialogs.workForm.typeLocked' | transloco }}</p>
     }
   </div>
 
   @if (!isEdit && selectedType() === 'Pattern') {
-    <div class="flex flex-col gap-2">
-      <p class="text-sm text-gray-600">{{ 'dialogs.workForm.matrixSize' | transloco }}</p>
+    <div class="work-form__size">
+      <p class="work-form__label">{{ 'dialogs.workForm.matrixSize' | transloco }}</p>
 
-      <div class="flex gap-2">
+      <div class="work-form__modes">
         <p-button
           [label]="'dialogs.workForm.sizeManual' | transloco"
           type="button"
@@ -47,47 +47,47 @@
       </div>
 
       @if (sizeMode() === 'manual') {
-        <div class="flex items-start gap-3">
-          <div class="flex flex-1 flex-col gap-1">
-            <label for="matrix-width" class="text-xs text-gray-500">{{ 'matrixEditor.width' | transloco }}</label>
-            <input pInputText id="matrix-width" type="number" formControlName="width" min="1" max="200" class="w-full" />
+        <div class="work-form__dimensions">
+          <div class="field">
+            <label for="matrix-width" class="field__hint">{{ 'matrixEditor.width' | transloco }}</label>
+            <input pInputText id="matrix-width" type="number" formControlName="width" min="1" max="200" />
           </div>
-          <span class="mt-7 text-gray-400">x</span>
-          <div class="flex flex-1 flex-col gap-1">
-            <label for="matrix-height" class="text-xs text-gray-500">{{ 'matrixEditor.height' | transloco }}</label>
-            <input pInputText id="matrix-height" type="number" formControlName="height" min="1" max="200" class="w-full" />
+          <span class="work-form__times">x</span>
+          <div class="field">
+            <label for="matrix-height" class="field__hint">{{ 'matrixEditor.height' | transloco }}</label>
+            <input pInputText id="matrix-height" type="number" formControlName="height" min="1" max="200" />
           </div>
         </div>
         @if (
           (form.controls.width.invalid && form.controls.width.touched) ||
           (form.controls.height.invalid && form.controls.height.touched)
         ) {
-          <small class="text-red-600">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
+          <small class="field__error">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
         }
       } @else {
-        <input #matrixFile type="file" accept=".xlsx" class="hidden" (change)="onFileSelected($event)" />
+        <input #matrixFile type="file" accept=".xlsx" class="work-form__file" (change)="onFileSelected($event)" />
 
         @if (importError()) {
-          <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ importError() }}</p>
+          <p class="alert alert--error">{{ importError() }}</p>
         }
 
         @if (importPreview(); as preview) {
-          <div class="flex flex-col gap-1 rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm">
-            <p class="font-medium text-gray-700">{{ importFile()?.name }}</p>
-            <p class="text-gray-600">
+          <div class="work-form__preview">
+            <p class="work-form__preview-name">{{ importFile()?.name }}</p>
+            <p>
               {{ 'matrixEditor.importSummary' | transloco: { width: preview.width, height: preview.height, count: preview.coloredCells } }}
             </p>
             @if (newColorCount(preview) > 0) {
-              <p class="text-xs text-gray-500">{{ 'dialogs.workForm.importNewColors' | transloco: { count: newColorCount(preview) } }}</p>
+              <p class="field__hint">{{ 'dialogs.workForm.importNewColors' | transloco: { count: newColorCount(preview) } }}</p>
             }
             @if (preview.skippedCells > 0) {
-              <p class="text-xs text-amber-800">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
+              <p class="work-form__warning">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
             }
           </div>
         }
 
         @if (importRequired()) {
-          <small class="text-red-600">{{ 'dialogs.workForm.importFileRequired' | transloco }}</small>
+          <small class="field__error">{{ 'dialogs.workForm.importFileRequired' | transloco }}</small>
         }
 
         <div>
@@ -106,37 +106,37 @@
   }
 
   @if (!isEdit && selectedType() !== 'Pattern') {
-    <div class="flex flex-col gap-1">
-      <label for="work-url" class="text-sm text-gray-700">
+    <div class="field">
+      <label for="work-url" class="field__label">
         {{ (selectedType() === 'Video' ? 'dialogs.workForm.videoUrl' : 'dialogs.workForm.siteUrl') | transloco }}
       </label>
-      <input pInputText id="work-url" type="text" formControlName="url" maxlength="2048" class="w-full" />
-      <small class="text-gray-500">
+      <input pInputText id="work-url" type="text" formControlName="url" maxlength="2048" />
+      <small class="field__hint">
         {{ (selectedType() === 'Video' ? 'dialogs.workForm.videoUrlHint' : 'dialogs.workForm.siteUrlHint') | transloco }}
       </small>
       @if (form.controls.url.invalid && form.controls.url.touched) {
-        <small class="text-red-600">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
+        <small class="field__error">{{ 'dialogs.workForm.videoUrlRequired' | transloco }}</small>
       }
     </div>
   }
 
-  <div class="flex flex-col gap-1">
-    <label for="work-name" class="text-sm text-gray-700">{{ 'common.name' | transloco }}</label>
-    <input pInputText id="work-name" type="text" formControlName="name" maxlength="150" class="w-full" />
+  <div class="field">
+    <label for="work-name" class="field__label">{{ 'common.name' | transloco }}</label>
+    <input pInputText id="work-name" type="text" formControlName="name" maxlength="150" />
     @if (
       (form.controls.name.hasError('required') || form.controls.name.hasError('pattern')) &&
       form.controls.name.touched
     ) {
-      <small class="text-red-600">{{ 'common.nameRequired' | transloco }}</small>
+      <small class="field__error">{{ 'common.nameRequired' | transloco }}</small>
     }
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="work-description" class="text-sm text-gray-700">{{ 'dialogs.workForm.description' | transloco }}</label>
-    <textarea pTextarea id="work-description" rows="3" formControlName="description" maxlength="2000" class="w-full"></textarea>
+  <div class="field">
+    <label for="work-description" class="field__label">{{ 'dialogs.workForm.description' | transloco }}</label>
+    <textarea pTextarea id="work-description" rows="3" formControlName="description" maxlength="2000"></textarea>
   </div>
 
-  <div class="flex justify-end gap-2">
+  <div class="form-actions">
     <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="data.submitLabel" type="submit" [loading]="loading()" />
   </div>

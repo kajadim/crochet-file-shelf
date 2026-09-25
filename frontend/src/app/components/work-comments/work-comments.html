@@ -1,21 +1,21 @@
-<section class="flex flex-col gap-4">
+<section class="comments">
   @if (showTitle()) {
-    <h2 class="text-base font-semibold text-gray-800">{{ 'comments.title' | transloco }}</h2>
+    <h2 class="comments__title">{{ 'comments.title' | transloco }}</h2>
   }
 
   @if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   }
 
   @if (canWrite()) {
-  <div class="flex flex-col gap-2">
+  <div class="comments__composer">
     <button
       type="button"
-      class="flex items-center gap-2 self-start py-1 text-left text-sm font-semibold text-gray-700"
+      class="comments__toggle"
       [attr.aria-expanded]="composerOpen()"
       (click)="toggleComposer()"
     >
-      <i class="pi text-xs text-gray-500" [class.pi-chevron-down]="composerOpen()" [class.pi-chevron-right]="!composerOpen()"></i>
+      <i class="pi comments__chevron" [class.pi-chevron-down]="composerOpen()" [class.pi-chevron-right]="!composerOpen()"></i>
       {{ 'comments.add' | transloco }}
     </button>
 
@@ -30,7 +30,7 @@
         <ng-container *ngTemplateOutlet="toolbar"></ng-container>
       </ng-template>
     </p-editor>
-    <div class="flex justify-end">
+    <div class="comments__submit">
       <p-button
         [label]="'comments.add' | transloco"
         [disabled]="!canSubmit(newText())"
@@ -43,23 +43,23 @@
   }
 
   @if (store.loading()) {
-    <p class="text-sm text-gray-500">{{ 'common.loading' | transloco }}</p>
+    <p class="comments__note">{{ 'common.loading' | transloco }}</p>
   } @else if (store.error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ store.error() }}</p>
+    <p class="alert alert--error">{{ store.error() }}</p>
   } @else if (store.comments().length === 0) {
-    <p class="text-sm text-gray-500">{{ 'comments.empty' | transloco }}</p>
+    <p class="comments__note">{{ 'comments.empty' | transloco }}</p>
   } @else {
-    <ul class="flex flex-col gap-3">
+    <ul class="comments__list">
       @for (comment of store.comments(); track comment.id) {
-        <li class="rounded-lg border border-gray-300 bg-white p-3">
+        <li class="comment">
           @if (editingId() === comment.id) {
-            <div class="flex flex-col gap-2">
+            <div class="comment__edit">
               <p-editor [ngModel]="editText()" (ngModelChange)="editText.set($event ?? '')" [style]="{ height: '140px' }">
                 <ng-template #header>
                   <ng-container *ngTemplateOutlet="toolbar"></ng-container>
                 </ng-template>
               </p-editor>
-              <div class="flex gap-2">
+              <div class="comment__edit-actions">
                 <p-button
                   [label]="'common.save' | transloco"
                   [disabled]="!canSubmit(editText())"
@@ -70,25 +70,25 @@
               </div>
             </div>
           } @else {
-            <div class="comment-body text-gray-800" [innerHTML]="comment.text"></div>
-            <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-              <span class="flex min-w-0 items-center gap-2">
+            <div class="comment__body" [innerHTML]="comment.text"></div>
+            <div class="comment__meta">
+              <span class="comment__author">
                 <app-avatar
                   [userId]="comment.authorId"
                   [name]="comment.authorName"
                   [version]="comment.authorAvatarVersion"
                   [size]="22"
                 />
-                <span class="min-w-0 truncate">
-                  <span class="font-medium text-gray-700">{{ comment.authorName }}</span>
-                  <span>&#64;{{ comment.authorUsername }}</span>
+                <span class="comment__author-text">
+                  <span class="comment__name">{{ comment.authorName }}</span>
+                  <span class="comment__username">&#64;{{ comment.authorUsername }}</span>
                   · {{ (comment.updatedAt ?? comment.createdAt) | date: 'short' }}
                   @if (comment.updatedAt) {
                     · {{ 'comments.edited' | transloco }}
                   }
                 </span>
               </span>
-              <span class="flex gap-1">
+              <span class="comment__buttons">
                 @if (comment.canEdit) {
                 <p-button
                   icon="pi pi-pencil"

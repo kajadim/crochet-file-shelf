@@ -1,0 +1,36 @@
+.works-list {
+  display: flex;
+  flex-direction: column;
+
+  &__note {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    color: var(--c-text-muted);
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.875rem;
+    color: var(--c-primary-dark);
+    border-radius: var(--radius-sm);
+
+    &:hover {
+      text-decoration: underline;
+      background: var(--c-surface-soft);
+    }
+
+    i {
+      font-size: 0.75rem;
+      color: var(--c-text-muted);
+    }
+  }
+
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

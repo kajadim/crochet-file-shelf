@@ -61,13 +61,13 @@ export class VideoWork implements OnInit {
   protected readonly frameClass = computed(() => {
     switch (this.videoStore.video()?.platform) {
       case 'YouTube':
-        return 'aspect-video w-full max-w-[min(64rem,calc((100dvh-10rem)*1.7778))]';
+        return 'video__frame--youtube';
       case 'TikTok':
-        return 'h-full max-h-[740px] w-full max-w-[340px]';
+        return 'video__frame--tiktok';
       case 'Instagram':
-        return 'h-full w-full max-w-[540px]';
+        return 'video__frame--instagram';
       default:
-        return 'h-full w-full max-w-[480px]';
+        return 'video__frame--generic';
     }
   });
 

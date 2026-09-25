@@ -1,0 +1,18 @@
+@if (loading()) {
+  <p class="works-list__note">{{ 'common.loading' | transloco }}</p>
+} @else if (error()) {
+  <p class="alert alert--error">{{ error() }}</p>
+} @else if (works().length === 0) {
+  <p class="works-list__note">{{ 'palette.notUsedYet' | transloco }}</p>
+} @else {
+  <ul class="works-list">
+    @for (work of works(); track work.id) {
+      <li>
+        <a [routerLink]="['/works', work.id, 'matrix']" class="works-list__link" (click)="opened.emit()">
+          <i class="pi pi-table"></i>
+          <span class="works-list__name">{{ work.name }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+}

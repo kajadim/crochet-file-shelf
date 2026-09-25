@@ -8,30 +8,8 @@ import { extractErrorMessage } from '../../core/utils/http-error';
 @Component({
   selector: 'app-color-works-list',
   imports: [RouterLink, TranslocoPipe],
-  template: `
-    @if (loading()) {
-      <p class="text-sm text-gray-500">{{ 'common.loading' | transloco }}</p>
-    } @else if (error()) {
-      <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
-    } @else if (works().length === 0) {
-      <p class="text-sm text-gray-500">{{ 'palette.notUsedYet' | transloco }}</p>
-    } @else {
-      <ul class="flex flex-col">
-        @for (work of works(); track work.id) {
-          <li>
-            <a
-              [routerLink]="['/works', work.id, 'matrix']"
-              class="flex items-center gap-2 rounded px-2 py-1.5 text-sm text-blue-700 hover:bg-gray-100 hover:underline"
-              (click)="opened.emit()"
-            >
-              <i class="pi pi-table text-xs text-gray-500"></i>
-              <span class="truncate">{{ work.name }}</span>
-            </a>
-          </li>
-        }
-      </ul>
-    }
-  `,
+  templateUrl: './color-works-list.html',
+  styleUrl: './color-works-list.scss',
 })
 export class ColorWorksList implements OnInit {
   readonly colorId = input.required<string>();

@@ -1,0 +1,30 @@
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 50%;
+  user-select: none;
+  background: var(--c-primary);
+
+  &--tone-1 {
+    background: var(--c-sage);
+  }
+
+  &--tone-2 {
+    background: #c79a5b;
+  }
+
+  &--tone-3 {
+    background: #8f8aa8;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

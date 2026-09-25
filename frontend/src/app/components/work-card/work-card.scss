@@ -1,0 +1,93 @@
+.work-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: var(--c-border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  &__type,
+  &__shared {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  &__type {
+    color: var(--c-text-soft);
+    background: var(--c-surface-soft);
+  }
+
+  &__shared {
+    margin-right: auto;
+    color: var(--c-sage-dark);
+    background: var(--c-sage-soft);
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    overflow-wrap: anywhere;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+
+    i {
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+  }
+
+  &__meta-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__description {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.875rem;
+    color: var(--c-text-soft);
+    overflow-wrap: anywhere;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  &__updated {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--c-text-faint);
+  }
+}

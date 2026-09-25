@@ -1,7 +1,7 @@
-<div class="flex flex-col gap-4">
+<div class="form-stack">
   <p>{{ data.message }}</p>
 
-  <div class="flex justify-end gap-2">
+  <div class="form-actions">
     <p-button [label]="'common.cancel' | transloco" [text]="true" (onClick)="cancel()" />
     <p-button [label]="data.confirmLabel" [severity]="data.destructive ? 'danger' : 'primary'" (onClick)="confirm()" />
   </div>

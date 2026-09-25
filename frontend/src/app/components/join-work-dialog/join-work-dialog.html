@@ -1,28 +1,28 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
-  <p class="text-sm text-gray-600">{{ 'sharing.joinHint' | transloco }}</p>
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
+  <p class="form-hint">{{ 'sharing.joinHint' | transloco }}</p>
 
   @if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   }
 
-  <div class="flex flex-col gap-1">
-    <label for="join-code" class="text-sm text-gray-700">{{ 'sharing.code' | transloco }}</label>
+  <div class="field">
+    <label for="join-code" class="field__label">{{ 'sharing.code' | transloco }}</label>
     <input
       pInputText
       id="join-code"
+      class="join-code"
       type="text"
       formControlName="code"
       maxlength="32"
       autocomplete="off"
       placeholder="ABCD-EFGH"
-      class="w-full font-mono uppercase tracking-widest"
     />
     @if (form.controls.code.invalid && form.controls.code.touched) {
-      <small class="text-red-600">{{ 'sharing.codeRequired' | transloco }}</small>
+      <small class="field__error">{{ 'sharing.codeRequired' | transloco }}</small>
     }
   </div>
 
-  <div class="flex justify-end gap-2">
+  <div class="form-actions">
     <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="'sharing.join' | transloco" type="submit" [loading]="loading()" />
   </div>

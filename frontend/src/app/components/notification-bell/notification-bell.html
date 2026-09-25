@@ -1,67 +1,57 @@
-<div class="relative">
+<div class="bell">
   <button
     type="button"
-    class="relative flex h-9 w-9 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+    class="bell__button"
     [attr.aria-label]="'notifications.title' | transloco"
     [attr.aria-expanded]="open()"
     (click)="toggle()"
   >
-    <i class="pi pi-bell text-lg"></i>
+    <i class="pi pi-bell"></i>
     @if (store.unreadCount() > 0) {
-      <span
-        class="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold text-white"
-      >
-        {{ store.unreadCount() > 9 ? '9+' : store.unreadCount() }}
-      </span>
+      <span class="bell__badge">{{ store.unreadCount() > 9 ? '9+' : store.unreadCount() }}</span>
     }
   </button>
 
   @if (open()) {
-    <div
-      class="absolute right-0 z-50 mt-2 flex max-h-[70vh] w-96 max-w-[90vw] flex-col overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
-    >
-      <div class="flex items-center justify-between border-b border-gray-200 px-4 py-2">
-        <p class="text-sm font-semibold text-gray-800">{{ 'notifications.title' | transloco }}</p>
+    <div class="bell__panel">
+      <div class="bell__head">
+        <p class="bell__title">{{ 'notifications.title' | transloco }}</p>
         @if (store.unreadCount() > 0) {
-          <button type="button" class="text-xs text-blue-700 hover:underline" (click)="store.markAllRead()">
+          <button type="button" class="bell__mark-read" (click)="store.markAllRead()">
             {{ 'notifications.markAllRead' | transloco }}
           </button>
         }
       </div>
 
       @if (store.items().length === 0) {
-        <p class="px-4 py-6 text-center text-sm text-gray-500">{{ 'notifications.empty' | transloco }}</p>
+        <p class="bell__empty">{{ 'notifications.empty' | transloco }}</p>
       } @else {
-        <ul class="overflow-y-auto">
+        <ul class="bell__list">
           @for (notification of store.items(); track notification.id) {
-            <li
-              class="flex cursor-pointer items-start gap-3 border-b border-gray-100 px-4 py-3 last:border-b-0 hover:bg-gray-50"
-              [class.bg-blue-50]="!notification.isRead"
-              (click)="onItemClick(notification)"
-            >
-              <i class="pi {{ iconFor(notification) }} mt-0.5 text-gray-500"></i>
-              <div class="min-w-0 flex-1">
+            <li class="bell__item" [class.is-unread]="!notification.isRead" (click)="onItemClick(notification)">
+              <i class="pi {{ iconFor(notification) }} bell__item-icon"></i>
+              <div class="bell__item-body">
                 @let info = describe(notification);
                 @if (segments(notification); as parts) {
-                  <p class="text-sm text-gray-800">
+                  <p class="bell__item-text">
                     {{ parts.before }}<button
                       type="button"
-                      class="inline cursor-pointer font-medium text-blue-700 underline hover:text-blue-900"
+                      class="bell__link"
                       (click)="onLinkClick($event, notification)"
                     >{{ parts.name }}</button>{{ parts.after }}
                   </p>
                 } @else {
-                  <p class="text-sm text-gray-800">{{ info.key | transloco: info.params }}</p>
+                  <p class="bell__item-text">{{ info.key | transloco: info.params }}</p>
                 }
-                <p class="mt-0.5 text-xs text-gray-500">{{ notification.createdAt | date: 'short' }}</p>
+                <p class="bell__item-date">{{ notification.createdAt | date: 'short' }}</p>
               </div>
               <button
                 type="button"
-                class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-700"
+                class="bell__remove"
                 [attr.aria-label]="'common.delete' | transloco"
                 (click)="remove($event, notification)"
               >
-                <i class="pi pi-times text-xs"></i>
+                <i class="pi pi-times"></i>
               </button>
             </li>
           }

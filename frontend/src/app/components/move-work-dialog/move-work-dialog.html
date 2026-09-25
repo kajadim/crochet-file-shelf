@@ -1,15 +1,15 @@
-<div class="flex flex-col gap-4">
+<div class="form-stack">
   @if (error()) {
-    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+    <p class="alert alert--error">{{ error() }}</p>
   }
 
-  <p class="text-sm text-gray-600">{{ 'dialogs.moveWork.chooseDestination' | transloco }}</p>
+  <p class="form-hint">{{ 'dialogs.moveWork.chooseDestination' | transloco }}</p>
 
-  <div class="flex flex-col gap-2">
+  <div class="move-list">
     @for (row of data.rows; track row.folder.id) {
       <label
-        class="flex items-center gap-2"
-        [class.opacity-50]="row.folder.id === data.work.folderId"
+        class="move-option"
+        [class.move-option--current]="row.folder.id === data.work.folderId"
         [style.margin-left.rem]="row.depth * 1.25"
       >
         <p-radiobutton
@@ -21,13 +21,13 @@
         />
         {{ row.folder.name }}
         @if (row.folder.id === data.work.folderId) {
-          <span class="text-xs text-gray-500">{{ 'common.currentFolder' | transloco }}</span>
+          <span class="move-option__tag">{{ 'common.currentFolder' | transloco }}</span>
         }
       </label>
     }
   </div>
 
-  <div class="flex justify-end gap-2">
+  <div class="form-actions">
     <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
     <p-button [label]="'dialogs.moveWork.move' | transloco" type="button" [disabled]="!selectedId()" [loading]="loading()" (onClick)="submit()" />
   </div>

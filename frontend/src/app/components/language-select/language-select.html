@@ -1,0 +1,5 @@
+<select class="language-select" [attr.aria-label]="'profile.language' | transloco" (change)="onChange($event)">
+  @for (option of language.options; track option.code) {
+    <option [value]="option.code" [selected]="option.code === language.current()">{{ option.label }}</option>
+  }
+</select>

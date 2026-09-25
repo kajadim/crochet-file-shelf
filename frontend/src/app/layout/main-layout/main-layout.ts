@@ -11,7 +11,6 @@ import { Realtime } from '../../core/services/realtime';
 @Component({
   selector: 'app-main-layout',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, Toast, TranslocoPipe, NotificationBell, Avatar],
-  host: { class: 'flex h-dvh flex-col overflow-hidden' },
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
 })
