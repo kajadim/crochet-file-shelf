@@ -1,3 +1,5 @@
+import { Work } from './work.models';
+
 export interface Folder {
   id: string;
   name: string;
@@ -25,3 +27,15 @@ export interface FolderRow {
   hasChildren: boolean;
   expanded: boolean;
 }
+
+export interface TreeFolderRow extends FolderRow {
+  kind: 'folder';
+}
+
+export interface TreeWorkRow {
+  kind: 'work';
+  work: Work;
+  depth: number;
+}
+
+export type TreeRow = TreeFolderRow | TreeWorkRow;

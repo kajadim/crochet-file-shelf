@@ -1,7 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { FolderApi } from '../api/folder-api';
-import { Folder, FolderDeletionSummary, FolderRow } from '../models/folder.models';
+import { Folder, FolderDeletionSummary, FolderRow, TreeRow } from '../models/folder.models';
+import { Work } from '../models/work.models';
 
 @Injectable({
   providedIn: 'root',
@@ -87,8 +88,57 @@ export class FolderStore {
     return names.join(' / ');
   }
 
+  childrenOf(parentId: string | null): Folder[] {
+    return this.childrenByParent().get(parentId) ?? [];
+  }
+
+  treeRows(works: Work[]): TreeRow[] {
+    const children = this.childrenByParent();
+    const expandedIds = this.expandedIdsState();
+    const worksByFolder = new Map<string, Work[]>();
+
+    for (const work of works) {
+      const siblings = worksByFolder.get(work.folderId) ?? [];
+      siblings.push(work);
+      worksByFolder.set(work.folderId, siblings);
+    }
+    for (const siblings of worksByFolder.values()) {
+      siblings.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+    }
+
+    const rows: TreeRow[] = [];
+
+    const visit = (parentId: string | null, depth: number): void => {
+      for (const folder of children.get(parentId) ?? []) {
+        const folderWorks = worksByFolder.get(folder.id) ?? [];
+        const hasChildren = (children.get(folder.id)?.length ?? 0) > 0 || folderWorks.length > 0;
+        const expanded = expandedIds.has(folder.id);
+        rows.push({ kind: 'folder', folder, depth, hasChildren, expanded });
+
+        if (hasChildren && expanded) {
+          visit(folder.id, depth + 1);
+          for (const work of folderWorks) {
+            rows.push({ kind: 'work', work, depth: depth + 1 });
+          }
+        }
+      }
+    };
+
+    visit(null, 0);
+    return rows;
+  }
+
   select(id: string | null): void {
     this.selectedIdState.set(id);
+
+    if (id) {
+      const byId = new Map(this.foldersState().map((folder) => [folder.id, folder]));
+      let parentId = byId.get(id)?.parentFolderId ?? null;
+      while (parentId) {
+        this.expand(parentId);
+        parentId = byId.get(parentId)?.parentFolderId ?? null;
+      }
+    }
   }
 
   toggle(id: string): void {

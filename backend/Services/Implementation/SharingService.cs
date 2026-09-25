@@ -308,6 +308,8 @@ namespace backend.Services.Implementation
         {
             UserId = member.UserId,
             DisplayName = member.User.DisplayName,
+            Username = member.User.Username,
+            AvatarVersion = member.User.AvatarVersion,
             Permission = member.Permission,
             JoinedAt = member.JoinedAt,
         };

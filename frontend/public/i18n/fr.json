@@ -38,9 +38,19 @@
     },
     "register": {
       "title": "Crée ton compte",
-      "displayName": "Nom d'affichage",
-      "displayNameRequired": "Le nom d'affichage est requis",
-      "displayNameMaxLength": "Le nom d'affichage peut contenir au maximum 100 caractères",
+      "firstName": "Prénom",
+      "firstNameRequired": "Le prénom est obligatoire",
+      "firstNameMaxLength": "Le prénom peut contenir au maximum 100 caractères",
+      "lastName": "Nom",
+      "lastNameRequired": "Le nom est obligatoire",
+      "lastNameMaxLength": "Le nom peut contenir au maximum 100 caractères",
+      "username": "Nom d'utilisateur",
+      "usernameHint": "3 à 30 caractères : lettres, chiffres, points, tirets et tirets bas. Il doit être unique.",
+      "usernameRequired": "Le nom d'utilisateur est obligatoire",
+      "usernamePattern": "Utilisez 3 à 30 lettres, chiffres, points, tirets ou tirets bas",
+      "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+      "usernameChecking": "Vérification de la disponibilité...",
+      "usernameAvailable": "Le nom d'utilisateur est disponible",
       "submit": "Envoyer le code de vérification",
       "haveAccount": "Tu as déjà un compte ?",
       "login": "Se connecter"
@@ -105,7 +115,9 @@
     "sharedWithMe": "Partagés avec moi",
     "joinWork": "Rejoindre un ouvrage",
     "emptyShared": "Rien n'a encore été partagé avec toi.",
-    "deleteSharedWorkMessage": "Cet ouvrage est partagé avec {{count}} personnes. Si l'une d'elles peut modifier, il passe à celle qui a rejoint en premier. Sinon il est supprimé pour tout le monde."
+    "deleteSharedWorkMessage": "Cet ouvrage est partagé avec {{count}} personnes. Si l'une d'elles peut modifier, il passe à celle qui a rejoint en premier. Sinon il est supprimé pour tout le monde.",
+    "selectFolderFirst": "Sélectionne d'abord un dossier",
+    "folderEmpty": "Vide"
   },
   "palette": {
     "title": "Ma palette",
@@ -297,5 +309,26 @@
   "presence": {
     "alsoHere": "Aussi ici : {{names}}",
     "here": "aussi ici"
+  },
+  "profile": {
+    "title": "Profil",
+    "memberSince": "Membre depuis le {{date}}",
+    "myWorks": "Mes ouvrages",
+    "total": "Au total : {{count}}",
+    "sharedByMe": "Personnes avec qui tu partages",
+    "sharedByMeEmpty": "Tu n'as encore partagé aucun ouvrage.",
+    "sharedWithMe": "Partagés avec toi",
+    "sharedWithMeEmpty": "Personne n'a encore partagé d'ouvrage avec toi.",
+    "account": "Compte",
+    "language": "Langue",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetTitle": "Réinitialiser le mot de passe ?",
+    "resetHint": "Nous enverrons un code à {{email}} et te déconnecterons pour que tu choisisses un nouveau mot de passe.",
+    "resetConfirm": "Envoyer le code",
+    "edit": "Modifier le profil",
+    "changePhoto": "Changer la photo",
+    "removePhoto": "Supprimer la photo",
+    "bio": "À propos de vous",
+    "avatarReadError": "Ce fichier n'a pas pu être lu comme une image"
   }
 }

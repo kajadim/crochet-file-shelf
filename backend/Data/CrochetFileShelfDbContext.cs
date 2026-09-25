@@ -9,6 +9,7 @@ namespace backend.Data
         { }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<UserAvatar> UserAvatars => Set<UserAvatar>();
         public DbSet<Folder> Folders => Set<Folder>();
         public DbSet<Work> Works => Set<Work>();
         public DbSet<Pattern> Patterns => Set<Pattern>();

@@ -1,30 +1,44 @@
 <nav class="flex flex-col" aria-label="Folders">
-  @for (row of rows(); track row.folder.id) {
-    <div
-      class="flex items-center rounded-md pr-1 hover:bg-gray-100"
-      [class.bg-gray-200]="row.folder.id === selectedId()"
-      [style.padding-left.rem]="row.depth"
-    >
-      <button
-        type="button"
-        class="flex h-8 w-7 shrink-0 items-center justify-center text-gray-500"
-        [class.invisible]="!row.hasChildren"
-        [attr.aria-label]="row.expanded ? 'Collapse folder' : 'Expand folder'"
-        (click)="toggleFolder.emit(row.folder.id)"
+  @for (row of rows(); track row.kind === 'folder' ? row.folder.id : row.work.id) {
+    @if (row.kind === 'folder') {
+      <div
+        class="flex items-center rounded-md pr-1 hover:bg-gray-100"
+        [class.bg-gray-200]="row.folder.id === selectedId()"
+        [style.padding-left.rem]="row.depth"
       >
-        <i class="pi text-xs" [class.pi-chevron-down]="row.expanded" [class.pi-chevron-right]="!row.expanded"></i>
-      </button>
+        <button
+          type="button"
+          class="flex h-8 w-7 shrink-0 items-center justify-center text-gray-500"
+          [class.invisible]="!row.hasChildren"
+          [attr.aria-label]="row.expanded ? 'Collapse folder' : 'Expand folder'"
+          (click)="toggleFolder.emit(row.folder.id)"
+        >
+          <i class="pi text-xs" [class.pi-chevron-down]="row.expanded" [class.pi-chevron-right]="!row.expanded"></i>
+        </button>
 
-      <button
-        type="button"
-        class="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left"
-        (click)="selectFolder.emit(row.folder.id)"
-      >
-        <i class="pi text-sm shrink-0" [class.pi-folder-open]="row.expanded" [class.pi-folder]="!row.expanded"></i>
-        <span class="truncate">{{ row.folder.name }}</span>
-      </button>
+        <button
+          type="button"
+          class="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left"
+          (click)="selectFolder.emit(row.folder.id)"
+        >
+          <i class="pi text-sm shrink-0" [class.pi-folder-open]="row.expanded" [class.pi-folder]="!row.expanded"></i>
+          <span class="truncate">{{ row.folder.name }}</span>
+        </button>
 
-      <app-action-menu [items]="menuItems(row.folder)" [ariaLabel]="folderActionsLabel" />
-    </div>
+        <app-action-menu [items]="menuItems(row.folder)" [ariaLabel]="folderActionsLabel" />
+      </div>
+    } @else {
+      <div class="flex items-center rounded-md pr-1 hover:bg-gray-100" [style.padding-left.rem]="row.depth">
+        <span class="h-8 w-7 shrink-0"></span>
+        <button
+          type="button"
+          class="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left text-sm text-gray-700"
+          (click)="openWork.emit(row.work)"
+        >
+          <i class="pi shrink-0 text-xs text-gray-500" [class]="workIcons[row.work.type]"></i>
+          <span class="truncate">{{ row.work.name }}</span>
+        </button>
+      </div>
+    }
   }
 </nav>

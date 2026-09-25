@@ -38,9 +38,19 @@
     },
     "register": {
       "title": "Napravi nalog",
-      "displayName": "Ime za prikaz",
-      "displayNameRequired": "Ime za prikaz je obavezno",
-      "displayNameMaxLength": "Ime za prikaz može imati najviše 100 karaktera",
+      "firstName": "Ime",
+      "firstNameRequired": "Ime je obavezno",
+      "firstNameMaxLength": "Ime može imati najviše 100 karaktera",
+      "lastName": "Prezime",
+      "lastNameRequired": "Prezime je obavezno",
+      "lastNameMaxLength": "Prezime može imati najviše 100 karaktera",
+      "username": "Korisničko ime",
+      "usernameHint": "3-30 karaktera: slova, brojevi, tačke, crtice i donje crte. Mora biti jedinstveno.",
+      "usernameRequired": "Korisničko ime je obavezno",
+      "usernamePattern": "Koristite 3-30 slova, brojeva, tačaka, crtica ili donjih crta",
+      "usernameTaken": "Ovo korisničko ime je već zauzeto",
+      "usernameChecking": "Proveravam dostupnost...",
+      "usernameAvailable": "Korisničko ime je dostupno",
       "submit": "Pošalji kod za verifikaciju",
       "haveAccount": "Već imaš nalog?",
       "login": "Prijavi se"
@@ -105,7 +115,9 @@
     "sharedWithMe": "Podeljeno sa mnom",
     "joinWork": "Pridruži se radu",
     "emptyShared": "Još ništa nije podeljeno sa tobom.",
-    "deleteSharedWorkMessage": "Ovaj rad je podeljen sa {{count}} osoba. Ako neko od njih može da ga menja, rad prelazi na onoga ko se prvi pridružio. Inače se briše za sve."
+    "deleteSharedWorkMessage": "Ovaj rad je podeljen sa {{count}} osoba. Ako neko od njih može da ga menja, rad prelazi na onoga ko se prvi pridružio. Inače se briše za sve.",
+    "selectFolderFirst": "Prvo izaberi folder",
+    "folderEmpty": "Prazan"
   },
   "palette": {
     "title": "Moja paleta",
@@ -297,5 +309,26 @@
   "presence": {
     "alsoHere": "Još su ovde: {{names}}",
     "here": "još su ovde"
+  },
+  "profile": {
+    "title": "Profil",
+    "memberSince": "Član od {{date}}",
+    "myWorks": "Moji radovi",
+    "total": "Ukupno: {{count}}",
+    "sharedByMe": "Ljudi sa kojima deliš",
+    "sharedByMeEmpty": "Još nisi podelila nijedan rad.",
+    "sharedWithMe": "Podeljeno sa tobom",
+    "sharedWithMeEmpty": "Niko još nije podelio rad sa tobom.",
+    "account": "Nalog",
+    "language": "Jezik",
+    "resetPassword": "Resetuj lozinku",
+    "resetTitle": "Resetovati lozinku?",
+    "resetHint": "Poslaćemo kod na {{email}} i odjaviti te da bi izabrala novu lozinku.",
+    "resetConfirm": "Pošalji kod",
+    "edit": "Izmeni profil",
+    "changePhoto": "Promeni sliku",
+    "removePhoto": "Ukloni sliku",
+    "bio": "O vama",
+    "avatarReadError": "Ovaj fajl nije moguće pročitati kao sliku"
   }
 }

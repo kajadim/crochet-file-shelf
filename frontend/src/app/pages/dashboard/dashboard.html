@@ -37,9 +37,10 @@
     </button>
 
     <app-folder-tree
-      [rows]="folderStore.rows()"
+      [rows]="treeRows()"
       [selectedId]="sharedView() ? null : folderStore.selectedId()"
       (selectFolder)="selectFolder($event)"
+      (openWork)="openWork($event)"
       (toggleFolder)="folderStore.toggle($event)"
       (createSubfolder)="openCreateFolder($event)"
       (renameFolder)="openRenameFolder($event)"
@@ -69,12 +70,17 @@
           }
         </h1>
 
-        <p-button
-          [label]="'dashboard.newWork' | transloco"
-          icon="pi pi-plus"
-          [disabled]="sharedView() || !folderStore.selectedFolder()"
-          (onClick)="openCreateWork()"
-        />
+        <span
+          class="inline-block"
+          [title]="sharedView() || !folderStore.selectedFolder() ? ('dashboard.selectFolderFirst' | transloco) : ''"
+        >
+          <p-button
+            [label]="'dashboard.newWork' | transloco"
+            icon="pi pi-plus"
+            [disabled]="sharedView() || !folderStore.selectedFolder()"
+            (onClick)="openCreateWork()"
+          />
+        </span>
       </div>
 
       @if (!sharedView()) {
@@ -145,6 +151,24 @@
       </div>
       }
 
+      @if (visibleFolders().length > 0) {
+        <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          @for (folder of visibleFolders(); track folder.id) {
+            <button
+              type="button"
+              class="flex items-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-left hover:bg-gray-50"
+              (click)="selectFolder(folder.id)"
+            >
+              <i class="pi pi-folder text-xl text-amber-600"></i>
+              <span class="min-w-0">
+                <span class="block truncate font-medium text-gray-800">{{ folder.name }}</span>
+                <span class="block truncate text-xs text-gray-500">{{ folderSummary(folder.id) }}</span>
+              </span>
+            </button>
+          }
+        </div>
+      }
+
       @if (folderStore.folders().length === 0 && !sharedView()) {
         <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
           <p class="mb-3">{{ 'dashboard.emptyFolders' | transloco }}</p>
@@ -171,7 +195,7 @@
           @for (work of workStore.works(); track work.id) {
             <app-work-card
               [work]="work"
-              [folderPath]="filtersActive() && !sharedView() ? folderStore.pathFor(work.folderId) : null"
+              [folderPath]="sharedView() ? null : folderStore.pathFor(work.folderId)"
               (open)="openWork($event)"
               (edit)="openEditWork($event)"
               (move)="openMoveWork($event)"

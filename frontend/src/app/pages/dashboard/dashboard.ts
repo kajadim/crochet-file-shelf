@@ -66,6 +66,12 @@ export class Dashboard implements OnInit {
   protected readonly colorFilter = signal<string | null>(this.storedFilters.colorId);
   protected readonly platformFilter = signal<string | null>(this.storedFilters.platform);
 
+  protected readonly treeRows = computed(() => this.folderStore.treeRows(this.workStore.index()));
+
+  protected readonly visibleFolders = computed(() =>
+    this.sharedView() || this.filtersActive() ? [] : this.folderStore.childrenOf(this.folderStore.selectedId()),
+  );
+
   protected readonly filtersActive = computed(
     () => !!(this.search() || this.typeFilter() || this.colorFilter() || this.platformFilter()),
   );
@@ -131,6 +137,7 @@ export class Dashboard implements OnInit {
   ngOnInit(): void {
     this.folderStore.reset();
     this.workStore.reset();
+    this.workStore.loadIndex();
     this.colorStore.reset();
     this.colorStore.load().subscribe({
       next: (colors) => {
@@ -155,6 +162,21 @@ export class Dashboard implements OnInit {
   protected selectFolder(id: string | null): void {
     this.sharedView.set(false);
     this.folderStore.select(id);
+  }
+
+  protected folderSummary(folderId: string): string {
+    const subfolders = this.folderStore.childrenOf(folderId).length;
+    const works = this.workStore.index().filter((work) => work.folderId === folderId).length;
+    const parts: string[] = [];
+
+    if (subfolders > 0) {
+      parts.push(`${subfolders} ${this.transloco.translate(subfolders === 1 ? 'common.subfolder' : 'common.subfolders')}`);
+    }
+    if (works > 0) {
+      parts.push(`${works} ${this.transloco.translate(works === 1 ? 'common.work' : 'common.works')}`);
+    }
+
+    return parts.length > 0 ? parts.join(' · ') : this.transloco.translate('dashboard.folderEmpty');
   }
 
   protected selectShared(): void {

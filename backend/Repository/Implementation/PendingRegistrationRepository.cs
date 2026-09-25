@@ -17,6 +17,10 @@ namespace backend.Repository.Implementation
         public Task<PendingRegistration?> GetByEmailAsync(string email) =>
             _context.PendingRegistrations.FirstOrDefaultAsync(p => p.Email == email);
 
+        public Task<bool> UsernameReservedAsync(string username, string exceptEmail) =>
+            _context.PendingRegistrations.AnyAsync(p =>
+                p.Username == username && p.Email != exceptEmail && p.ExpiresAt > DateTime.UtcNow);
+
         public async Task AddAsync(PendingRegistration pendingRegistration) =>
             await _context.PendingRegistrations.AddAsync(pendingRegistration);
 

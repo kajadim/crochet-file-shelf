@@ -4,22 +4,28 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
+import { AuthApi } from '../../core/api/auth-api';
 import { Auth } from '../../core/services/auth';
+import { USERNAME_PATTERN, usernameAvailableValidator } from '../../core/utils/username';
 import { extractErrorMessage } from '../../core/utils/http-error';
+import { LanguageSelect } from '../../components/language-select/language-select';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, LanguageSelect],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
 export class Register {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(Auth);
+  private readonly authApi = inject(AuthApi);
   private readonly router = inject(Router);
 
   readonly form = this.fb.group({
-    displayName: ['', [Validators.required, Validators.maxLength(100)]],
+    firstName: ['', [Validators.required, Validators.maxLength(100)]],
+    lastName: ['', [Validators.required, Validators.maxLength(100)]],
+    username: ['', [Validators.required, Validators.pattern(USERNAME_PATTERN)], [usernameAvailableValidator(this.authApi)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
@@ -28,7 +34,7 @@ export class Register {
   readonly error = signal<string | null>(null);
 
   submit(): void {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.form.pending) {
       this.form.markAllAsTouched();
       return;
     }

@@ -26,18 +26,17 @@
   <div class="flex items-center gap-3">
     <app-notification-bell />
 
-    <select
-      class="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
-      aria-label="Language"
-      (change)="onLanguageChange($event)"
+    <a
+      routerLink="/profile"
+      routerLinkActive="bg-gray-100"
+      class="flex items-center gap-2 rounded-full py-1 pr-3 pl-1 text-sm text-gray-700 hover:bg-gray-100"
+      [attr.aria-label]="'profile.title' | transloco"
     >
-      @for (option of language.options; track option.code) {
-        <option [value]="option.code" [selected]="option.code === language.current()">{{ option.label }}</option>
+      @if (auth.user(); as user) {
+        <app-avatar [userId]="user.id" [name]="user.displayName" [version]="user.avatarVersion" [size]="28" />
+        {{ user.displayName }}
       }
-    </select>
-
-    <span class="text-sm text-gray-600">{{ auth.user()?.displayName }}</span>
-    <p-button [label]="'layout.logout' | transloco" [outlined]="true" (onClick)="auth.logout()" />
+    </a>
   </div>
 </header>
 

@@ -11,6 +11,7 @@ export class WorkStore {
   private readonly api = inject(WorkApi);
 
   private readonly worksState = signal<Work[]>([]);
+  private readonly indexState = signal<Work[]>([]);
   private readonly loadingState = signal(false);
   private readonly errorState = signal<string | null>(null);
 
@@ -18,6 +19,7 @@ export class WorkStore {
   private requestId = 0;
 
   readonly works = this.worksState.asReadonly();
+  readonly index = this.indexState.asReadonly();
   readonly loading = this.loadingState.asReadonly();
   readonly error = this.errorState.asReadonly();
 
@@ -25,8 +27,16 @@ export class WorkStore {
     this.requestId++;
     this.currentQuery = {};
     this.worksState.set([]);
+    this.indexState.set([]);
     this.loadingState.set(false);
     this.errorState.set(null);
+  }
+
+  loadIndex(): void {
+    this.api.getAll({}).subscribe({
+      next: (works) => this.indexState.set(works),
+      error: () => this.indexState.set([]),
+    });
   }
 
   load(query: WorkQuery): void {
@@ -56,6 +66,7 @@ export class WorkStore {
   create(request: CreateWorkRequest): Observable<Work> {
     return this.api.create(request).pipe(
       tap((work) => {
+        this.indexState.update((works) => [...works, work]);
         if (this.isFiltered()) {
           this.load(this.currentQuery);
         } else if (this.isVisibleInCurrentView(work)) {
@@ -72,6 +83,7 @@ export class WorkStore {
   move(id: string, folderId: string): Observable<Work> {
     return this.api.move(id, { folderId }).pipe(
       tap((work) => {
+        this.replaceInIndex(work);
         if (this.isFiltered() || this.isVisibleInCurrentView(work)) {
           this.replace(work);
         } else {
@@ -84,7 +96,12 @@ export class WorkStore {
   remove(id: string): Observable<void> {
     return this.api
       .delete(id)
-      .pipe(tap(() => this.worksState.update((works) => works.filter((work) => work.id !== id))));
+      .pipe(
+        tap(() => {
+          this.worksState.update((works) => works.filter((work) => work.id !== id));
+          this.indexState.update((works) => works.filter((work) => work.id !== id));
+        }),
+      );
   }
 
   reload(): void {
@@ -108,7 +125,12 @@ export class WorkStore {
     return folderId === null || folderId === work.folderId;
   }
 
+  private replaceInIndex(updated: Work): void {
+    this.indexState.update((works) => works.map((work) => (work.id === updated.id ? updated : work)));
+  }
+
   private replace(updated: Work): void {
+    this.replaceInIndex(updated);
     this.worksState.update((works) => this.sorted(works.map((work) => (work.id === updated.id ? updated : work))));
   }
 

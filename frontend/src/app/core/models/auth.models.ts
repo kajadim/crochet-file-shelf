@@ -4,6 +4,12 @@ export interface UserSummary {
   id: string;
   email: string;
   displayName: string;
+  username: string;
+  avatarVersion: number | null;
+}
+
+export interface UsernameAvailability {
+  available: boolean;
 }
 
 export interface AuthResponse {
@@ -19,7 +25,9 @@ export interface MessageResponse {
 export interface RegisterRequest {
   email: string;
   password: string;
-  displayName: string;
+  firstName: string;
+  lastName: string;
+  username: string;
 }
 
 export interface LoginRequest {

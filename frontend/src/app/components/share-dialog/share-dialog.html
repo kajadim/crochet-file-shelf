@@ -59,7 +59,11 @@
         <ul class="flex flex-col gap-2">
           @for (member of sharing.members; track member.userId) {
             <li class="flex items-center gap-2 rounded border border-gray-200 px-3 py-2">
-              <span class="min-w-0 flex-1 truncate text-sm">{{ member.displayName }}</span>
+              <app-avatar [userId]="member.userId" [name]="member.displayName" [version]="member.avatarVersion" [size]="28" />
+              <span class="min-w-0 flex-1 truncate text-sm">
+                {{ member.displayName }}
+                <span class="text-xs text-gray-500">&#64;{{ member.username }}</span>
+              </span>
               <select
                 class="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
                 [ngModel]="member.permission"

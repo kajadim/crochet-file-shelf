@@ -8,6 +8,7 @@ import { SharingApi } from '../../core/api/sharing-api';
 import { SharingInfo, WorkMember, WorkPermission } from '../../core/models/sharing.models';
 import { Work } from '../../core/models/work.models';
 import { extractErrorMessage } from '../../core/utils/http-error';
+import { Avatar } from '../avatar/avatar';
 import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dialog';
 
 export interface ShareDialogData {
@@ -16,7 +17,7 @@ export interface ShareDialogData {
 
 @Component({
   selector: 'app-share-dialog',
-  imports: [FormsModule, ButtonModule, TranslocoPipe],
+  imports: [FormsModule, ButtonModule, TranslocoPipe, Avatar],
   templateUrl: './share-dialog.html',
   styleUrl: './share-dialog.scss',
 })

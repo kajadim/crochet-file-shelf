@@ -5,6 +5,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
 import { EditorModule } from 'primeng/editor';
+import { Avatar } from '../avatar/avatar';
 import { ConfirmDialog, ConfirmDialogData } from '../confirm-dialog/confirm-dialog';
 import { WorkComment } from '../../core/models/comment.models';
 import { CommentStore } from '../../core/services/comment-store';
@@ -16,7 +17,7 @@ function hasContent(html: string | null): boolean {
 
 @Component({
   selector: 'app-work-comments',
-  imports: [FormsModule, EditorModule, ButtonModule, DatePipe, NgTemplateOutlet, TranslocoPipe],
+  imports: [FormsModule, EditorModule, ButtonModule, DatePipe, NgTemplateOutlet, TranslocoPipe, Avatar],
   templateUrl: './work-comments.html',
   styleUrl: './work-comments.scss',
 })

@@ -6,6 +6,7 @@ namespace backend.Services.Interfaces
     {
         Task RegisterAsync(RegisterRequest request);
         Task<(AuthResponse Response, string RawRefreshToken)> VerifyEmailAsync(VerifyEmailRequest request);
+        Task<bool> IsUsernameAvailableAsync(string username);
         Task ResendVerificationAsync(ResendVerificationRequest request);
         Task<(AuthResponse Response, string RawRefreshToken)> LoginAsync(LoginRequest request);
         Task<(AuthResponse Response, string RawRefreshToken)> RefreshAsync(string rawRefreshToken);

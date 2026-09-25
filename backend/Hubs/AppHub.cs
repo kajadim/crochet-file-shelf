@@ -50,7 +50,7 @@ namespace backend.Hubs
             var user = await _userRepository.GetByIdAsync(UserId) ?? throw new HubException("access-denied");
 
             await Groups.AddToGroupAsync(Context.ConnectionId, HubGroups.Work(workId));
-            _presence.Join(workId, Context.ConnectionId, new PresenceUser(user.Id, user.DisplayName));
+            _presence.Join(workId, Context.ConnectionId, new PresenceUser(user.Id, user.DisplayName, user.Username, user.AvatarVersion));
             await BroadcastPresenceAsync(workId);
         }
 

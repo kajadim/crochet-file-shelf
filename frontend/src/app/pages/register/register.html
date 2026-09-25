@@ -1,3 +1,4 @@
+<app-language-select />
 <div class="min-h-screen flex items-center justify-center p-4">
   <div class="w-full max-w-md">
     <h1 class="text-2xl font-semibold">{{ 'auth.appName' | transloco }}</h1>
@@ -9,12 +10,41 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
       <div class="flex flex-col gap-1">
-        <label for="displayName" class="text-sm text-gray-700">{{ 'auth.register.displayName' | transloco }}</label>
-        <input pInputText id="displayName" type="text" formControlName="displayName" autocomplete="nickname" class="w-full" />
-        @if (form.controls.displayName.hasError('required') && form.controls.displayName.touched) {
-          <small class="text-red-600">{{ 'auth.register.displayNameRequired' | transloco }}</small>
-        } @else if (form.controls.displayName.hasError('maxlength') && form.controls.displayName.touched) {
-          <small class="text-red-600">{{ 'auth.register.displayNameMaxLength' | transloco }}</small>
+        <label for="firstName" class="text-sm text-gray-700">{{ 'auth.register.firstName' | transloco }}</label>
+        <input pInputText id="firstName" type="text" formControlName="firstName" autocomplete="given-name" class="w-full" />
+        @if (form.controls.firstName.hasError('required') && form.controls.firstName.touched) {
+          <small class="text-red-600">{{ 'auth.register.firstNameRequired' | transloco }}</small>
+        } @else if (form.controls.firstName.hasError('maxlength') && form.controls.firstName.touched) {
+          <small class="text-red-600">{{ 'auth.register.firstNameMaxLength' | transloco }}</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="lastName" class="text-sm text-gray-700">{{ 'auth.register.lastName' | transloco }}</label>
+        <input pInputText id="lastName" type="text" formControlName="lastName" autocomplete="family-name" class="w-full" />
+        @if (form.controls.lastName.hasError('required') && form.controls.lastName.touched) {
+          <small class="text-red-600">{{ 'auth.register.lastNameRequired' | transloco }}</small>
+        } @else if (form.controls.lastName.hasError('maxlength') && form.controls.lastName.touched) {
+          <small class="text-red-600">{{ 'auth.register.lastNameMaxLength' | transloco }}</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="username" class="text-sm text-gray-700">{{ 'auth.register.username' | transloco }}</label>
+        <input pInputText id="username" type="text" formControlName="username" autocomplete="username" autocapitalize="none" class="w-full" />
+        <small class="text-gray-500">{{ 'auth.register.usernameHint' | transloco }}</small>
+        @if (form.controls.username.touched || form.controls.username.dirty) {
+          @if (form.controls.username.hasError('required')) {
+            <small class="text-red-600">{{ 'auth.register.usernameRequired' | transloco }}</small>
+          } @else if (form.controls.username.hasError('pattern')) {
+            <small class="text-red-600">{{ 'auth.register.usernamePattern' | transloco }}</small>
+          } @else if (form.controls.username.hasError('usernameTaken')) {
+            <small class="text-red-600">{{ 'auth.register.usernameTaken' | transloco }}</small>
+          } @else if (form.controls.username.pending) {
+            <small class="text-gray-500">{{ 'auth.register.usernameChecking' | transloco }}</small>
+          } @else if (form.controls.username.valid) {
+            <small class="text-green-700">{{ 'auth.register.usernameAvailable' | transloco }}</small>
+          }
         }
       </div>
 

@@ -166,6 +166,15 @@
   <data name="PatternSizeIncomplete" xml:space="preserve">
     <value>Saisis la largeur et la hauteur de la grille.</value>
   </data>
+  <data name="UsernameTaken" xml:space="preserve">
+    <value>Ce nom d'utilisateur est déjà pris.</value>
+  </data>
+  <data name="AvatarInvalid" xml:space="preserve">
+    <value>L'image doit être un JPEG.</value>
+  </data>
+  <data name="AvatarTooLarge" xml:space="preserve">
+    <value>L'image est trop volumineuse. La taille maximale est de 300 Ko.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Cet ouvrage n'est pas une grille.</value>
   </data>

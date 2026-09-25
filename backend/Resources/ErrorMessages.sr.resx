@@ -166,6 +166,15 @@
   <data name="PatternSizeIncomplete" xml:space="preserve">
     <value>Unesi i širinu i visinu matrice.</value>
   </data>
+  <data name="UsernameTaken" xml:space="preserve">
+    <value>Ovo korisničko ime je već zauzeto.</value>
+  </data>
+  <data name="AvatarInvalid" xml:space="preserve">
+    <value>Slika mora biti JPEG.</value>
+  </data>
+  <data name="AvatarTooLarge" xml:space="preserve">
+    <value>Slika je prevelika. Najveća dozvoljena veličina je 300 KB.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Ovaj rad nije tipa matrica.</value>
   </data>

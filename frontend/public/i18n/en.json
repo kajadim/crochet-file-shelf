@@ -38,9 +38,19 @@
     },
     "register": {
       "title": "Create your account",
-      "displayName": "Display name",
-      "displayNameRequired": "Display name is required",
-      "displayNameMaxLength": "Display name can have at most 100 characters",
+      "firstName": "First name",
+      "firstNameRequired": "First name is required",
+      "firstNameMaxLength": "First name can have at most 100 characters",
+      "lastName": "Last name",
+      "lastNameRequired": "Last name is required",
+      "lastNameMaxLength": "Last name can have at most 100 characters",
+      "username": "Username",
+      "usernameHint": "3-30 characters: letters, numbers, dots, dashes and underscores. It must be unique.",
+      "usernameRequired": "Username is required",
+      "usernamePattern": "Use 3-30 letters, numbers, dots, dashes or underscores",
+      "usernameTaken": "This username is already taken",
+      "usernameChecking": "Checking availability...",
+      "usernameAvailable": "Username is available",
       "submit": "Send verification code",
       "haveAccount": "Already have an account?",
       "login": "Log in"
@@ -105,7 +115,9 @@
     "sharedWithMe": "Shared with me",
     "joinWork": "Join a work",
     "emptyShared": "Nothing has been shared with you yet.",
-    "deleteSharedWorkMessage": "This work is shared with {{count}} people. If any of them can edit, it moves to the one who joined first. Otherwise it is deleted for everyone."
+    "deleteSharedWorkMessage": "This work is shared with {{count}} people. If any of them can edit, it moves to the one who joined first. Otherwise it is deleted for everyone.",
+    "selectFolderFirst": "Select a folder first",
+    "folderEmpty": "Empty"
   },
   "palette": {
     "title": "My palette",
@@ -297,5 +309,26 @@
   "presence": {
     "alsoHere": "Also here: {{names}}",
     "here": "also here"
+  },
+  "profile": {
+    "title": "Profile",
+    "memberSince": "Member since {{date}}",
+    "myWorks": "My works",
+    "total": "{{count}} in total",
+    "sharedByMe": "People you share with",
+    "sharedByMeEmpty": "You have not shared any work yet.",
+    "sharedWithMe": "Shared with you",
+    "sharedWithMeEmpty": "Nobody has shared a work with you yet.",
+    "account": "Account",
+    "language": "Language",
+    "resetPassword": "Reset password",
+    "resetTitle": "Reset your password?",
+    "resetHint": "We will send a code to {{email}} and sign you out so you can choose a new password.",
+    "resetConfirm": "Send code",
+    "edit": "Edit profile",
+    "changePhoto": "Change photo",
+    "removePhoto": "Remove photo",
+    "bio": "About you",
+    "avatarReadError": "This file could not be read as an image"
   }
 }

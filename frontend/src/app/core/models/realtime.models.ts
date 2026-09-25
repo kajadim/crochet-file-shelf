@@ -35,6 +35,8 @@ export interface AccessChangedEvent {
 export interface PresenceUser {
   userId: string;
   displayName: string;
+  username: string;
+  avatarVersion: number | null;
 }
 
 export interface PresenceChangedEvent {

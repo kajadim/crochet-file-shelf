@@ -23,6 +23,9 @@ namespace backend.Repository.Implementation
         public Task<bool> EmailExistsAsync(string email) =>
             _context.Users.AnyAsync(u => u.Email == email);
 
+        public Task<bool> UsernameExistsAsync(string username, Guid? excludeUserId) =>
+            _context.Users.AnyAsync(u => u.Username == username && (excludeUserId == null || u.Id != excludeUserId));
+
         public async Task AddAsync(User user) =>
             await _context.Users.AddAsync(user);
 

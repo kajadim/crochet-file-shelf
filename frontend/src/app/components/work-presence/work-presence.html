@@ -2,10 +2,8 @@
   <div class="flex items-center gap-2" [title]="'presence.alsoHere' | transloco: { names: names() }">
     <div class="flex -space-x-2">
       @for (user of visible(); track user.userId) {
-        <span
-          class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-teal-600 text-[10px] font-semibold text-white"
-        >
-          {{ initials(user) }}
+        <span class="rounded-full border-2 border-white">
+          <app-avatar [userId]="user.userId" [name]="user.displayName" [version]="user.avatarVersion" [size]="28" />
         </span>
       }
       @if (hiddenCount() > 0) {

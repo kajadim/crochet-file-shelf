@@ -24,6 +24,12 @@ namespace backend.Controllers
             _refreshTokenOptions = refreshTokenOptions.Value;
         }
 
+        [HttpGet("username-available")]
+        public async Task<ActionResult<UsernameAvailabilityResponse>> UsernameAvailable([FromQuery] string username)
+        {
+            return Ok(new UsernameAvailabilityResponse { Available = await _authService.IsUsernameAvailableAsync(username ?? string.Empty) });
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult<MessageResponse>> Register(RegisterRequest request)
         {

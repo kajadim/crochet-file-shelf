@@ -57,6 +57,13 @@ namespace backend.Services.Implementation
 
             // Heš lozinke se pravi nad "praznim" korisnikom - PasswordHasher ne koristi ništa
             // od stvarnih podataka korisnika, samo mu je potreban instance parametar.
+            var username = UsernameRules.Normalize(request.Username);
+            if (await _userRepository.UsernameExistsAsync(username, null)
+                || await _pendingRegistrationRepository.UsernameReservedAsync(username, normalizedEmail))
+            {
+                throw new ConflictException(ErrorCode.UsernameTaken);
+            }
+
             var passwordHash = _passwordHasher.HashPassword(new User(), request.Password);
 
             var existingPending = await _pendingRegistrationRepository.GetByEmailAsync(normalizedEmail);
@@ -72,7 +79,9 @@ namespace backend.Services.Implementation
                 Id = Guid.NewGuid(),
                 Email = normalizedEmail,
                 PasswordHash = passwordHash,
-                DisplayName = request.DisplayName.Trim(),
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
+                Username = username,
                 CodeHash = _verificationCodeService.HashCode(code),
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.Add(VerificationCodeLifetime),
@@ -108,15 +117,34 @@ namespace backend.Services.Implementation
                 Id = Guid.NewGuid(),
                 Email = pending.Email,
                 PasswordHash = pending.PasswordHash,
-                DisplayName = pending.DisplayName,
+                FirstName = pending.FirstName,
+                LastName = pending.LastName,
+                Username = pending.Username,
                 CreatedAt = DateTime.UtcNow,
             };
+
+            if (await _userRepository.UsernameExistsAsync(user.Username, null))
+            {
+                throw new ConflictException(ErrorCode.UsernameTaken);
+            }
 
             await _userRepository.AddAsync(user);
             _pendingRegistrationRepository.Remove(pending);
             await _userRepository.SaveChangesAsync();
 
             return await IssueTokensAsync(user);
+        }
+
+        public async Task<bool> IsUsernameAvailableAsync(string username)
+        {
+            var normalized = UsernameRules.Normalize(username);
+            if (!UsernameRules.IsValid(normalized))
+            {
+                return false;
+            }
+
+            return !await _userRepository.UsernameExistsAsync(normalized, null)
+                && !await _pendingRegistrationRepository.UsernameReservedAsync(normalized, string.Empty);
         }
 
         public async Task ResendVerificationAsync(ResendVerificationRequest request)
@@ -287,6 +315,8 @@ namespace backend.Services.Implementation
                     Id = user.Id,
                     Email = user.Email,
                     DisplayName = user.DisplayName,
+                    Username = user.Username,
+                    AvatarVersion = user.AvatarVersion,
                 },
             };
 

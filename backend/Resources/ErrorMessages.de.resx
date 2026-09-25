@@ -166,6 +166,15 @@
   <data name="PatternSizeIncomplete" xml:space="preserve">
     <value>Gib sowohl die Breite als auch die Höhe der Matrix an.</value>
   </data>
+  <data name="UsernameTaken" xml:space="preserve">
+    <value>Dieser Benutzername ist bereits vergeben.</value>
+  </data>
+  <data name="AvatarInvalid" xml:space="preserve">
+    <value>Das Bild muss ein JPEG sein.</value>
+  </data>
+  <data name="AvatarTooLarge" xml:space="preserve">
+    <value>Das Bild ist zu groß. Die maximale Größe beträgt 300 KB.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Dieses Werk ist keine Matrix.</value>
   </data>

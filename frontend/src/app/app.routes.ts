@@ -7,6 +7,7 @@ import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { Login } from './pages/login/login';
 import { MatrixEditor } from './pages/matrix-editor/matrix-editor';
 import { Palette } from './pages/palette/palette';
+import { ProfilePage } from './pages/profile/profile';
 import { Register } from './pages/register/register';
 import { ResetPassword } from './pages/reset-password/reset-password';
 import { VerifyEmail } from './pages/verify-email/verify-email';
@@ -26,6 +27,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: Dashboard },
       { path: 'palette', component: Palette },
+      { path: 'profile', component: ProfilePage },
       { path: 'works/:workId/matrix', component: MatrixEditor },
       { path: 'works/:workId/video', component: VideoWork },
       { path: 'works/:workId/site', component: SiteWork },

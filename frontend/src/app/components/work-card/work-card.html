@@ -14,9 +14,9 @@
   <h3 class="text-lg font-semibold break-words">{{ work().name }}</h3>
 
   @if (folderPath()) {
-    <p class="flex items-center gap-1 text-xs text-gray-500">
-      <i class="pi pi-folder text-xs"></i>
-      {{ folderPath() }}
+    <p class="flex min-w-0 items-center gap-1 text-xs text-gray-500" [title]="folderPath()">
+      <i class="pi pi-folder shrink-0 text-xs"></i>
+      <span class="truncate">{{ folderPath() }}</span>
     </p>
   }
 

@@ -6,10 +6,11 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/services/auth';
 import { extractErrorMessage } from '../../core/utils/http-error';
+import { LanguageSelect } from '../../components/language-select/language-select';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, LanguageSelect],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })

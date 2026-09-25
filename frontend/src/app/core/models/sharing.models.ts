@@ -11,6 +11,8 @@ export interface Invitation {
 export interface WorkMember {
   userId: string;
   displayName: string;
+  username: string;
+  avatarVersion: number | null;
   permission: WorkPermission;
   joinedAt: string;
 }

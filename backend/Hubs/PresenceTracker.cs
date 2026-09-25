@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace backend.Hubs
 {
-    public sealed record PresenceUser(Guid UserId, string DisplayName);
+    public sealed record PresenceUser(Guid UserId, string DisplayName, string Username, long? AvatarVersion);
 
     public class PresenceTracker
     {

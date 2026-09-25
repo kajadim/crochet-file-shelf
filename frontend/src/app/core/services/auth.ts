@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, catchError, finalize, firstValueFrom, map, of, shareReplay, tap, throwError } from 'rxjs';
+import { Observable, catchError, finalize, firstValueFrom, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { AuthApi } from '../api/auth-api';
 import { clearDashboardFilters } from '../utils/dashboard-filters-storage';
 import {
@@ -76,6 +76,17 @@ export class Auth {
     return this.api.forgotPassword({ email });
   }
 
+  startPasswordReset(email: string): Observable<void> {
+    return this.api.forgotPassword({ email }).pipe(
+      switchMap(() => this.api.logout().pipe(catchError(() => of(undefined)))),
+      tap(() => {
+        this.clearSession();
+        this.router.navigate(['/reset-password'], { queryParams: { email } });
+      }),
+      map(() => undefined),
+    );
+  }
+
   resetPassword(request: ResetPasswordRequest): Observable<MessageResponse> {
     return this.api.resetPassword(request);
   }
@@ -88,6 +99,10 @@ export class Auth {
         this.clearSession();
         this.router.navigate(['/login']);
       });
+  }
+
+  updateUser(changes: Partial<UserSummary>): void {
+    this.userState.update((user) => (user ? { ...user, ...changes } : user));
   }
 
   clearSession(): void {

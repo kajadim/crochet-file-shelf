@@ -58,11 +58,21 @@
           } @else {
             <div class="comment-body text-gray-800" [innerHTML]="comment.text"></div>
             <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-              <span>
-                {{ comment.authorName }} · {{ comment.createdAt | date: 'short' }}
-                @if (comment.updatedAt) {
-                  · {{ 'comments.edited' | transloco }}
-                }
+              <span class="flex min-w-0 items-center gap-2">
+                <app-avatar
+                  [userId]="comment.authorId"
+                  [name]="comment.authorName"
+                  [version]="comment.authorAvatarVersion"
+                  [size]="22"
+                />
+                <span class="min-w-0 truncate">
+                  <span class="font-medium text-gray-700">{{ comment.authorName }}</span>
+                  <span>&#64;{{ comment.authorUsername }}</span>
+                  · {{ comment.createdAt | date: 'short' }}
+                  @if (comment.updatedAt) {
+                    · {{ 'comments.edited' | transloco }}
+                  }
+                </span>
               </span>
               <span class="flex gap-1">
                 @if (comment.canEdit) {

@@ -12,5 +12,7 @@ namespace backend.Dtos.Auth
         public Guid Id { get; set; }
         public string Email { get; set; } = null!;
         public string DisplayName { get; set; } = null!;
+        public string Username { get; set; } = null!;
+        public long? AvatarVersion { get; set; }
     }
 }

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit, computed, inject, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { PresenceUser } from '../../core/models/realtime.models';
+import { Avatar } from '../avatar/avatar';
 import { Realtime } from '../../core/services/realtime';
 
 const MAX_VISIBLE = 4;
 
 @Component({
   selector: 'app-work-presence',
-  imports: [TranslocoPipe],
+  imports: [TranslocoPipe, Avatar],
   templateUrl: './work-presence.html',
   styleUrl: './work-presence.scss',
 })
@@ -27,9 +27,5 @@ export class WorkPresence implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     void this.realtime.leaveWork(this.workId());
-  }
-
-  protected initials(user: PresenceUser): string {
-    return user.displayName.trim().slice(0, 2).toUpperCase();
   }
 }

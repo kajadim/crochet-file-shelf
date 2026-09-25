@@ -38,9 +38,19 @@
     },
     "register": {
       "title": "Konto erstellen",
-      "displayName": "Anzeigename",
-      "displayNameRequired": "Anzeigename ist erforderlich",
-      "displayNameMaxLength": "Der Anzeigename darf höchstens 100 Zeichen haben",
+      "firstName": "Vorname",
+      "firstNameRequired": "Vorname ist erforderlich",
+      "firstNameMaxLength": "Der Vorname darf höchstens 100 Zeichen lang sein",
+      "lastName": "Nachname",
+      "lastNameRequired": "Nachname ist erforderlich",
+      "lastNameMaxLength": "Der Nachname darf höchstens 100 Zeichen lang sein",
+      "username": "Benutzername",
+      "usernameHint": "3-30 Zeichen: Buchstaben, Zahlen, Punkte, Bindestriche und Unterstriche. Er muss eindeutig sein.",
+      "usernameRequired": "Benutzername ist erforderlich",
+      "usernamePattern": "Verwende 3-30 Buchstaben, Zahlen, Punkte, Bindestriche oder Unterstriche",
+      "usernameTaken": "Dieser Benutzername ist bereits vergeben",
+      "usernameChecking": "Verfügbarkeit wird geprüft...",
+      "usernameAvailable": "Benutzername ist verfügbar",
       "submit": "Bestätigungscode senden",
       "haveAccount": "Du hast bereits ein Konto?",
       "login": "Anmelden"
@@ -105,7 +115,9 @@
     "sharedWithMe": "Mit mir geteilt",
     "joinWork": "Einem Werk beitreten",
     "emptyShared": "Es wurde noch nichts mit dir geteilt.",
-    "deleteSharedWorkMessage": "Dieses Werk ist mit {{count}} Personen geteilt. Kann eine davon bearbeiten, geht es an die Person, die zuerst beigetreten ist. Sonst wird es für alle gelöscht."
+    "deleteSharedWorkMessage": "Dieses Werk ist mit {{count}} Personen geteilt. Kann eine davon bearbeiten, geht es an die Person, die zuerst beigetreten ist. Sonst wird es für alle gelöscht.",
+    "selectFolderFirst": "Wähle zuerst einen Ordner aus",
+    "folderEmpty": "Leer"
   },
   "palette": {
     "title": "Meine Palette",
@@ -297,5 +309,26 @@
   "presence": {
     "alsoHere": "Auch hier: {{names}}",
     "here": "auch hier"
+  },
+  "profile": {
+    "title": "Profil",
+    "memberSince": "Mitglied seit {{date}}",
+    "myWorks": "Meine Werke",
+    "total": "Insgesamt: {{count}}",
+    "sharedByMe": "Personen, mit denen du teilst",
+    "sharedByMeEmpty": "Du hast noch kein Werk geteilt.",
+    "sharedWithMe": "Mit dir geteilt",
+    "sharedWithMeEmpty": "Noch niemand hat ein Werk mit dir geteilt.",
+    "account": "Konto",
+    "language": "Sprache",
+    "resetPassword": "Passwort zurücksetzen",
+    "resetTitle": "Passwort zurücksetzen?",
+    "resetHint": "Wir senden einen Code an {{email}} und melden dich ab, damit du ein neues Passwort wählen kannst.",
+    "resetConfirm": "Code senden",
+    "edit": "Profil bearbeiten",
+    "changePhoto": "Foto ändern",
+    "removePhoto": "Foto entfernen",
+    "bio": "Über dich",
+    "avatarReadError": "Diese Datei konnte nicht als Bild gelesen werden"
   }
 }

@@ -39,5 +39,8 @@ namespace backend.Exceptions
         MemberNotFound,
         NotificationNotFound,
         PatternSizeIncomplete,
+        UsernameTaken,
+        AvatarInvalid,
+        AvatarTooLarge,
     }
 }

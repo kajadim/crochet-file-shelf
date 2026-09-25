@@ -14,6 +14,8 @@ namespace backend.Dtos.Sharing
     {
         public Guid UserId { get; set; }
         public string DisplayName { get; set; } = null!;
+        public string Username { get; set; } = null!;
+        public long? AvatarVersion { get; set; }
         public WorkPermission Permission { get; set; }
         public DateTime JoinedAt { get; set; }
     }

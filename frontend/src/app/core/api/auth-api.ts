@@ -9,6 +9,7 @@ import {
   RegisterRequest,
   ResendVerificationRequest,
   ResetPasswordRequest,
+  UsernameAvailability,
   VerifyEmailRequest,
 } from '../models/auth.models';
 
@@ -24,6 +25,10 @@ export class AuthApi {
 
   register(request: RegisterRequest): Observable<MessageResponse> {
     return this.http.post<MessageResponse>(`${this.baseUrl}/register`, request, this.options);
+  }
+
+  usernameAvailable(username: string): Observable<UsernameAvailability> {
+    return this.http.get<UsernameAvailability>(`${this.baseUrl}/username-available`, { params: { username } });
   }
 
   verifyEmail(request: VerifyEmailRequest): Observable<AuthResponse> {

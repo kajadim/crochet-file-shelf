@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { ActionMenu, ActionMenuItem } from '../action-menu/action-menu';
-import { Folder, FolderRow } from '../../core/models/folder.models';
+import { Folder, TreeRow } from '../../core/models/folder.models';
+import { Work } from '../../core/models/work.models';
 
 @Component({
   selector: 'app-folder-tree',
@@ -9,16 +10,19 @@ import { Folder, FolderRow } from '../../core/models/folder.models';
   styleUrl: './folder-tree.scss',
 })
 export class FolderTree {
-  readonly rows = input.required<FolderRow[]>();
+  readonly rows = input.required<TreeRow[]>();
   readonly selectedId = input<string | null>(null);
 
   readonly selectFolder = output<string>();
+  readonly openWork = output<Work>();
   readonly toggleFolder = output<string>();
   readonly createSubfolder = output<Folder>();
   readonly renameFolder = output<Folder>();
   readonly deleteFolder = output<Folder>();
 
   protected readonly folderActionsLabel = 'folderTree.folderActions';
+
+  protected readonly workIcons = { Pattern: 'pi-table', Video: 'pi-play-circle', Site: 'pi-globe' };
 
   protected menuItems(folder: Folder): ActionMenuItem[] {
     return [
