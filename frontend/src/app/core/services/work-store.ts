@@ -84,7 +84,7 @@ export class WorkStore {
     return this.api.move(id, { folderId }).pipe(
       tap((work) => {
         this.replaceInIndex(work);
-        if (this.isFiltered() || this.isVisibleInCurrentView(work)) {
+        if (this.isVisibleInCurrentView(work)) {
           this.replace(work);
         } else {
           this.worksState.update((works) => works.filter((existing) => existing.id !== id));

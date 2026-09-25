@@ -105,7 +105,7 @@ export class Dashboard implements OnInit {
         if (shared) {
           this.workStore.load({ shared: true });
         } else if (this.filtersActive()) {
-          this.workStore.load({ search, type, colorId, platform });
+          this.workStore.load({ folderId, search, type, colorId, platform });
         } else {
           this.workStore.load({ folderId });
         }
