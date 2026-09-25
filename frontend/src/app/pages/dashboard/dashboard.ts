@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
-import { catchError, map, of, switchMap, throwError } from 'rxjs';
+import { catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -325,15 +325,24 @@ export class Dashboard implements OnInit {
   }
 
   protected openMoveWork(work: Work): void {
-    this.dialogService.open<MoveWorkDialog, MoveWorkDialogData>(MoveWorkDialog, {
+    let targetFolderId: string | null = null;
+
+    const ref = this.dialogService.open<MoveWorkDialog, MoveWorkDialogData>(MoveWorkDialog, {
       header: this.transloco.translate('dashboard.moveWork', { name: work.name }),
       width: '420px',
       modal: true,
       data: {
         work,
         rows: this.folderStore.allRows(),
-        submit: (folderId) => this.workStore.move(work.id, folderId),
+        submit: (folderId) =>
+          this.workStore.move(work.id, folderId).pipe(tap(() => (targetFolderId = folderId))),
       },
+    });
+
+    ref?.onClose.subscribe((moved) => {
+      if (moved && targetFolderId) {
+        this.selectFolder(targetFolderId);
+      }
     });
   }
 

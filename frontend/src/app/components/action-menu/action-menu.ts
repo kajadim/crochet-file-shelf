@@ -40,7 +40,8 @@ export class ActionMenu {
     this.open.set(true);
   }
 
-  protected select(item: ActionMenuItem): void {
+  protected select(event: MouseEvent, item: ActionMenuItem): void {
+    event.stopPropagation();
     this.open.set(false);
     item.action();
   }
