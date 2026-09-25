@@ -32,5 +32,12 @@ namespace backend.Exceptions
         ExcelFileTooLarge,
         ExcelEmptyMatrix,
         ExcelMatrixTooLarge,
+        WorkAccessDenied,
+        InvitationInvalid,
+        AlreadyWorkMember,
+        CannotJoinOwnWork,
+        MemberNotFound,
+        NotificationNotFound,
+        PatternSizeIncomplete,
     }
 }

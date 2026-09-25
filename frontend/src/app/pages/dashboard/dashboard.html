@@ -8,19 +8,37 @@
       (onClick)="openCreateFolder(null)"
     />
 
+    <p-button
+      [label]="'dashboard.joinWork' | transloco"
+      icon="pi pi-key"
+      [text]="true"
+      [fluid]="true"
+      (onClick)="openJoin()"
+    />
+
     <button
       type="button"
       class="flex items-center gap-2 rounded-md px-3 py-1.5 text-left hover:bg-gray-100"
-      [class.bg-gray-200]="folderStore.selectedId() === null"
+      [class.bg-gray-200]="folderStore.selectedId() === null && !sharedView()"
       (click)="selectFolder(null)"
     >
       <i class="pi pi-folder text-sm"></i>
       {{ 'dashboard.allWorks' | transloco }}
     </button>
 
+    <button
+      type="button"
+      class="flex items-center gap-2 rounded-md px-3 py-1.5 text-left hover:bg-gray-100"
+      [class.bg-gray-200]="sharedView()"
+      (click)="selectShared()"
+    >
+      <i class="pi pi-users text-sm"></i>
+      {{ 'dashboard.sharedWithMe' | transloco }}
+    </button>
+
     <app-folder-tree
       [rows]="folderStore.rows()"
-      [selectedId]="folderStore.selectedId()"
+      [selectedId]="sharedView() ? null : folderStore.selectedId()"
       (selectFolder)="selectFolder($event)"
       (toggleFolder)="folderStore.toggle($event)"
       (createSubfolder)="openCreateFolder($event)"
@@ -35,7 +53,9 @@
     } @else if (folderStore.loaded()) {
       <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-xl font-semibold">
-          @if (filtersActive()) {
+          @if (sharedView()) {
+            {{ 'dashboard.sharedWithMe' | transloco }}
+          } @else if (filtersActive()) {
             {{ 'dashboard.searchResults' | transloco }}
           } @else if (folderStore.breadcrumb().length > 0) {
             @for (folder of folderStore.breadcrumb(); track folder.id; let last = $last) {
@@ -52,11 +72,12 @@
         <p-button
           [label]="'dashboard.newWork' | transloco"
           icon="pi pi-plus"
-          [disabled]="!folderStore.selectedFolder()"
+          [disabled]="sharedView() || !folderStore.selectedFolder()"
           (onClick)="openCreateWork()"
         />
       </div>
 
+      @if (!sharedView()) {
       <div class="mb-6 flex flex-wrap items-center gap-2">
         <span class="relative">
           <i class="pi pi-search pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm text-gray-400"></i>
@@ -122,8 +143,9 @@
           <p-button [label]="'dashboard.resetFilters' | transloco" icon="pi pi-times" [text]="true" (onClick)="resetFilters()" />
         }
       </div>
+      }
 
-      @if (folderStore.folders().length === 0) {
+      @if (folderStore.folders().length === 0 && !sharedView()) {
         <div class="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
           <p class="mb-3">{{ 'dashboard.emptyFolders' | transloco }}</p>
           <p-button [label]="'dashboard.newFolder' | transloco" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
@@ -134,7 +156,9 @@
         <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
         <p class="text-gray-500">
-          @if (filtersActive()) {
+          @if (sharedView()) {
+            {{ 'dashboard.emptyShared' | transloco }}
+          } @else if (filtersActive()) {
             {{ 'dashboard.noResults' | transloco }}
           } @else if (folderStore.selectedFolder()) {
             {{ 'dashboard.emptyWorksInFolder' | transloco }}
@@ -147,11 +171,13 @@
           @for (work of workStore.works(); track work.id) {
             <app-work-card
               [work]="work"
-              [folderPath]="filtersActive() ? folderStore.pathFor(work.folderId) : null"
+              [folderPath]="filtersActive() && !sharedView() ? folderStore.pathFor(work.folderId) : null"
               (open)="openWork($event)"
               (edit)="openEditWork($event)"
               (move)="openMoveWork($event)"
               (remove)="deleteWork($event)"
+              (share)="openShare($event)"
+              (leave)="leaveWork($event)"
             />
           }
         </div>

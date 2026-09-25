@@ -18,6 +18,8 @@ export class WorkCard {
   readonly edit = output<Work>();
   readonly move = output<Work>();
   readonly remove = output<Work>();
+  readonly share = output<Work>();
+  readonly leave = output<Work>();
 
   private static readonly typeKeys = { Pattern: 'workCard.matrix', Video: 'workCard.video', Site: 'workCard.site' };
   private static readonly typeIcons = { Pattern: 'pi-table', Video: 'pi-play-circle', Site: 'pi-globe' };
@@ -30,9 +32,17 @@ export class WorkCard {
 
   protected readonly workActionsLabel = 'workCard.workActions';
 
-  protected readonly menuItems = computed<ActionMenuItem[]>(() => [
-    { label: 'common.edit', icon: 'pi pi-pencil', action: () => this.edit.emit(this.work()) },
-    { label: 'workCard.moveTo', icon: 'pi pi-arrow-right-arrow-left', action: () => this.move.emit(this.work()) },
-    { label: 'common.delete', icon: 'pi pi-trash', action: () => this.remove.emit(this.work()), danger: true },
-  ]);
+  protected readonly isOwner = computed(() => this.work().role === 'Owner');
+  protected readonly roleKey = computed(() => (this.work().role === 'Editor' ? 'sharing.canEdit' : 'sharing.viewOnly'));
+
+  protected readonly menuItems = computed<ActionMenuItem[]>(() =>
+    this.isOwner()
+      ? [
+          { label: 'common.edit', icon: 'pi pi-pencil', action: () => this.edit.emit(this.work()) },
+          { label: 'workCard.moveTo', icon: 'pi pi-arrow-right-arrow-left', action: () => this.move.emit(this.work()) },
+          { label: 'workCard.share', icon: 'pi pi-share-alt', action: () => this.share.emit(this.work()) },
+          { label: 'common.delete', icon: 'pi pi-trash', action: () => this.remove.emit(this.work()), danger: true },
+        ]
+      : [{ label: 'workCard.leave', icon: 'pi pi-sign-out', action: () => this.leave.emit(this.work()), danger: true }],
+  );
 }

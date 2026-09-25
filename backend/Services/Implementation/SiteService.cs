@@ -10,20 +10,23 @@ namespace backend.Services.Implementation
     {
         private readonly ISiteRepository _siteRepository;
 
-        public SiteService(ISiteRepository siteRepository)
+        private readonly IWorkAccessService _access;
+
+        public SiteService(ISiteRepository siteRepository, IWorkAccessService access)
         {
             _siteRepository = siteRepository;
+            _access = access;
         }
 
         public async Task<SiteResponse> GetAsync(Guid userId, Guid workId)
         {
-            var site = await GetOwnedSiteAsync(userId, workId);
+            var site = await GetSiteAsync(userId, workId, WorkAccessLevel.Read);
             return ToResponse(site);
         }
 
         public async Task<SiteResponse> UpdateAsync(Guid userId, Guid workId, UpdateSiteRequest request)
         {
-            var site = await GetOwnedSiteAsync(userId, workId);
+            var site = await GetSiteAsync(userId, workId, WorkAccessLevel.Owner);
 
             site.Url = SiteLinkNormalizer.Normalize(request.Url);
             site.Work.UpdatedAt = DateTime.UtcNow;
@@ -32,9 +35,10 @@ namespace backend.Services.Implementation
             return ToResponse(site);
         }
 
-        private async Task<SiteReference> GetOwnedSiteAsync(Guid userId, Guid workId)
+        private async Task<SiteReference> GetSiteAsync(Guid userId, Guid workId, WorkAccessLevel level)
         {
-            var site = await _siteRepository.GetByWorkIdAsync(workId, userId);
+            await _access.RequireAsync(userId, workId, level);
+            var site = await _siteRepository.GetByWorkIdAsync(workId);
             return site ?? throw new NotFoundException(ErrorCode.SiteNotFound);
         }
 

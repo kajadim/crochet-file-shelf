@@ -37,6 +37,18 @@ namespace backend.Repository.Implementation
         public Task<int> CountWorksInFoldersAsync(IReadOnlyCollection<Guid> folderIds) =>
             _context.Works.CountAsync(w => folderIds.Contains(w.FolderId));
 
+        public Task<Folder?> GetRootByNameAsync(Guid ownerId, string name)
+        {
+            var lowerName = name.ToLower();
+            return _context.Folders.FirstOrDefaultAsync(f =>
+                f.OwnerId == ownerId && f.ParentFolderId == null && f.Name.ToLower() == lowerName);
+        }
+
+        public Task<List<Work>> GetSharedWorksInFoldersAsync(IReadOnlyCollection<Guid> folderIds) =>
+            _context.Works
+                .Where(w => folderIds.Contains(w.FolderId) && w.Members.Any())
+                .ToListAsync();
+
         public async Task AddAsync(Folder folder) =>
             await _context.Folders.AddAsync(folder);
 

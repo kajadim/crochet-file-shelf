@@ -22,5 +22,11 @@ namespace backend.Dtos.Works
 
         [MaxLength(2048)]
         public string? Url { get; set; }
+
+        [Range(1, 200)]
+        public int? Width { get; set; }
+
+        [Range(1, 200)]
+        public int? Height { get; set; }
     }
 }

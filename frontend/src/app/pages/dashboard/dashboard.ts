@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import { catchError, map, of, switchMap, throwError } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -10,10 +11,15 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { FolderNameDialog, FolderNameDialogData } from '../../components/folder-name-dialog/folder-name-dialog';
 import { FolderTree } from '../../components/folder-tree/folder-tree';
+import { JoinWorkDialog } from '../../components/join-work-dialog/join-work-dialog';
+import { ShareDialog, ShareDialogData } from '../../components/share-dialog/share-dialog';
 import { MoveWorkDialog, MoveWorkDialogData } from '../../components/move-work-dialog/move-work-dialog';
 import { WorkCard } from '../../components/work-card/work-card';
 import { WorkFormDialog, WorkFormDialogData } from '../../components/work-form-dialog/work-form-dialog';
+import { PatternApi } from '../../core/api/pattern-api';
+import { SharingApi } from '../../core/api/sharing-api';
 import { Folder, FolderDeletionSummary } from '../../core/models/folder.models';
+import { JoinWorkResponse } from '../../core/models/sharing.models';
 import { Work, WorkType } from '../../core/models/work.models';
 import { FolderStore } from '../../core/services/folder-store';
 import { WorkStore } from '../../core/services/work-store';
@@ -35,6 +41,8 @@ export class Dashboard implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly transloco = inject(TranslocoService);
   private readonly router = inject(Router);
+  private readonly sharingApi = inject(SharingApi);
+  private readonly patternApi = inject(PatternApi);
 
   protected readonly loadError = signal<string | null>(null);
 
@@ -46,6 +54,8 @@ export class Dashboard implements OnInit {
   protected readonly platformOptions = PLATFORM_OPTIONS;
 
   private readonly storedFilters = loadDashboardFilters();
+
+  protected readonly sharedView = signal(false);
 
   protected readonly searchInput = signal(this.storedFilters.search);
   protected readonly search = signal(this.storedFilters.search.trim());
@@ -73,6 +83,7 @@ export class Dashboard implements OnInit {
       if (!this.folderStore.loaded()) {
         return;
       }
+      const shared = this.sharedView();
       const folderId = this.folderStore.selectedId();
       const search = this.search();
       const type = this.typeFilter();
@@ -80,7 +91,9 @@ export class Dashboard implements OnInit {
       const platform = this.platformFilter();
 
       untracked(() => {
-        if (this.filtersActive()) {
+        if (shared) {
+          this.workStore.load({ shared: true });
+        } else if (this.filtersActive()) {
           this.workStore.load({ search, type, colorId, platform });
         } else {
           this.workStore.load({ folderId });
@@ -135,7 +148,70 @@ export class Dashboard implements OnInit {
   }
 
   protected selectFolder(id: string | null): void {
+    this.sharedView.set(false);
     this.folderStore.select(id);
+  }
+
+  protected selectShared(): void {
+    this.sharedView.set(true);
+  }
+
+  protected openJoin(): void {
+    const ref = this.dialogService.open<JoinWorkDialog>(JoinWorkDialog, {
+      header: this.transloco.translate('sharing.joinTitle'),
+      width: '420px',
+      modal: true,
+    });
+
+    ref?.onClose.subscribe((result: JoinWorkResponse | undefined) => {
+      if (!result) {
+        return;
+      }
+      this.messageService.add({
+        severity: 'success',
+        summary: this.transloco.translate('sharing.joined', { name: result.name }),
+      });
+      this.sharedView.set(true);
+    });
+  }
+
+  protected openShare(work: Work): void {
+    this.dialogService.open<ShareDialog, ShareDialogData>(ShareDialog, {
+      header: this.transloco.translate('sharing.shareTitle', { name: work.name }),
+      width: '520px',
+      modal: true,
+      closable: true,
+      closeOnEscape: true,
+      dismissableMask: true,
+      data: { work },
+    });
+  }
+
+  protected leaveWork(work: Work): void {
+    const title = this.transloco.translate('sharing.leaveTitle', { name: work.name });
+    const data: ConfirmDialogData = {
+      title,
+      message: this.transloco.translate('sharing.leaveMessage'),
+      confirmLabel: this.transloco.translate('sharing.leave'),
+      destructive: true,
+    };
+
+    const ref = this.dialogService.open<ConfirmDialog, ConfirmDialogData>(ConfirmDialog, {
+      header: title,
+      width: '420px',
+      modal: true,
+      data,
+    });
+
+    ref?.onClose.subscribe((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.sharingApi.leave(work.id).subscribe({
+        next: () => this.workStore.dropLocal(work.id),
+        error: (error) => this.showError(error),
+      });
+    });
   }
 
   protected openCreateFolder(parent: Folder | null): void {
@@ -186,7 +262,24 @@ export class Dashboard implements OnInit {
       data: {
         submitLabel: this.transloco.translate('common.create'),
         work: null,
-        submit: (value) => this.workStore.create({ ...value, folderId: folder.id }),
+        submit: (value) => {
+          const { importFile, ...request } = value;
+          return this.workStore.create({ ...request, folderId: folder.id }).pipe(
+            switchMap((work) =>
+              importFile
+                ? this.patternApi.importFile(work.id, importFile).pipe(
+                    map(() => work),
+                    catchError((error) =>
+                      this.workStore.remove(work.id).pipe(
+                        catchError(() => of(undefined)),
+                        switchMap(() => throwError(() => error)),
+                      ),
+                    ),
+                  )
+                : of(work),
+            ),
+          );
+        },
       },
     });
   }
@@ -218,10 +311,20 @@ export class Dashboard implements OnInit {
   }
 
   protected deleteWork(work: Work): void {
+    this.sharingApi.get(work.id).subscribe({
+      next: (info) => this.confirmWorkDeletion(work, info.members.length),
+      error: () => this.confirmWorkDeletion(work, 0),
+    });
+  }
+
+  private confirmWorkDeletion(work: Work, memberCount: number): void {
     const title = this.transloco.translate('dashboard.deleteWorkTitle', { name: work.name });
     const data: ConfirmDialogData = {
       title,
-      message: this.transloco.translate('dashboard.deleteWorkMessage'),
+      message:
+        memberCount > 0
+          ? this.transloco.translate('dashboard.deleteSharedWorkMessage', { count: memberCount })
+          : this.transloco.translate('dashboard.deleteWorkMessage'),
       confirmLabel: this.transloco.translate('common.delete'),
       destructive: true,
     };

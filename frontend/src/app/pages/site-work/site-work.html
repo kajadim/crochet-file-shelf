@@ -36,6 +36,7 @@
       </div>
     }
 
+    @if (isOwner()) {
     <div>
       <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'siteWork.link' | transloco }}</p>
 
@@ -53,7 +54,8 @@
         <p-button [label]="'siteWork.updateLink' | transloco" type="submit" [outlined]="true" [loading]="saving()" />
       </form>
     </div>
+    }
   }
 
-  <app-work-comments [workId]="workId" />
+  <app-work-comments [workId]="workId" [canWrite]="canEdit()" />
 </div>

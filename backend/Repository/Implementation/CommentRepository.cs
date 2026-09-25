@@ -16,12 +16,15 @@ namespace backend.Repository.Implementation
 
         public Task<List<WorkComment>> GetByWorkAsync(Guid workId) =>
             _context.WorkComments
+                .Include(c => c.Author)
                 .Where(c => c.WorkId == workId)
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
         public Task<WorkComment?> GetByIdAsync(Guid commentId, Guid workId) =>
-            _context.WorkComments.FirstOrDefaultAsync(c => c.Id == commentId && c.WorkId == workId);
+            _context.WorkComments
+                .Include(c => c.Author)
+                .FirstOrDefaultAsync(c => c.Id == commentId && c.WorkId == workId);
 
         public async Task AddAsync(WorkComment comment) =>
             await _context.WorkComments.AddAsync(comment);

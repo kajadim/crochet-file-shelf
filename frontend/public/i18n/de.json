@@ -101,7 +101,11 @@
     "filterPlatform": "Plattform",
     "resetFilters": "Zurücksetzen",
     "noResults": "Keine Werke entsprechen deiner Suche.",
-    "searchResults": "Suchergebnisse"
+    "searchResults": "Suchergebnisse",
+    "sharedWithMe": "Mit mir geteilt",
+    "joinWork": "Einem Werk beitreten",
+    "emptyShared": "Es wurde noch nichts mit dir geteilt.",
+    "deleteSharedWorkMessage": "Dieses Werk ist mit {{count}} Personen geteilt. Kann eine davon bearbeiten, geht es an die Person, die zuerst beigetreten ist. Sonst wird es für alle gelöscht."
   },
   "palette": {
     "title": "Meine Palette",
@@ -130,7 +134,14 @@
       "videoUrlRequired": "Ein Link ist erforderlich",
       "site": "Website",
       "siteUrl": "Webadresse",
-      "siteUrlHint": "Ein Blog, Artikel oder eine beliebige Webseite"
+      "siteUrlHint": "Ein Blog, Artikel oder eine beliebige Webseite",
+      "matrixSize": "Größe der Matrix",
+      "sizeManual": "Größe eingeben",
+      "sizeImport": "Aus Excel importieren",
+      "chooseFile": ".xlsx-Datei wählen",
+      "chooseAnotherFile": "Andere Datei wählen",
+      "importFileRequired": "Wähle eine Excel-Datei zum Importieren.",
+      "importNewColors": "{{count}} neue Farben werden deiner Palette hinzugefügt."
     },
     "moveWork": {
       "chooseDestination": "Zielordner auswählen.",
@@ -184,7 +195,9 @@
     "importSkipped": "{{count}} Zellen konnten nicht gelesen werden und werden übersprungen:",
     "importConfirm": "Importieren",
     "importWarningUnresolvedColor": "nicht unterstützte Farbe",
-    "importWarningUnsupportedFill": "nicht unterstütztes Füllmuster"
+    "importWarningUnsupportedFill": "nicht unterstütztes Füllmuster",
+    "viewOnlyBadge": "Nur ansehen",
+    "notSetUpYet": "Der Besitzer hat diese Matrix noch nicht eingerichtet."
   },
   "folderTree": {
     "newSubfolder": "Neuer Unterordner",
@@ -196,7 +209,10 @@
     "moveTo": "Verschieben nach...",
     "updated": "Aktualisiert am {{date}}",
     "workActions": "Werkaktionen",
-    "site": "Website"
+    "site": "Website",
+    "share": "Teilen",
+    "leave": "Verlassen",
+    "sharedBy": "Geteilt von {{name}}"
   },
   "colorActions": "Farbaktionen",
   "videoWork": {
@@ -233,5 +249,45 @@
     "bulletList": "Aufzählung",
     "link": "Link",
     "clean": "Formatierung entfernen"
+  },
+  "sharing": {
+    "codeTitle": "Einladungscode",
+    "codeGives": "Gibt Zugriff: {{permission}}",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "noActiveCode": "Es gibt keinen aktiven Code. Erstelle einen, um Leute einzuladen.",
+    "permission": "Berechtigung",
+    "canEdit": "Kann bearbeiten",
+    "viewOnly": "Nur ansehen",
+    "createCode": "Code erstellen",
+    "generateNew": "Neuen Code erzeugen",
+    "revoke": "Widerrufen",
+    "codeHint": "Jeder mit einem aktiven Code kann beitreten. Ein neuer Code ersetzt den alten; wer bereits beigetreten ist, behält den Zugriff.",
+    "membersTitle": "Mitglieder ({{count}})",
+    "noMembers": "Noch niemand ist beigetreten.",
+    "remove": "Entfernen",
+    "removeTitle": "{{name}} entfernen?",
+    "removeMessage": "Der Zugriff auf dieses Werk wird sofort entzogen.",
+    "joinHint": "Gib den Code ein, den dir der Besitzer mitgeteilt hat.",
+    "code": "Code",
+    "codeRequired": "Gib einen Code ein",
+    "join": "Beitreten",
+    "shareTitle": "„{{name}}“ teilen",
+    "joinTitle": "Einem Werk beitreten",
+    "joined": "Du bist „{{name}}“ beigetreten.",
+    "leaveTitle": "„{{name}}“ verlassen?",
+    "leaveMessage": "Du verlierst den Zugriff auf dieses Werk.",
+    "leave": "Verlassen"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "markAllRead": "Alle als gelesen markieren",
+    "empty": "Keine Benachrichtigungen.",
+    "workInviteCanEdit": "Du bist „{{workName}}“ beigetreten und kannst es bearbeiten.",
+    "workInviteViewOnly": "Du bist „{{workName}}“ nur zum Ansehen beigetreten.",
+    "memberJoined": "{{userName}} ist „{{workName}}“ beigetreten.",
+    "removedFromWork": "Du wurdest aus „{{workName}}“ entfernt.",
+    "workDeleted": "„{{workName}}“ wurde vom Besitzer gelöscht.",
+    "ownershipTransferred": "Du bist jetzt Besitzer von „{{workName}}“. Es liegt in deinem Ordner „Shared with me“."
   }
 }

@@ -20,9 +20,14 @@ namespace backend.Repository.Implementation
             string? search,
             WorkType? type,
             Guid? colorId,
-            VideoPlatform? platform)
+            VideoPlatform? platform,
+            bool includeShared)
         {
-            var query = _context.Works.Where(w => w.OwnerId == ownerId);
+            var query = includeShared
+                ? _context.Works
+                    .Include(w => w.Owner)
+                    .Where(w => w.OwnerId == ownerId || w.Members.Any(m => m.UserId == ownerId))
+                : _context.Works.Where(w => w.OwnerId == ownerId);
 
             if (folderId.HasValue)
             {
@@ -58,6 +63,24 @@ namespace backend.Repository.Implementation
 
         private static string EscapeLike(string value) =>
             value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
+
+        public Task<List<Work>> GetSharedWithAsync(Guid userId) =>
+            _context.Works
+                .Include(w => w.Owner)
+                .Where(w => w.Members.Any(m => m.UserId == userId))
+                .OrderBy(w => w.Name)
+                .ToListAsync();
+
+        public Task<Work?> GetByIdAsync(Guid id) =>
+            _context.Works.Include(w => w.Owner).FirstOrDefaultAsync(w => w.Id == id);
+
+        public Task<WorkMember?> GetMemberAsync(Guid workId, Guid userId) =>
+            _context.WorkMembers.FirstOrDefaultAsync(m => m.WorkId == workId && m.UserId == userId);
+
+        public Task<Dictionary<Guid, WorkPermission>> GetMemberPermissionsAsync(Guid userId, IReadOnlyCollection<Guid> workIds) =>
+            _context.WorkMembers
+                .Where(m => m.UserId == userId && workIds.Contains(m.WorkId))
+                .ToDictionaryAsync(m => m.WorkId, m => m.Permission);
 
         public Task<Work?> GetByIdAsync(Guid id, Guid ownerId) =>
             _context.Works.FirstOrDefaultAsync(w => w.Id == id && w.OwnerId == ownerId);

@@ -4,7 +4,7 @@ namespace backend.Repository.Interfaces
 {
     public interface IPatternRepository
     {
-        Task<Pattern?> GetByWorkIdAsync(Guid workId, Guid ownerId);
+        Task<Pattern?> GetByWorkIdAsync(Guid workId);
         Task AddAsync(Pattern pattern);
         Task<List<PatternCell>> GetAllCellsAsync(Guid patternId);
         Task AddCellAsync(PatternCell cell);

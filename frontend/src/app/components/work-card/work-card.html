@@ -20,6 +20,13 @@
     </p>
   }
 
+  @if (!isOwner()) {
+    <p class="flex items-center gap-1 text-xs text-gray-500">
+      <i class="pi pi-users text-xs"></i>
+      {{ 'workCard.sharedBy' | transloco: { name: work().ownerName } }} · {{ roleKey() | transloco }}
+    </p>
+  }
+
   @if (work().description) {
     <p class="line-clamp-3 text-sm text-gray-600 break-words">{{ work().description }}</p>
   }

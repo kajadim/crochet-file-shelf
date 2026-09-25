@@ -6,6 +6,9 @@
     <h1 class="text-lg font-semibold">{{ workName() }}</h1>
 
     <div class="ml-auto flex items-center gap-3">
+      @if (role() === 'Viewer') {
+        <span class="rounded bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">{{ 'matrixEditor.viewOnlyBadge' | transloco }}</span>
+      }
       @if (patternStore.pattern(); as pattern) {
         <span class="rounded border border-gray-300 px-3 py-1 text-sm text-gray-700">
           {{ 'matrixEditor.positionSummary' | transloco: { row: pattern.currentRow, column: pattern.currentColumn } }}
@@ -32,10 +35,14 @@
   </div>
 
   <p-drawer [(visible)]="commentsOpen" position="right" [style]="{ width: '28rem' }" [header]="'comments.title' | transloco">
-    <app-work-comments [workId]="workId" />
+    <app-work-comments [workId]="workId" [canWrite]="canEdit()" />
   </p-drawer>
 
-  @if (patternStore.notFound()) {
+  @if (patternStore.notFound() && role() === null) {
+    <p class="p-6 text-gray-500">{{ 'common.loading' | transloco }}</p>
+  } @else if (patternStore.notFound() && role() !== 'Owner') {
+    <p class="p-6 text-gray-600">{{ 'matrixEditor.notSetUpYet' | transloco }}</p>
+  } @else if (patternStore.notFound()) {
     <div class="mx-auto w-full max-w-md p-6">
       <h2 class="mb-1 text-lg font-semibold">{{ 'matrixEditor.setupTitle' | transloco }}</h2>
       <p class="mb-4 text-sm text-gray-500">{{ 'matrixEditor.setupSubtitle' | transloco }}</p>
@@ -171,6 +178,7 @@
               [class.text-gray-500]="row !== pattern.activeRow"
               [attr.aria-label]="'matrixEditor.markActiveRow' | transloco"
               [title]="'matrixEditor.markActiveRow' | transloco"
+              [disabled]="!canEdit()"
               (click)="onRowArrowClick(row)"
             >
               @if (row === pattern.activeRow) {
@@ -225,6 +233,7 @@
           <i class="pi pi-angle-right"></i>
         </button>
 
+        @if (canEdit()) {
         <div>
           <div class="mb-2 flex items-center justify-between">
             <p class="text-sm font-semibold text-gray-700">{{ 'matrixEditor.myPalette' | transloco }}</p>
@@ -269,6 +278,8 @@
           }
         </div>
 
+        }
+
         <div>
           <p class="mb-2 text-sm font-semibold text-gray-700">{{ 'matrixEditor.legend' | transloco }}</p>
           @if (patternStore.legend().length === 0) {
@@ -285,6 +296,7 @@
           }
         </div>
 
+        @if (canEdit()) {
         <div>
           <p class="mb-2 text-sm font-semibold text-gray-700">{{ 'matrixEditor.position' | transloco }}</p>
           <form [formGroup]="positionForm" (ngSubmit)="markAsCurrent()" class="flex flex-col gap-2">
@@ -302,6 +314,9 @@
           </form>
         </div>
 
+        }
+
+        @if (isOwner()) {
         <div>
           <p class="mb-2 text-sm font-semibold text-gray-700">{{ 'matrixEditor.addCells' | transloco }}</p>
 
@@ -362,7 +377,11 @@
           </form>
         </div>
 
-        <p class="text-xs text-gray-400">{{ 'matrixEditor.rightClickHint' | transloco }}</p>
+        }
+
+        @if (canEdit()) {
+          <p class="text-xs text-gray-400">{{ 'matrixEditor.rightClickHint' | transloco }}</p>
+        }
       </aside>
       }
     </div>

@@ -1,0 +1,88 @@
+<div class="flex flex-col gap-5">
+  @if (error()) {
+    <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
+  } @else if (info(); as sharing) {
+    <section class="flex flex-col gap-3">
+      <p class="text-sm font-semibold text-gray-700">{{ 'sharing.codeTitle' | transloco }}</p>
+
+      @if (sharing.invitation?.isActive) {
+        <div class="flex items-center justify-between gap-3 rounded-lg border border-gray-300 bg-gray-50 px-4 py-3">
+          <div>
+            <p class="font-mono text-2xl font-semibold tracking-widest">{{ sharing.invitation!.code }}</p>
+            <p class="text-xs text-gray-500">
+              {{ 'sharing.codeGives' | transloco: { permission: (permissionKey(sharing.invitation!.permission) | transloco) } }}
+            </p>
+          </div>
+          <p-button
+            [icon]="copied() ? 'pi pi-check' : 'pi pi-copy'"
+            [label]="(copied() ? 'sharing.copied' : 'sharing.copy') | transloco"
+            [outlined]="true"
+            (onClick)="copyCode(sharing.invitation!.code)"
+          />
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500">{{ 'sharing.noActiveCode' | transloco }}</p>
+      }
+
+      <div class="flex flex-wrap items-center gap-2">
+        <select
+          class="rounded border border-gray-300 bg-white px-2 py-1.5 text-sm"
+          [ngModel]="newPermission()"
+          (ngModelChange)="newPermission.set($event)"
+          [attr.aria-label]="'sharing.permission' | transloco"
+        >
+          <option value="CanEdit">{{ 'sharing.canEdit' | transloco }}</option>
+          <option value="ViewOnly">{{ 'sharing.viewOnly' | transloco }}</option>
+        </select>
+        <p-button
+          [label]="(sharing.invitation?.isActive ? 'sharing.generateNew' : 'sharing.createCode') | transloco"
+          [loading]="busy()"
+          (onClick)="createCode()"
+        />
+        @if (sharing.invitation?.isActive) {
+          <p-button [label]="'sharing.revoke' | transloco" [text]="true" severity="danger" [disabled]="busy()" (onClick)="revokeCode()" />
+        }
+      </div>
+      <p class="text-xs text-gray-500">{{ 'sharing.codeHint' | transloco }}</p>
+    </section>
+
+    <section class="flex flex-col gap-2">
+      <p class="text-sm font-semibold text-gray-700">{{ 'sharing.membersTitle' | transloco: { count: sharing.members.length } }}</p>
+
+      @if (sharing.members.length === 0) {
+        <p class="text-sm text-gray-500">{{ 'sharing.noMembers' | transloco }}</p>
+      } @else {
+        <ul class="flex flex-col gap-2">
+          @for (member of sharing.members; track member.userId) {
+            <li class="flex items-center gap-2 rounded border border-gray-200 px-3 py-2">
+              <span class="min-w-0 flex-1 truncate text-sm">{{ member.displayName }}</span>
+              <select
+                class="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
+                [ngModel]="member.permission"
+                (ngModelChange)="changePermission(member, $event)"
+                [disabled]="busy()"
+                [attr.aria-label]="'sharing.permission' | transloco"
+              >
+                <option value="CanEdit">{{ 'sharing.canEdit' | transloco }}</option>
+                <option value="ViewOnly">{{ 'sharing.viewOnly' | transloco }}</option>
+              </select>
+              <p-button
+                icon="pi pi-times"
+                [text]="true"
+                severity="danger"
+                size="small"
+                [disabled]="busy()"
+                [ariaLabel]="'sharing.remove' | transloco"
+                (onClick)="removeMember(member)"
+              />
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</div>

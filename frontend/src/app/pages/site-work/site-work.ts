@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkApi } from '../../core/api/work-api';
+import { WorkRole } from '../../core/models/work.models';
 import { SiteStore } from '../../core/services/site-store';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
@@ -24,6 +25,9 @@ export class SiteWork implements OnInit {
 
   protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
   protected readonly workName = signal<string | null>(null);
+  protected readonly role = signal<WorkRole | null>(null);
+  protected readonly canEdit = computed(() => this.role() === 'Owner' || this.role() === 'Editor');
+  protected readonly isOwner = computed(() => this.role() === 'Owner');
   protected readonly workDescription = signal<string | null>(null);
 
   protected readonly domain = computed(() => {
@@ -60,6 +64,7 @@ export class SiteWork implements OnInit {
       next: (work) => {
         this.workName.set(work.name);
         this.workDescription.set(work.description);
+        this.role.set(work.role);
       },
     });
   }

@@ -39,6 +39,7 @@
       <p class="text-sm text-gray-500">{{ 'videoWork.noPreview' | transloco }}</p>
     }
 
+    @if (canEdit()) {
     <div>
       <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.startTime' | transloco }}</p>
 
@@ -68,6 +69,9 @@
       }
     </div>
 
+    }
+
+    @if (isOwner()) {
     <div>
       <p class="mb-1 text-sm font-semibold text-gray-700">{{ 'videoWork.link' | transloco }}</p>
 
@@ -85,7 +89,8 @@
         <p-button [label]="'videoWork.updateLink' | transloco" type="submit" [outlined]="true" [loading]="linkSaving()" />
       </form>
     </div>
+    }
   }
 
-  <app-work-comments [workId]="workId" />
+  <app-work-comments [workId]="workId" [canWrite]="canEdit()" />
 </div>

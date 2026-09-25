@@ -5,6 +5,7 @@
     <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
   }
 
+  @if (canWrite()) {
   <div class="flex flex-col gap-2">
     <p-editor
       [ngModel]="newText()"
@@ -25,6 +26,7 @@
       />
     </div>
   </div>
+  }
 
   @if (store.loading()) {
     <p class="text-sm text-gray-500">{{ 'common.loading' | transloco }}</p>
@@ -57,12 +59,13 @@
             <div class="comment-body text-gray-800" [innerHTML]="comment.text"></div>
             <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
               <span>
-                {{ comment.createdAt | date: 'short' }}
+                {{ comment.authorName }} · {{ comment.createdAt | date: 'short' }}
                 @if (comment.updatedAt) {
                   · {{ 'comments.edited' | transloco }}
                 }
               </span>
               <span class="flex gap-1">
+                @if (comment.canEdit) {
                 <p-button
                   icon="pi pi-pencil"
                   [text]="true"
@@ -70,6 +73,8 @@
                   [ariaLabel]="'common.edit' | transloco"
                   (onClick)="startEdit(comment)"
                 />
+                }
+                @if (comment.canDelete) {
                 <p-button
                   icon="pi pi-trash"
                   [text]="true"
@@ -78,6 +83,7 @@
                   [ariaLabel]="'common.delete' | transloco"
                   (onClick)="delete(comment)"
                 />
+                }
               </span>
             </div>
           }

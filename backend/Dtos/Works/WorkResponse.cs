@@ -11,5 +11,7 @@ namespace backend.Dtos.Works
         public Guid FolderId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public WorkRole Role { get; set; }
+        public string? OwnerName { get; set; }
     }
 }

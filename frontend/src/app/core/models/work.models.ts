@@ -1,4 +1,5 @@
 export type WorkType = 'Pattern' | 'Video' | 'Site';
+export type WorkRole = 'Owner' | 'Editor' | 'Viewer';
 
 export interface Work {
   id: string;
@@ -8,6 +9,8 @@ export interface Work {
   folderId: string;
   createdAt: string;
   updatedAt: string;
+  role: WorkRole;
+  ownerName: string | null;
 }
 
 export interface CreateWorkRequest {
@@ -16,10 +19,13 @@ export interface CreateWorkRequest {
   type: WorkType;
   folderId: string;
   url?: string | null;
+  width?: number | null;
+  height?: number | null;
 }
 
 export interface WorkQuery {
   folderId?: string | null;
+  shared?: boolean;
   search?: string;
   type?: WorkType | null;
   colorId?: string | null;

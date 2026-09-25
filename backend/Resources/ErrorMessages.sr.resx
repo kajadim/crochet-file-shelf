@@ -145,6 +145,27 @@
   <data name="ExcelMatrixTooLarge" xml:space="preserve">
     <value>Obojeni deo je veći od 200 x 200 ćelija.</value>
   </data>
+  <data name="WorkAccessDenied" xml:space="preserve">
+    <value>Nemaš dozvolu za tu radnju na ovom radu.</value>
+  </data>
+  <data name="InvitationInvalid" xml:space="preserve">
+    <value>Kod nije ispravan.</value>
+  </data>
+  <data name="AlreadyWorkMember" xml:space="preserve">
+    <value>Već si član ovog rada.</value>
+  </data>
+  <data name="CannotJoinOwnWork" xml:space="preserve">
+    <value>Ovo je tvoj rad.</value>
+  </data>
+  <data name="MemberNotFound" xml:space="preserve">
+    <value>Član nije pronađen.</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>Obaveštenje nije pronađeno.</value>
+  </data>
+  <data name="PatternSizeIncomplete" xml:space="preserve">
+    <value>Unesi i širinu i visinu matrice.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Ovaj rad nije tipa matrica.</value>
   </data>

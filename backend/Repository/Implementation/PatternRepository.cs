@@ -14,8 +14,8 @@ namespace backend.Repository.Implementation
             _context = context;
         }
 
-        public Task<Pattern?> GetByWorkIdAsync(Guid workId, Guid ownerId) =>
-            _context.Patterns.FirstOrDefaultAsync(p => p.WorkId == workId && p.Work.OwnerId == ownerId);
+        public Task<Pattern?> GetByWorkIdAsync(Guid workId) =>
+            _context.Patterns.FirstOrDefaultAsync(p => p.WorkId == workId);
 
         public async Task AddAsync(Pattern pattern) =>
             await _context.Patterns.AddAsync(pattern);

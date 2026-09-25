@@ -9,39 +9,35 @@ namespace backend.Services.Implementation
     public class PatternService : IPatternService
     {
         private readonly IPatternRepository _patternRepository;
-        private readonly IWorkRepository _workRepository;
+        private readonly IWorkAccessService _access;
         private readonly IYarnColorRepository _yarnColorRepository;
 
         public PatternService(
             IPatternRepository patternRepository,
-            IWorkRepository workRepository,
+            IWorkAccessService access,
             IYarnColorRepository yarnColorRepository)
         {
             _patternRepository = patternRepository;
-            _workRepository = workRepository;
+            _access = access;
             _yarnColorRepository = yarnColorRepository;
         }
 
         public async Task<PatternResponse> GetAsync(Guid userId, Guid workId)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Read);
             var cells = await _patternRepository.GetAllCellsAsync(pattern.Id);
             return ToResponse(pattern, cells);
         }
 
         public async Task<PatternResponse> CreateAsync(Guid userId, Guid workId, CreatePatternRequest request)
         {
-            var work = await _workRepository.GetByIdAsync(workId, userId);
-            if (work is null)
-            {
-                throw new NotFoundException(ErrorCode.WorkNotFound);
-            }
+            var work = (await _access.RequireAsync(userId, workId, WorkAccessLevel.Owner)).Work;
             if (work.Type != WorkType.Pattern)
             {
                 throw new ConflictException(ErrorCode.WorkNotPatternType);
             }
 
-            var existing = await _patternRepository.GetByWorkIdAsync(workId, userId);
+            var existing = await _patternRepository.GetByWorkIdAsync(workId);
             if (existing is not null)
             {
                 throw new ConflictException(ErrorCode.PatternAlreadyExists);
@@ -65,7 +61,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> UpdatePositionAsync(Guid userId, Guid workId, UpdatePositionRequest request)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Edit);
 
             var row = request.Row!.Value;
             var column = request.Column!.Value;
@@ -84,7 +80,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> UpdateActiveRowAsync(Guid userId, Guid workId, UpdateActiveRowRequest request)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Edit);
 
             if (request.Row.HasValue && request.Row.Value >= pattern.Height)
             {
@@ -100,7 +96,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> ExpandAsync(Guid userId, Guid workId, PatternEdgesRequest request)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Owner);
 
             var newWidth = pattern.Width + request.Left + request.Right;
             var newHeight = pattern.Height + request.Top + request.Bottom;
@@ -127,7 +123,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> ShrinkAsync(Guid userId, Guid workId, PatternEdgesRequest request)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Owner);
 
             var newWidth = pattern.Width - request.Left - request.Right;
             var newHeight = pattern.Height - request.Top - request.Bottom;
@@ -169,7 +165,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> SetCellsAsync(Guid userId, Guid workId, SetCellsRequest request)
         {
-            var pattern = await GetOwnedPatternAsync(userId, workId);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Edit);
 
             var changes = new Dictionary<(int Row, int Column), CellChange>();
             foreach (var change in request.Cells)
@@ -234,9 +230,10 @@ namespace backend.Services.Implementation
             return ToResponse(pattern, updatedCells);
         }
 
-        private async Task<Pattern> GetOwnedPatternAsync(Guid userId, Guid workId)
+        private async Task<Pattern> GetPatternAsync(Guid userId, Guid workId, WorkAccessLevel level)
         {
-            var pattern = await _patternRepository.GetByWorkIdAsync(workId, userId);
+            await _access.RequireAsync(userId, workId, level);
+            var pattern = await _patternRepository.GetByWorkIdAsync(workId);
             return pattern ?? throw new NotFoundException(ErrorCode.PatternNotFound);
         }
 

@@ -8,6 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { Textarea } from 'primeng/textarea';
 import { Observable } from 'rxjs';
+import { PatternApi } from '../../core/api/pattern-api';
+import { ImportPreview } from '../../core/models/pattern.models';
 import { Work, WorkType } from '../../core/models/work.models';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
@@ -16,6 +18,9 @@ export interface WorkFormValue {
   description: string | null;
   type: WorkType;
   url: string | null;
+  width: number | null;
+  height: number | null;
+  importFile: File | null;
 }
 
 export interface WorkFormDialogData {
@@ -23,6 +28,8 @@ export interface WorkFormDialogData {
   work: Work | null;
   submit: (value: WorkFormValue) => Observable<unknown>;
 }
+
+type SizeMode = 'manual' | 'import';
 
 @Component({
   selector: 'app-work-form-dialog',
@@ -34,6 +41,7 @@ export class WorkFormDialog {
   protected readonly dialogRef = inject(DynamicDialogRef<boolean>);
   protected readonly data = inject(DynamicDialogConfig).data as WorkFormDialogData;
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly patternApi = inject(PatternApi);
 
   protected readonly isEdit = this.data.work !== null;
 
@@ -45,11 +53,20 @@ export class WorkFormDialog {
     description: [this.data.work?.description ?? '', [Validators.maxLength(2000)]],
     type: [{ value: (this.data.work?.type ?? 'Pattern') as WorkType, disabled: this.isEdit }],
     url: [{ value: '', disabled: this.isEdit }, [Validators.maxLength(2048)]],
+    width: [{ value: 40, disabled: this.isEdit }, [Validators.required, Validators.min(1), Validators.max(200)]],
+    height: [{ value: 40, disabled: this.isEdit }, [Validators.required, Validators.min(1), Validators.max(200)]],
   });
 
   protected readonly selectedType = toSignal(this.form.controls.type.valueChanges, {
     initialValue: this.form.controls.type.value,
   });
+
+  protected readonly sizeMode = signal<SizeMode>('manual');
+  protected readonly importFile = signal<File | null>(null);
+  protected readonly importPreview = signal<ImportPreview | null>(null);
+  protected readonly importBusy = signal(false);
+  protected readonly importError = signal<string | null>(null);
+  protected readonly importRequired = signal(false);
 
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -63,7 +80,44 @@ export class WorkFormDialog {
           : [Validators.maxLength(2048)],
       );
       control.updateValueAndValidity();
+      this.updateSizeControls();
     });
+  }
+
+  protected setSizeMode(mode: SizeMode): void {
+    this.sizeMode.set(mode);
+    this.updateSizeControls();
+  }
+
+  protected onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    input.value = '';
+    if (!file) {
+      return;
+    }
+
+    this.importFile.set(file);
+    this.importPreview.set(null);
+    this.importError.set(null);
+    this.importRequired.set(false);
+    this.importBusy.set(true);
+
+    this.patternApi.previewImportFile(file).subscribe({
+      next: (preview) => {
+        this.importPreview.set(preview);
+        this.importBusy.set(false);
+      },
+      error: (err) => {
+        this.importFile.set(null);
+        this.importError.set(extractErrorMessage(err));
+        this.importBusy.set(false);
+      },
+    });
+  }
+
+  protected newColorCount(preview: ImportPreview): number {
+    return preview.colors.filter((color) => !color.existingName).length;
   }
 
   protected submit(): void {
@@ -73,6 +127,14 @@ export class WorkFormDialog {
     }
 
     const raw = this.form.getRawValue();
+    const isNewMatrix = !this.isEdit && raw.type === 'Pattern';
+    const useImport = isNewMatrix && this.sizeMode() === 'import';
+
+    if (useImport && !this.importPreview()) {
+      this.importRequired.set(true);
+      return;
+    }
+
     const description = raw.description.trim();
 
     this.loading.set(true);
@@ -84,6 +146,9 @@ export class WorkFormDialog {
         description: description === '' ? null : description,
         type: raw.type,
         url: !this.isEdit && raw.type !== 'Pattern' ? raw.url.trim() : null,
+        width: isNewMatrix && !useImport ? raw.width : null,
+        height: isNewMatrix && !useImport ? raw.height : null,
+        importFile: useImport ? this.importFile() : null,
       })
       .subscribe({
         next: () => this.dialogRef.close(true),
@@ -92,5 +157,16 @@ export class WorkFormDialog {
           this.loading.set(false);
         },
       });
+  }
+
+  private updateSizeControls(): void {
+    const applies = !this.isEdit && this.form.controls.type.value === 'Pattern' && this.sizeMode() === 'manual';
+    for (const control of [this.form.controls.width, this.form.controls.height]) {
+      if (applies) {
+        control.enable({ emitEvent: false });
+      } else {
+        control.disable({ emitEvent: false });
+      }
+    }
   }
 }

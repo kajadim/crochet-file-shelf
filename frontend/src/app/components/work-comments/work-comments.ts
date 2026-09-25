@@ -22,6 +22,7 @@ function hasContent(html: string | null): boolean {
 })
 export class WorkComments implements OnInit {
   readonly workId = input.required<string>();
+  readonly canWrite = input(true);
 
   private readonly dialogService = inject(DialogService);
   private readonly transloco = inject(TranslocoService);

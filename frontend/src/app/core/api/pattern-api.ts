@@ -55,6 +55,12 @@ export class PatternApi {
     return this.http.post<ImportPreview>(`${this.baseUrl(workId)}/import/preview`, form);
   }
 
+  previewImportFile(file: File): Observable<ImportPreview> {
+    const form = new FormData();
+    form.append('file', file);
+    return this.http.post<ImportPreview>('/api/patterns/import/preview', form);
+  }
+
   importFile(workId: string, file: File): Observable<Pattern> {
     const form = new FormData();
     form.append('file', file);

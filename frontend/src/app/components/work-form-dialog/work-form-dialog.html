@@ -24,6 +24,87 @@
     }
   </div>
 
+  @if (!isEdit && selectedType() === 'Pattern') {
+    <div class="flex flex-col gap-2">
+      <p class="text-sm text-gray-600">{{ 'dialogs.workForm.matrixSize' | transloco }}</p>
+
+      <div class="flex gap-2">
+        <p-button
+          [label]="'dialogs.workForm.sizeManual' | transloco"
+          type="button"
+          size="small"
+          [outlined]="sizeMode() !== 'manual'"
+          (onClick)="setSizeMode('manual')"
+        />
+        <p-button
+          [label]="'dialogs.workForm.sizeImport' | transloco"
+          type="button"
+          icon="pi pi-file-excel"
+          size="small"
+          [outlined]="sizeMode() !== 'import'"
+          (onClick)="setSizeMode('import')"
+        />
+      </div>
+
+      @if (sizeMode() === 'manual') {
+        <div class="flex items-start gap-3">
+          <div class="flex flex-1 flex-col gap-1">
+            <label for="matrix-width" class="text-xs text-gray-500">{{ 'matrixEditor.width' | transloco }}</label>
+            <input pInputText id="matrix-width" type="number" formControlName="width" min="1" max="200" class="w-full" />
+          </div>
+          <span class="mt-7 text-gray-400">x</span>
+          <div class="flex flex-1 flex-col gap-1">
+            <label for="matrix-height" class="text-xs text-gray-500">{{ 'matrixEditor.height' | transloco }}</label>
+            <input pInputText id="matrix-height" type="number" formControlName="height" min="1" max="200" class="w-full" />
+          </div>
+        </div>
+        @if (
+          (form.controls.width.invalid && form.controls.width.touched) ||
+          (form.controls.height.invalid && form.controls.height.touched)
+        ) {
+          <small class="text-red-600">{{ 'matrixEditor.dimensionRange' | transloco }}</small>
+        }
+      } @else {
+        <input #matrixFile type="file" accept=".xlsx" class="hidden" (change)="onFileSelected($event)" />
+
+        @if (importError()) {
+          <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ importError() }}</p>
+        }
+
+        @if (importPreview(); as preview) {
+          <div class="flex flex-col gap-1 rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm">
+            <p class="font-medium text-gray-700">{{ importFile()?.name }}</p>
+            <p class="text-gray-600">
+              {{ 'matrixEditor.importSummary' | transloco: { width: preview.width, height: preview.height, count: preview.coloredCells } }}
+            </p>
+            @if (newColorCount(preview) > 0) {
+              <p class="text-xs text-gray-500">{{ 'dialogs.workForm.importNewColors' | transloco: { count: newColorCount(preview) } }}</p>
+            }
+            @if (preview.skippedCells > 0) {
+              <p class="text-xs text-amber-800">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
+            }
+          </div>
+        }
+
+        @if (importRequired()) {
+          <small class="text-red-600">{{ 'dialogs.workForm.importFileRequired' | transloco }}</small>
+        }
+
+        <div>
+          <p-button
+            [label]="(importPreview() ? 'dialogs.workForm.chooseAnotherFile' : 'dialogs.workForm.chooseFile') | transloco"
+            type="button"
+            icon="pi pi-upload"
+            [outlined]="true"
+            size="small"
+            [loading]="importBusy()"
+            (onClick)="matrixFile.click()"
+          />
+        </div>
+      }
+    </div>
+  }
+
   @if (!isEdit && selectedType() !== 'Pattern') {
     <div class="flex flex-col gap-1">
       <label for="work-url" class="text-sm text-gray-700">

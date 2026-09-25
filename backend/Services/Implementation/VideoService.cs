@@ -10,29 +10,31 @@ namespace backend.Services.Implementation
     {
         private readonly IVideoRepository _videoRepository;
         private readonly IVideoLinkService _videoLinkService;
+        private readonly IWorkAccessService _access;
 
-        public VideoService(IVideoRepository videoRepository, IVideoLinkService videoLinkService)
+        public VideoService(IVideoRepository videoRepository, IVideoLinkService videoLinkService, IWorkAccessService access)
         {
             _videoRepository = videoRepository;
             _videoLinkService = videoLinkService;
+            _access = access;
         }
 
         public async Task<VideoResponse> GetAsync(Guid userId, Guid workId)
         {
-            var video = await GetOwnedVideoAsync(userId, workId);
+            var video = await GetVideoAsync(userId, workId, WorkAccessLevel.Read);
             return ToResponse(video);
         }
 
         public async Task<VideoStatusResponse> GetStatusAsync(Guid userId, Guid workId)
         {
-            var video = await GetOwnedVideoAsync(userId, workId);
+            var video = await GetVideoAsync(userId, workId, WorkAccessLevel.Read);
             var available = await _videoLinkService.CheckAvailabilityAsync(video.Platform, video.NormalizedUrl);
             return new VideoStatusResponse { Available = available };
         }
 
         public async Task<VideoResponse> UpdateLinkAsync(Guid userId, Guid workId, UpdateVideoLinkRequest request)
         {
-            var video = await GetOwnedVideoAsync(userId, workId);
+            var video = await GetVideoAsync(userId, workId, WorkAccessLevel.Owner);
             var link = await _videoLinkService.ResolveAsync(request.Url);
 
             video.Platform = link.Platform;
@@ -47,7 +49,7 @@ namespace backend.Services.Implementation
 
         public async Task<VideoResponse> UpdateTimestampAsync(Guid userId, Guid workId, UpdateVideoTimestampRequest request)
         {
-            var video = await GetOwnedVideoAsync(userId, workId);
+            var video = await GetVideoAsync(userId, workId, WorkAccessLevel.Edit);
 
             video.TimestampSeconds = request.Seconds;
             video.Work.UpdatedAt = DateTime.UtcNow;
@@ -56,9 +58,10 @@ namespace backend.Services.Implementation
             return ToResponse(video);
         }
 
-        private async Task<VideoReference> GetOwnedVideoAsync(Guid userId, Guid workId)
+        private async Task<VideoReference> GetVideoAsync(Guid userId, Guid workId, WorkAccessLevel level)
         {
-            var video = await _videoRepository.GetByWorkIdAsync(workId, userId);
+            await _access.RequireAsync(userId, workId, level);
+            var video = await _videoRepository.GetByWorkIdAsync(workId);
             return video ?? throw new NotFoundException(ErrorCode.VideoNotFound);
         }
 

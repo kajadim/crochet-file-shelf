@@ -14,10 +14,10 @@ namespace backend.Repository.Implementation
             _context = context;
         }
 
-        public Task<VideoReference?> GetByWorkIdAsync(Guid workId, Guid ownerId) =>
+        public Task<VideoReference?> GetByWorkIdAsync(Guid workId) =>
             _context.VideoReferences
                 .Include(v => v.Work)
-                .FirstOrDefaultAsync(v => v.WorkId == workId && v.Work.OwnerId == ownerId);
+                .FirstOrDefaultAsync(v => v.WorkId == workId);
 
         public Task SaveChangesAsync() =>
             _context.SaveChangesAsync();

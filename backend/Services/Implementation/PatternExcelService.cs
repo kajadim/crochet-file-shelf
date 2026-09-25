@@ -14,24 +14,23 @@ namespace backend.Services.Implementation
         private static readonly Regex InvalidFileNameChars = new(@"[\\/:*?""<>|\x00-\x1F]", RegexOptions.Compiled);
 
         private readonly IPatternRepository _patternRepository;
-        private readonly IWorkRepository _workRepository;
+        private readonly IWorkAccessService _access;
         private readonly IYarnColorRepository _yarnColorRepository;
 
         public PatternExcelService(
             IPatternRepository patternRepository,
-            IWorkRepository workRepository,
+            IWorkAccessService access,
             IYarnColorRepository yarnColorRepository)
         {
             _patternRepository = patternRepository;
-            _workRepository = workRepository;
+            _access = access;
             _yarnColorRepository = yarnColorRepository;
         }
 
         public async Task<ExcelFileResult> ExportAsync(Guid userId, Guid workId)
         {
-            var work = await _workRepository.GetByIdAsync(workId, userId)
-                ?? throw new NotFoundException(ErrorCode.WorkNotFound);
-            var pattern = await _patternRepository.GetByWorkIdAsync(workId, userId)
+            var work = (await _access.RequireAsync(userId, workId, WorkAccessLevel.Read)).Work;
+            var pattern = await _patternRepository.GetByWorkIdAsync(workId)
                 ?? throw new NotFoundException(ErrorCode.PatternNotFound);
 
             var cells = await _patternRepository.GetAllCellsAsync(pattern.Id);
@@ -44,6 +43,11 @@ namespace backend.Services.Implementation
         public async Task<ImportPreviewResponse> PreviewImportAsync(Guid userId, Guid workId, IFormFile file)
         {
             await EnsureImportableAsync(userId, workId);
+            return await PreviewFileAsync(userId, file);
+        }
+
+        public async Task<ImportPreviewResponse> PreviewFileAsync(Guid userId, IFormFile file)
+        {
             var matrix = await ReadMatrixAsync(file);
             var palette = await _yarnColorRepository.GetActiveByOwnerAsync(userId);
             var byHex = palette.ToDictionary(c => c.HexValue.ToUpperInvariant(), c => c);
@@ -134,14 +138,13 @@ namespace backend.Services.Implementation
 
         private async Task EnsureImportableAsync(Guid userId, Guid workId)
         {
-            var work = await _workRepository.GetByIdAsync(workId, userId)
-                ?? throw new NotFoundException(ErrorCode.WorkNotFound);
+            var work = (await _access.RequireAsync(userId, workId, WorkAccessLevel.Owner)).Work;
             if (work.Type != WorkType.Pattern)
             {
                 throw new ConflictException(ErrorCode.WorkNotPatternType);
             }
 
-            var existing = await _patternRepository.GetByWorkIdAsync(workId, userId);
+            var existing = await _patternRepository.GetByWorkIdAsync(workId);
             if (existing is not null)
             {
                 throw new ConflictException(ErrorCode.PatternAlreadyExists);

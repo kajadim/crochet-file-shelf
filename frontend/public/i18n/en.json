@@ -101,7 +101,11 @@
     "filterPlatform": "Platform",
     "resetFilters": "Reset",
     "noResults": "No works match your search.",
-    "searchResults": "Search results"
+    "searchResults": "Search results",
+    "sharedWithMe": "Shared with me",
+    "joinWork": "Join a work",
+    "emptyShared": "Nothing has been shared with you yet.",
+    "deleteSharedWorkMessage": "This work is shared with {{count}} people. If any of them can edit, it moves to the one who joined first. Otherwise it is deleted for everyone."
   },
   "palette": {
     "title": "My palette",
@@ -130,7 +134,14 @@
       "videoUrlRequired": "A link is required",
       "site": "Site",
       "siteUrl": "Web address",
-      "siteUrlHint": "A blog, article or any web page"
+      "siteUrlHint": "A blog, article or any web page",
+      "matrixSize": "Matrix size",
+      "sizeManual": "Enter size",
+      "sizeImport": "Import from Excel",
+      "chooseFile": "Choose .xlsx file",
+      "chooseAnotherFile": "Choose another file",
+      "importFileRequired": "Choose an Excel file to import.",
+      "importNewColors": "{{count}} new colors will be added to your palette."
     },
     "moveWork": {
       "chooseDestination": "Choose the destination folder.",
@@ -184,7 +195,9 @@
     "importSkipped": "{{count}} cells could not be read and will be skipped:",
     "importConfirm": "Import",
     "importWarningUnresolvedColor": "unsupported color",
-    "importWarningUnsupportedFill": "unsupported fill pattern"
+    "importWarningUnsupportedFill": "unsupported fill pattern",
+    "viewOnlyBadge": "View only",
+    "notSetUpYet": "The owner has not set up this matrix yet."
   },
   "folderTree": {
     "newSubfolder": "New subfolder",
@@ -196,7 +209,10 @@
     "moveTo": "Move to...",
     "updated": "Updated {{date}}",
     "workActions": "Work actions",
-    "site": "Site"
+    "site": "Site",
+    "share": "Share",
+    "leave": "Leave",
+    "sharedBy": "Shared by {{name}}"
   },
   "colorActions": "Color actions",
   "videoWork": {
@@ -233,5 +249,45 @@
     "bulletList": "Bulleted list",
     "link": "Link",
     "clean": "Clear formatting"
+  },
+  "sharing": {
+    "codeTitle": "Invitation code",
+    "codeGives": "Gives {{permission}} access",
+    "copy": "Copy",
+    "copied": "Copied",
+    "noActiveCode": "There is no active code. Create one to invite people.",
+    "permission": "Permission",
+    "canEdit": "Can edit",
+    "viewOnly": "View only",
+    "createCode": "Create code",
+    "generateNew": "Generate new code",
+    "revoke": "Revoke",
+    "codeHint": "Anyone with an active code can join. A new code replaces the old one; people who already joined keep access.",
+    "membersTitle": "Members ({{count}})",
+    "noMembers": "Nobody has joined yet.",
+    "remove": "Remove",
+    "removeTitle": "Remove {{name}}?",
+    "removeMessage": "They will lose access to this work immediately.",
+    "joinHint": "Enter the code the owner shared with you.",
+    "code": "Code",
+    "codeRequired": "Enter a code",
+    "join": "Join",
+    "shareTitle": "Share \"{{name}}\"",
+    "joinTitle": "Join a work",
+    "joined": "You joined \"{{name}}\".",
+    "leaveTitle": "Leave \"{{name}}\"?",
+    "leaveMessage": "You will lose access to this work.",
+    "leave": "Leave"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "empty": "No notifications.",
+    "workInviteCanEdit": "You joined \"{{workName}}\" and can edit it.",
+    "workInviteViewOnly": "You joined \"{{workName}}\" as view only.",
+    "memberJoined": "{{userName}} joined \"{{workName}}\".",
+    "removedFromWork": "You were removed from \"{{workName}}\".",
+    "workDeleted": "\"{{workName}}\" was deleted by its owner.",
+    "ownershipTransferred": "You are now the owner of \"{{workName}}\". It is in your \"Shared with me\" folder."
   }
 }

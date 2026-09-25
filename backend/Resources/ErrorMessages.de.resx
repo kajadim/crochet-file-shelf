@@ -145,6 +145,27 @@
   <data name="ExcelMatrixTooLarge" xml:space="preserve">
     <value>Der gefärbte Bereich ist größer als 200 x 200 Zellen.</value>
   </data>
+  <data name="WorkAccessDenied" xml:space="preserve">
+    <value>Du hast keine Berechtigung für diese Aktion bei diesem Werk.</value>
+  </data>
+  <data name="InvitationInvalid" xml:space="preserve">
+    <value>Der Code ist ungültig.</value>
+  </data>
+  <data name="AlreadyWorkMember" xml:space="preserve">
+    <value>Du bist bereits Mitglied dieses Werks.</value>
+  </data>
+  <data name="CannotJoinOwnWork" xml:space="preserve">
+    <value>Dies ist dein eigenes Werk.</value>
+  </data>
+  <data name="MemberNotFound" xml:space="preserve">
+    <value>Mitglied nicht gefunden.</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>Benachrichtigung nicht gefunden.</value>
+  </data>
+  <data name="PatternSizeIncomplete" xml:space="preserve">
+    <value>Gib sowohl die Breite als auch die Höhe der Matrix an.</value>
+  </data>
   <data name="WorkNotPatternType" xml:space="preserve">
     <value>Dieses Werk ist keine Matrix.</value>
   </data>

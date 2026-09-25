@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkApi } from '../../core/api/work-api';
+import { WorkRole } from '../../core/models/work.models';
 import { VideoStore } from '../../core/services/video-store';
 import { YouTubePlayerService } from '../../core/services/youtube-player';
 import { extractErrorMessage } from '../../core/utils/http-error';
@@ -30,6 +31,9 @@ export class VideoWork implements OnInit {
 
   protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
   protected readonly workName = signal<string | null>(null);
+  protected readonly role = signal<WorkRole | null>(null);
+  protected readonly canEdit = computed(() => this.role() === 'Owner' || this.role() === 'Editor');
+  protected readonly isOwner = computed(() => this.role() === 'Owner');
 
   private readonly player = viewChild<ElementRef<HTMLIFrameElement>>('player');
   protected readonly duration = signal<number | null>(null);
@@ -105,7 +109,12 @@ export class VideoWork implements OnInit {
   ngOnInit(): void {
     this.videoStore.reset();
     this.videoStore.load(this.workId);
-    this.workApi.getById(this.workId).subscribe({ next: (work) => this.workName.set(work.name) });
+    this.workApi.getById(this.workId).subscribe({
+      next: (work) => {
+        this.workName.set(work.name);
+        this.role.set(work.role);
+      },
+    });
   }
 
   protected openOriginal(url: string): void {

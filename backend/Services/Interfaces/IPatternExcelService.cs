@@ -7,6 +7,7 @@ namespace backend.Services.Interfaces
     {
         Task<ExcelFileResult> ExportAsync(Guid userId, Guid workId);
         Task<ImportPreviewResponse> PreviewImportAsync(Guid userId, Guid workId, IFormFile file);
+        Task<ImportPreviewResponse> PreviewFileAsync(Guid userId, IFormFile file);
         Task<PatternResponse> ImportAsync(Guid userId, Guid workId, IFormFile file);
     }
 }

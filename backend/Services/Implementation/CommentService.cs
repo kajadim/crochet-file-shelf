@@ -11,25 +11,33 @@ namespace backend.Services.Implementation
         private const int MaxHtmlLength = 10000;
 
         private readonly ICommentRepository _commentRepository;
-        private readonly IWorkRepository _workRepository;
+        private readonly IWorkAccessService _access;
+        private readonly IUserRepository _userRepository;
 
-        public CommentService(ICommentRepository commentRepository, IWorkRepository workRepository)
+        public CommentService(
+            ICommentRepository commentRepository,
+            IWorkAccessService access,
+            IUserRepository userRepository)
         {
             _commentRepository = commentRepository;
-            _workRepository = workRepository;
+            _access = access;
+            _userRepository = userRepository;
         }
 
         public async Task<List<CommentResponse>> GetAsync(Guid userId, Guid workId)
         {
-            await EnsureWorkOwnedAsync(userId, workId);
+            var access = await _access.RequireAsync(userId, workId, WorkAccessLevel.Read);
             var comments = await _commentRepository.GetByWorkAsync(workId);
-            return comments.Select(ToResponse).ToList();
+            return comments.Select(c => ToResponse(c, userId, access.Role)).ToList();
         }
 
         public async Task<CommentResponse> CreateAsync(Guid userId, Guid workId, CommentRequest request)
         {
-            await EnsureWorkOwnedAsync(userId, workId);
+            var access = await _access.RequireAsync(userId, workId, WorkAccessLevel.Edit);
             var (html, plainText) = Clean(request.Text);
+
+            var author = await _userRepository.GetByIdAsync(userId)
+                ?? throw new NotFoundException(ErrorCode.WorkNotFound);
 
             var comment = new WorkComment
             {
@@ -39,18 +47,24 @@ namespace backend.Services.Implementation
                 CreatedAt = DateTime.UtcNow,
                 WorkId = workId,
                 AuthorId = userId,
+                Author = author,
             };
 
             await _commentRepository.AddAsync(comment);
             await _commentRepository.SaveChangesAsync();
 
-            return ToResponse(comment);
+            return ToResponse(comment, userId, access.Role);
         }
 
         public async Task<CommentResponse> UpdateAsync(Guid userId, Guid workId, Guid commentId, CommentRequest request)
         {
-            await EnsureWorkOwnedAsync(userId, workId);
+            var access = await _access.RequireAsync(userId, workId, WorkAccessLevel.Edit);
             var comment = await GetCommentAsync(workId, commentId);
+            if (comment.AuthorId != userId)
+            {
+                throw new ForbiddenException(ErrorCode.WorkAccessDenied);
+            }
+
             var (html, plainText) = Clean(request.Text);
 
             comment.Text = html;
@@ -58,25 +72,20 @@ namespace backend.Services.Implementation
             comment.UpdatedAt = DateTime.UtcNow;
             await _commentRepository.SaveChangesAsync();
 
-            return ToResponse(comment);
+            return ToResponse(comment, userId, access.Role);
         }
 
         public async Task DeleteAsync(Guid userId, Guid workId, Guid commentId)
         {
-            await EnsureWorkOwnedAsync(userId, workId);
+            var access = await _access.RequireAsync(userId, workId, WorkAccessLevel.Edit);
             var comment = await GetCommentAsync(workId, commentId);
+            if (comment.AuthorId != userId && access.Role != WorkRole.Owner)
+            {
+                throw new ForbiddenException(ErrorCode.WorkAccessDenied);
+            }
 
             _commentRepository.Remove(comment);
             await _commentRepository.SaveChangesAsync();
-        }
-
-        private async Task EnsureWorkOwnedAsync(Guid userId, Guid workId)
-        {
-            var work = await _workRepository.GetByIdAsync(workId, userId);
-            if (work is null)
-            {
-                throw new NotFoundException(ErrorCode.WorkNotFound);
-            }
         }
 
         private async Task<WorkComment> GetCommentAsync(Guid workId, Guid commentId)
@@ -101,10 +110,13 @@ namespace backend.Services.Implementation
             return (html, plainText);
         }
 
-        private static CommentResponse ToResponse(WorkComment comment) => new()
+        private static CommentResponse ToResponse(WorkComment comment, Guid userId, WorkRole role) => new()
         {
             Id = comment.Id,
             Text = comment.Text,
+            AuthorName = comment.Author.DisplayName,
+            CanEdit = comment.AuthorId == userId && role != WorkRole.Viewer,
+            CanDelete = role != WorkRole.Viewer && (comment.AuthorId == userId || role == WorkRole.Owner),
             CreatedAt = comment.CreatedAt,
             UpdatedAt = comment.UpdatedAt,
         };

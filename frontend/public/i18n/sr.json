@@ -101,7 +101,11 @@
     "filterPlatform": "Platforma",
     "resetFilters": "Resetuj",
     "noResults": "Nijedan rad ne odgovara pretrazi.",
-    "searchResults": "Rezultati pretrage"
+    "searchResults": "Rezultati pretrage",
+    "sharedWithMe": "Podeljeno sa mnom",
+    "joinWork": "Pridruži se radu",
+    "emptyShared": "Još ništa nije podeljeno sa tobom.",
+    "deleteSharedWorkMessage": "Ovaj rad je podeljen sa {{count}} osoba. Ako neko od njih može da ga menja, rad prelazi na onoga ko se prvi pridružio. Inače se briše za sve."
   },
   "palette": {
     "title": "Moja paleta",
@@ -130,7 +134,14 @@
       "videoUrlRequired": "Link je obavezan",
       "site": "Sajt",
       "siteUrl": "Veb adresa",
-      "siteUrlHint": "Blog, članak ili bilo koja veb stranica"
+      "siteUrlHint": "Blog, članak ili bilo koja veb stranica",
+      "matrixSize": "Veličina matrice",
+      "sizeManual": "Unesi veličinu",
+      "sizeImport": "Uvezi iz Excela",
+      "chooseFile": "Izaberi .xlsx fajl",
+      "chooseAnotherFile": "Izaberi drugi fajl",
+      "importFileRequired": "Izaberi Excel fajl za uvoz.",
+      "importNewColors": "{{count}} novih boja biće dodato u tvoju paletu."
     },
     "moveWork": {
       "chooseDestination": "Izaberi odredišni folder.",
@@ -184,7 +195,9 @@
     "importSkipped": "{{count}} ćelija nije moglo da se pročita i biće preskočeno:",
     "importConfirm": "Uvezi",
     "importWarningUnresolvedColor": "boja nije podržana",
-    "importWarningUnsupportedFill": "uzorak popune nije podržan"
+    "importWarningUnsupportedFill": "uzorak popune nije podržan",
+    "viewOnlyBadge": "Samo pregled",
+    "notSetUpYet": "Vlasnik još nije podesio ovu matricu."
   },
   "folderTree": {
     "newSubfolder": "Novi podfolder",
@@ -196,7 +209,10 @@
     "moveTo": "Premesti u...",
     "updated": "Ažurirano {{date}}",
     "workActions": "Akcije nad radom",
-    "site": "Sajt"
+    "site": "Sajt",
+    "share": "Podeli",
+    "leave": "Napusti",
+    "sharedBy": "Podelio/la: {{name}}"
   },
   "colorActions": "Akcije nad bojom",
   "videoWork": {
@@ -233,5 +249,45 @@
     "bulletList": "Lista sa tačkama",
     "link": "Link",
     "clean": "Ukloni formatiranje"
+  },
+  "sharing": {
+    "codeTitle": "Kod za pridruživanje",
+    "codeGives": "Daje dozvolu: {{permission}}",
+    "copy": "Kopiraj",
+    "copied": "Kopirano",
+    "noActiveCode": "Nema aktivnog koda. Napravi kod da bi pozvala ljude.",
+    "permission": "Dozvola",
+    "canEdit": "Može da menja",
+    "viewOnly": "Samo pregled",
+    "createCode": "Napravi kod",
+    "generateNew": "Generiši nov kod",
+    "revoke": "Opozovi",
+    "codeHint": "Svako ko ima aktivan kod može da se pridruži. Nov kod menja stari; ljudi koji su se već pridružili zadržavaju pristup.",
+    "membersTitle": "Članovi ({{count}})",
+    "noMembers": "Niko se još nije pridružio.",
+    "remove": "Ukloni",
+    "removeTitle": "Ukloniti korisnika {{name}}?",
+    "removeMessage": "Odmah će izgubiti pristup ovom radu.",
+    "joinHint": "Unesi kod koji ti je vlasnik rada podelio.",
+    "code": "Kod",
+    "codeRequired": "Unesi kod",
+    "join": "Pridruži se",
+    "shareTitle": "Podeli \"{{name}}\"",
+    "joinTitle": "Pridruži se radu",
+    "joined": "Pridružila si se radu \"{{name}}\".",
+    "leaveTitle": "Napustiti \"{{name}}\"?",
+    "leaveMessage": "Izgubićeš pristup ovom radu.",
+    "leave": "Napusti"
+  },
+  "notifications": {
+    "title": "Obaveštenja",
+    "markAllRead": "Označi sve kao pročitano",
+    "empty": "Nema obaveštenja.",
+    "workInviteCanEdit": "Pridružila si se radu \"{{workName}}\" i možeš da ga menjaš.",
+    "workInviteViewOnly": "Pridružila si se radu \"{{workName}}\" samo za pregled.",
+    "memberJoined": "{{userName}} se pridružio/la radu \"{{workName}}\".",
+    "removedFromWork": "Uklonjena si sa rada \"{{workName}}\".",
+    "workDeleted": "Vlasnik je obrisao rad \"{{workName}}\".",
+    "ownershipTransferred": "Sada si vlasnik rada \"{{workName}}\". Nalazi se u tvom folderu \"Shared with me\"."
   }
 }

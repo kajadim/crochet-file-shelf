@@ -87,12 +87,19 @@ export class WorkStore {
       .pipe(tap(() => this.worksState.update((works) => works.filter((work) => work.id !== id))));
   }
 
+  dropLocal(id: string): void {
+    this.worksState.update((works) => works.filter((work) => work.id !== id));
+  }
+
   private isFiltered(): boolean {
     const query = this.currentQuery;
     return !!(query.search || query.type || query.colorId || query.platform);
   }
 
   private isVisibleInCurrentView(work: Work): boolean {
+    if (this.currentQuery.shared) {
+      return false;
+    }
     const folderId = this.currentQuery.folderId ?? null;
     return folderId === null || folderId === work.folderId;
   }

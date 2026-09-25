@@ -1,3 +1,4 @@
+using backend.Dtos.Sharing;
 using backend.Dtos.Works;
 using backend.Extensions;
 using backend.Services.Interfaces;
@@ -12,10 +13,24 @@ namespace backend.Controllers
     public class WorksController : ControllerBase
     {
         private readonly IWorkService _workService;
+        private readonly ISharingService _sharingService;
 
-        public WorksController(IWorkService workService)
+        public WorksController(IWorkService workService, ISharingService sharingService)
         {
             _workService = workService;
+            _sharingService = sharingService;
+        }
+
+        [HttpGet("shared")]
+        public async Task<ActionResult<List<WorkResponse>>> GetShared()
+        {
+            return Ok(await _workService.GetSharedAsync(User.GetUserId()));
+        }
+
+        [HttpPost("join")]
+        public async Task<ActionResult<JoinWorkResponse>> Join(JoinWorkRequest request)
+        {
+            return Ok(await _sharingService.JoinAsync(User.GetUserId(), request));
         }
 
         [HttpGet]

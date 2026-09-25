@@ -9,6 +9,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { WorkComments } from '../../components/work-comments/work-comments';
 import { ImportPreview } from '../../core/models/pattern.models';
+import { WorkRole } from '../../core/models/work.models';
 import { YarnColorDialog, YarnColorDialogData } from '../../components/yarn-color-dialog/yarn-color-dialog';
 import { WorkApi } from '../../core/api/work-api';
 import { PatternStore } from '../../core/services/pattern-store';
@@ -37,6 +38,9 @@ export class MatrixEditor implements OnInit {
   protected readonly workId = this.route.snapshot.paramMap.get('workId')!;
   protected commentsOpen = false;
   protected readonly workName = signal<string | null>(null);
+  protected readonly role = signal<WorkRole | null>(null);
+  protected readonly canEdit = computed(() => this.role() === 'Owner' || this.role() === 'Editor');
+  protected readonly isOwner = computed(() => this.role() === 'Owner');
 
   protected readonly rows = computed(() => {
     const meta = this.patternStore.pattern();
@@ -109,7 +113,12 @@ export class MatrixEditor implements OnInit {
     this.colorStore.reset();
     this.colorStore.load().subscribe();
 
-    this.workApi.getById(this.workId).subscribe({ next: (work) => this.workName.set(work.name) });
+    this.workApi.getById(this.workId).subscribe({
+      next: (work) => {
+        this.workName.set(work.name);
+        this.role.set(work.role);
+      },
+    });
   }
 
   protected createPattern(): void {
@@ -141,6 +150,9 @@ export class MatrixEditor implements OnInit {
   }
 
   protected onRowArrowClick(row: number): void {
+    if (!this.canEdit()) {
+      return;
+    }
     const current = this.patternStore.pattern()?.activeRow;
     this.patternStore.updateActiveRow(current === row ? null : row);
   }
@@ -163,7 +175,7 @@ export class MatrixEditor implements OnInit {
   }
 
   protected onCellMouseDown(row: number, column: number, event: MouseEvent): void {
-    if (event.button !== 0) {
+    if (!this.canEdit() || event.button !== 0) {
       return;
     }
     this.isPainting.set(true);
@@ -178,6 +190,9 @@ export class MatrixEditor implements OnInit {
 
   protected onCellContextMenu(row: number, column: number, event: MouseEvent): void {
     event.preventDefault();
+    if (!this.canEdit()) {
+      return;
+    }
     this.patternStore.paintCell(row, column, null);
     this.patternStore.flushPendingChanges();
   }
@@ -191,6 +206,9 @@ export class MatrixEditor implements OnInit {
   }
 
   protected markAsCurrent(): void {
+    if (!this.canEdit()) {
+      return;
+    }
     if (this.positionForm.invalid) {
       this.positionForm.markAllAsTouched();
       return;

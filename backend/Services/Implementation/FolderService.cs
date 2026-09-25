@@ -9,10 +9,12 @@ namespace backend.Services.Implementation
     public class FolderService : IFolderService
     {
         private readonly IFolderRepository _folderRepository;
+        private readonly ISharingService _sharingService;
 
-        public FolderService(IFolderRepository folderRepository)
+        public FolderService(IFolderRepository folderRepository, ISharingService sharingService)
         {
             _folderRepository = folderRepository;
+            _sharingService = sharingService;
         }
 
         public async Task<List<FolderResponse>> GetAllAsync(Guid userId)
@@ -79,6 +81,18 @@ namespace backend.Services.Implementation
         public async Task DeleteAsync(Guid userId, Guid folderId)
         {
             var folder = await GetOwnedFolderAsync(userId, folderId);
+
+            var folderIds = await GetFolderAndDescendantIdsAsync(userId, folderId);
+            var sharedWorks = await _folderRepository.GetSharedWorksInFoldersAsync(folderIds);
+            if (sharedWorks.Count > 0)
+            {
+                foreach (var work in sharedWorks)
+                {
+                    await _sharingService.PrepareRemovalAsync(work);
+                }
+                await _folderRepository.SaveChangesAsync();
+            }
+
             _folderRepository.Remove(folder);
             await _folderRepository.SaveChangesAsync();
         }
