@@ -42,7 +42,17 @@
               <i class="pi {{ iconFor(notification) }} mt-0.5 text-gray-500"></i>
               <div class="min-w-0 flex-1">
                 @let info = describe(notification);
-                <p class="text-sm text-gray-800">{{ info.key | transloco: info.params }}</p>
+                @if (segments(notification); as parts) {
+                  <p class="text-sm text-gray-800">
+                    {{ parts.before }}<button
+                      type="button"
+                      class="inline cursor-pointer font-medium text-blue-700 underline hover:text-blue-900"
+                      (click)="onLinkClick($event, notification)"
+                    >{{ parts.name }}</button>{{ parts.after }}
+                  </p>
+                } @else {
+                  <p class="text-sm text-gray-800">{{ info.key | transloco: info.params }}</p>
+                }
                 <p class="mt-0.5 text-xs text-gray-500">{{ notification.createdAt | date: 'short' }}</p>
               </div>
               <button

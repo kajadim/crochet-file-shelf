@@ -24,12 +24,14 @@ function hasContent(html: string | null): boolean {
 export class WorkComments implements OnInit {
   readonly workId = input.required<string>();
   readonly canWrite = input(true);
+  readonly showTitle = input(true);
 
   private readonly dialogService = inject(DialogService);
   private readonly transloco = inject(TranslocoService);
 
   protected readonly store = inject(CommentStore);
 
+  protected readonly composerOpen = signal(false);
   protected readonly newText = signal('');
   protected readonly editingId = signal<string | null>(null);
   protected readonly editText = signal('');
@@ -39,6 +41,10 @@ export class WorkComments implements OnInit {
   ngOnInit(): void {
     this.store.reset();
     this.store.load(this.workId());
+  }
+
+  protected toggleComposer(): void {
+    this.composerOpen.update((open) => !open);
   }
 
   protected canSubmit(html: string): boolean {
@@ -56,6 +62,7 @@ export class WorkComments implements OnInit {
     this.store.create(this.newText()).subscribe({
       next: () => {
         this.newText.set('');
+        this.composerOpen.set(false);
         this.saving.set(false);
       },
       error: (err) => this.fail(err),

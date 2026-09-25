@@ -1,5 +1,7 @@
 <section class="flex flex-col gap-4">
-  <h2 class="text-base font-semibold text-gray-800">{{ 'comments.title' | transloco }}</h2>
+  @if (showTitle()) {
+    <h2 class="text-base font-semibold text-gray-800">{{ 'comments.title' | transloco }}</h2>
+  }
 
   @if (error()) {
     <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ error() }}</p>
@@ -7,6 +9,17 @@
 
   @if (canWrite()) {
   <div class="flex flex-col gap-2">
+    <button
+      type="button"
+      class="flex items-center gap-2 self-start py-1 text-left text-sm font-semibold text-gray-700"
+      [attr.aria-expanded]="composerOpen()"
+      (click)="toggleComposer()"
+    >
+      <i class="pi text-xs text-gray-500" [class.pi-chevron-down]="composerOpen()" [class.pi-chevron-right]="!composerOpen()"></i>
+      {{ 'comments.add' | transloco }}
+    </button>
+
+    @if (composerOpen()) {
     <p-editor
       [ngModel]="newText()"
       (ngModelChange)="newText.set($event ?? '')"
@@ -17,7 +30,7 @@
         <ng-container *ngTemplateOutlet="toolbar"></ng-container>
       </ng-template>
     </p-editor>
-    <div>
+    <div class="flex justify-end">
       <p-button
         [label]="'comments.add' | transloco"
         [disabled]="!canSubmit(newText())"
@@ -25,6 +38,7 @@
         (onClick)="add()"
       />
     </div>
+    }
   </div>
   }
 
@@ -68,7 +82,7 @@
                 <span class="min-w-0 truncate">
                   <span class="font-medium text-gray-700">{{ comment.authorName }}</span>
                   <span>&#64;{{ comment.authorUsername }}</span>
-                  · {{ comment.createdAt | date: 'short' }}
+                  · {{ (comment.updatedAt ?? comment.createdAt) | date: 'short' }}
                   @if (comment.updatedAt) {
                     · {{ 'comments.edited' | transloco }}
                   }

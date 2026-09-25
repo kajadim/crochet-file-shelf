@@ -44,7 +44,6 @@ export class MatrixEditor implements OnInit {
   protected readonly workName = signal<string | null>(null);
   protected readonly role = signal<WorkRole | null>(null);
   protected readonly canEdit = computed(() => this.role() === 'Owner' || this.role() === 'Editor');
-  protected readonly isOwner = computed(() => this.role() === 'Owner');
 
   protected readonly rows = computed(() => {
     const meta = this.patternStore.pattern();
@@ -59,6 +58,7 @@ export class MatrixEditor implements OnInit {
   protected readonly selectedTool = signal<PaintTool>(null);
   protected readonly isPainting = signal(false);
   protected readonly sidebarCollapsed = signal(false);
+  protected readonly openSections = signal<ReadonlySet<string>>(new Set(['palette']));
 
   protected readonly zoom = signal(100);
   protected readonly cellSize = computed(() => Math.round((22 * this.zoom()) / 100));
@@ -73,8 +73,8 @@ export class MatrixEditor implements OnInit {
   protected readonly setupError = signal<string | null>(null);
 
   protected readonly positionForm = this.fb.group({
-    row: [0, [Validators.required, Validators.min(0)]],
-    column: [0, [Validators.required, Validators.min(0)]],
+    row: [1, [Validators.required, Validators.min(1)]],
+    column: [1, [Validators.required, Validators.min(1)]],
   });
 
   protected readonly expandForm = this.fb.group({
@@ -104,7 +104,7 @@ export class MatrixEditor implements OnInit {
       const meta = this.patternStore.pattern();
       if (meta) {
         untracked(() =>
-          this.positionForm.patchValue({ row: meta.currentRow, column: meta.currentColumn }, { emitEvent: false }),
+          this.positionForm.patchValue({ row: meta.currentRow + 1, column: meta.currentColumn + 1 }, { emitEvent: false }),
         );
       }
     });
@@ -144,6 +144,20 @@ export class MatrixEditor implements OnInit {
         this.setupError.set(extractErrorMessage(err));
         this.creating.set(false);
       },
+    });
+  }
+
+  protected isOpen(section: string): boolean {
+    return this.openSections().has(section);
+  }
+
+  protected toggleSection(section: string): void {
+    this.openSections.update((open) => {
+      const next = new Set(open);
+      if (!next.delete(section)) {
+        next.add(section);
+      }
+      return next;
     });
   }
 
@@ -221,7 +235,7 @@ export class MatrixEditor implements OnInit {
       return;
     }
     const { row, column } = this.positionForm.getRawValue();
-    this.patternStore.updatePosition(row, column);
+    this.patternStore.updatePosition(row - 1, column - 1);
   }
 
   protected exportToExcel(): void {

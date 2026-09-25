@@ -101,7 +101,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> ExpandAsync(Guid userId, Guid workId, PatternEdgesRequest request)
         {
-            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Owner);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Edit);
 
             var newWidth = pattern.Width + request.Left + request.Right;
             var newHeight = pattern.Height + request.Top + request.Bottom;
@@ -129,7 +129,7 @@ namespace backend.Services.Implementation
 
         public async Task<PatternResponse> ShrinkAsync(Guid userId, Guid workId, PatternEdgesRequest request)
         {
-            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Owner);
+            var pattern = await GetPatternAsync(userId, workId, WorkAccessLevel.Edit);
 
             var newWidth = pattern.Width - request.Left - request.Right;
             var newHeight = pattern.Height - request.Top - request.Bottom;

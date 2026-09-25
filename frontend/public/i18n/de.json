@@ -301,7 +301,8 @@
     "memberJoined": "{{userName}} ist „{{workName}}“ beigetreten.",
     "removedFromWork": "Du wurdest aus „{{workName}}“ entfernt.",
     "workDeleted": "„{{workName}}“ wurde vom Besitzer gelöscht.",
-    "ownershipTransferred": "Du bist jetzt Besitzer von „{{workName}}“. Es liegt in deinem Ordner „Shared with me“."
+    "ownershipTransferred": "Du bist jetzt Besitzer von „{{workName}}“. Es liegt in deinem Ordner „Shared with me“.",
+    "commentAdded": "{{userName}} hat \"{{workName}}\" kommentiert."
   },
   "realtime": {
     "reconnecting": "Verbindung unterbrochen. Verbindung wird wiederhergestellt..."

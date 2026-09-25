@@ -5,6 +5,14 @@ import { WorkComment } from '../models/comment.models';
 import { extractErrorMessage } from '../utils/http-error';
 import { Realtime } from './realtime';
 
+function lastActivity(comment: WorkComment): number {
+  return new Date(comment.updatedAt ?? comment.createdAt).getTime();
+}
+
+function sortByLastActivity(comments: WorkComment[]): WorkComment[] {
+  return [...comments].sort((a, b) => lastActivity(b) - lastActivity(a));
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -47,7 +55,7 @@ export class CommentStore {
         if (requestId !== this.requestId) {
           return;
         }
-        this.commentsState.set(comments);
+        this.commentsState.set(sortByLastActivity(comments));
         this.loadingState.set(false);
       },
       error: (error) => {
@@ -68,7 +76,7 @@ export class CommentStore {
     this.api.getAll(workId).subscribe({
       next: (comments) => {
         if (workId === this.workId) {
-          this.commentsState.set(comments);
+          this.commentsState.set(sortByLastActivity(comments));
         }
       },
       error: () => undefined,
@@ -78,13 +86,15 @@ export class CommentStore {
   create(text: string): Observable<WorkComment> {
     return this.api
       .create(this.workId!, { text })
-      .pipe(tap((comment) => this.commentsState.update((comments) => [comment, ...comments])));
+      .pipe(tap((comment) => this.commentsState.update((comments) => sortByLastActivity([comment, ...comments]))));
   }
 
   update(commentId: string, text: string): Observable<WorkComment> {
     return this.api.update(this.workId!, commentId, { text }).pipe(
       tap((updated) =>
-        this.commentsState.update((comments) => comments.map((comment) => (comment.id === commentId ? updated : comment))),
+        this.commentsState.update((comments) =>
+          sortByLastActivity(comments.map((comment) => (comment.id === commentId ? updated : comment))),
+        ),
       ),
     );
   }

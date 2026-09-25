@@ -18,7 +18,7 @@ namespace backend.Repository.Implementation
             _context.WorkComments
                 .Include(c => c.Author)
                 .Where(c => c.WorkId == workId)
-                .OrderByDescending(c => c.CreatedAt)
+                .OrderByDescending(c => c.UpdatedAt ?? c.CreatedAt)
                 .ToListAsync();
 
         public Task<WorkComment?> GetByIdAsync(Guid commentId, Guid workId) =>

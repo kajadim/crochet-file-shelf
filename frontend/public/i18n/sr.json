@@ -301,7 +301,8 @@
     "memberJoined": "{{userName}} se pridružio/la radu \"{{workName}}\".",
     "removedFromWork": "Uklonjena si sa rada \"{{workName}}\".",
     "workDeleted": "Vlasnik je obrisao rad \"{{workName}}\".",
-    "ownershipTransferred": "Sada si vlasnik rada \"{{workName}}\". Nalazi se u tvom folderu \"Shared with me\"."
+    "ownershipTransferred": "Sada si vlasnik rada \"{{workName}}\". Nalazi se u tvom folderu \"Shared with me\".",
+    "commentAdded": "{{userName}} je ostavio/la komentar na radu \"{{workName}}\"."
   },
   "realtime": {
     "reconnecting": "Veza je prekinuta. Ponovno povezivanje..."

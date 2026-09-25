@@ -3,7 +3,8 @@ export type NotificationType =
   | 'RemovedFromWork'
   | 'MemberJoined'
   | 'WorkDeleted'
-  | 'OwnershipTransferred';
+  | 'OwnershipTransferred'
+  | 'CommentAdded';
 
 export interface AppNotification {
   id: string;

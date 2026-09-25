@@ -7,5 +7,6 @@
         MemberJoined = 2,
         WorkDeleted = 3,
         OwnershipTransferred = 4,
+        CommentAdded = 5,
     }
 }

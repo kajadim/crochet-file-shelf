@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { WorkApi } from '../../core/api/work-api';
 import { AppNotification } from '../../core/models/notification.models';
 import { NotificationStore } from '../../core/services/notification-store';
@@ -11,6 +11,9 @@ interface NotificationData {
   permission?: string;
   userName?: string;
 }
+
+const LINK_MARKER = '\u0001';
+const LINKABLE_TYPES = ['WorkInvite', 'MemberJoined', 'OwnershipTransferred', 'CommentAdded'];
 
 @Component({
   selector: 'app-notification-bell',
@@ -22,6 +25,7 @@ export class NotificationBell {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly router = inject(Router);
   private readonly workApi = inject(WorkApi);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly store = inject(NotificationStore);
   protected readonly open = signal(false);
@@ -64,6 +68,8 @@ export class NotificationBell {
         };
       case 'MemberJoined':
         return { key: 'notifications.memberJoined', params };
+      case 'CommentAdded':
+        return { key: 'notifications.commentAdded', params };
       case 'RemovedFromWork':
         return { key: 'notifications.removedFromWork', params };
       case 'WorkDeleted':
@@ -73,6 +79,25 @@ export class NotificationBell {
     }
   }
 
+  protected segments(notification: AppNotification): { before: string; name: string; after: string } | null {
+    const info = this.describe(notification);
+    if (!notification.workId || !LINKABLE_TYPES.includes(notification.type) || !info.params['workName']) {
+      return null;
+    }
+
+    const text = this.transloco.translate(info.key, { ...info.params, workName: LINK_MARKER });
+    const index = text.indexOf(LINK_MARKER);
+    if (index < 0) {
+      return null;
+    }
+
+    return {
+      before: text.slice(0, index),
+      name: info.params['workName'],
+      after: text.slice(index + LINK_MARKER.length),
+    };
+  }
+
   protected iconFor(notification: AppNotification): string {
     switch (notification.type) {
       case 'WorkInvite':
@@ -80,20 +105,22 @@ export class NotificationBell {
         return 'pi-user-plus';
       case 'OwnershipTransferred':
         return 'pi-key';
+      case 'CommentAdded':
+        return 'pi-comment';
       default:
         return 'pi-user-minus';
     }
   }
 
+  protected onLinkClick(event: MouseEvent, notification: AppNotification): void {
+    event.stopPropagation();
+    this.onItemClick(notification);
+  }
+
   protected onItemClick(notification: AppNotification): void {
     this.store.markRead(notification);
 
-    const opensWork =
-      notification.workId &&
-      (notification.type === 'WorkInvite' ||
-        notification.type === 'MemberJoined' ||
-        notification.type === 'OwnershipTransferred');
-    if (!opensWork) {
+    if (!notification.workId || !LINKABLE_TYPES.includes(notification.type)) {
       return;
     }
 

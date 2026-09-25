@@ -14,14 +14,20 @@ namespace backend.Services.Implementation
         private readonly IWorkAccessService _access;
         private readonly IUserRepository _userRepository;
         private readonly IRealtimeOutbox _outbox;
+        private readonly INotificationService _notifications;
+        private readonly ISharingRepository _sharingRepository;
 
         public CommentService(
             ICommentRepository commentRepository,
             IWorkAccessService access,
             IUserRepository userRepository,
-            IRealtimeOutbox outbox)
+            IRealtimeOutbox outbox,
+            INotificationService notifications,
+            ISharingRepository sharingRepository)
         {
             _outbox = outbox;
+            _notifications = notifications;
+            _sharingRepository = sharingRepository;
             _commentRepository = commentRepository;
             _access = access;
             _userRepository = userRepository;
@@ -54,6 +60,18 @@ namespace backend.Services.Implementation
             };
 
             await _commentRepository.AddAsync(comment);
+
+            var members = await _sharingRepository.GetMembersAsync(workId);
+            var recipients = members.Select(m => m.UserId).Append(access.Work.OwnerId).Distinct().Where(id => id != userId);
+            foreach (var recipientId in recipients)
+            {
+                await _notifications.AddAsync(
+                    recipientId,
+                    NotificationType.CommentAdded,
+                    workId,
+                    new { workName = access.Work.Name, userName = author.DisplayName });
+            }
+
             await _commentRepository.SaveChangesAsync();
             _outbox.Enqueue(n => n.CommentsChangedAsync(workId));
 

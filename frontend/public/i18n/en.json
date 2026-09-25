@@ -301,7 +301,8 @@
     "memberJoined": "{{userName}} joined \"{{workName}}\".",
     "removedFromWork": "You were removed from \"{{workName}}\".",
     "workDeleted": "\"{{workName}}\" was deleted by its owner.",
-    "ownershipTransferred": "You are now the owner of \"{{workName}}\". It is in your \"Shared with me\" folder."
+    "ownershipTransferred": "You are now the owner of \"{{workName}}\". It is in your \"Shared with me\" folder.",
+    "commentAdded": "{{userName}} commented on \"{{workName}}\"."
   },
   "realtime": {
     "reconnecting": "Connection lost. Reconnecting..."
