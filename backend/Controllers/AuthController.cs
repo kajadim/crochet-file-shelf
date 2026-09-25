@@ -118,7 +118,7 @@ namespace backend.Controllers
             Response.Cookies.Append(RefreshTokenCookieName, rawRefreshToken, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
+                Secure = _refreshTokenOptions.SecureCookie,
                 SameSite = SameSiteMode.Lax,
                 Path = "/api/auth",
                 Expires = DateTimeOffset.UtcNow.AddDays(_refreshTokenOptions.ExpiryDays),

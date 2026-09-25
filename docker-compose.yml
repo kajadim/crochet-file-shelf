@@ -1,3 +1,24 @@
+# Crochet File Shelf in Docker.
+#
+#   docker compose up -d
+#       Only the database. This is what everyday development uses: the backend runs from Visual Studio
+#       and the frontend with `npm start`, which allows debugging and fast reload.
+#
+#   docker compose --profile app up -d --build
+#       The whole application in containers (database, backend, frontend). Open http://localhost:8080
+#
+#   docker compose --profile test run --rm tests
+#       Runs the automated Java tests against a separate copy of the application, with a browser in its own
+#       container. The two test accounts are created by the "seed" service. You can watch the browser
+#       at http://localhost:7900 (password: secret) while the tests run.
+#
+#   docker compose --profile app --profile test down
+#       Stops and removes the containers (the database data is kept in a volume).
+#
+# The containerised application uses its own database (crochetfileshelf_docker) on the same PostgreSQL server,
+# so it never touches the data of the development database.
+# Secrets can be given in a .env file next to this file (see .env.example).
+
 services:
   postgres:
     image: postgres:16
@@ -11,6 +32,99 @@ services:
       - "5433:5432"
     volumes:
       - crochet-file-shelf-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    profiles: ["app", "test"]
+    build:
+      context: ./backend
+    container_name: crochet-file-shelf-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__CrochetFileShelfDb: "Host=postgres;Port=5432;Database=crochetfileshelf_docker;Username=postgres;Password=password"
+      Database__MigrateOnStartup: "true"
+      # The containerised application is served over plain HTTP, and browsers refuse cookies marked Secure there.
+      # Leave this at true (the default) whenever the application is served over HTTPS.
+      RefreshToken__SecureCookie: "false"
+      Jwt__Secret: "${JWT_SECRET:-local-docker-secret-please-change-this-to-something-long-and-random}"
+      Email__SenderEmail: "${EMAIL_SENDER:-}"
+      Email__Username: "${EMAIL_USERNAME:-}"
+      Email__Password: "${EMAIL_PASSWORD:-}"
+
+  frontend:
+    profiles: ["app", "test"]
+    build:
+      context: ./frontend
+    container_name: crochet-file-shelf-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/api/health || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  seed:
+    profiles: ["test"]
+    image: postgres:16
+    depends_on:
+      frontend:
+        condition: service_healthy
+    restart: "no"
+    environment:
+      PGPASSWORD: password
+    volumes:
+      - ./tests/docker/seed-test-users.sql:/seed.sql:ro
+    command: ["psql", "-h", "postgres", "-U", "postgres", "-d", "crochetfileshelf_docker", "-v", "ON_ERROR_STOP=1", "-f", "/seed.sql"]
+
+  selenium:
+    profiles: ["test"]
+    image: selenium/standalone-chrome:latest
+    container_name: crochet-file-shelf-selenium
+    shm_size: "2gb"
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    healthcheck:
+      test: ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+
+  tests:
+    profiles: ["test"]
+    build:
+      context: ./tests
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      selenium:
+        condition: service_healthy
+    environment:
+      BASE_URL: "http://frontend"
+      BROWSER: "chrome"
+      REMOTE_URL: "http://selenium:4444"
+      USER1_EMAIL: "test.user1@example.com"
+      USER1_PASSWORD: "Test1234!"
+      USER1_USERNAME: "testuser1"
+      USER2_EMAIL: "test.user2@example.com"
+      USER2_PASSWORD: "Test1234!"
+      USER2_USERNAME: "testuser2"
+    volumes:
+      - ./tests/screenshots:/tests/screenshots
+      - ./tests/target:/tests/target
+      - crochet-file-shelf-maven-cache:/root/.m2
 
 volumes:
   crochet-file-shelf-db-data:
+  crochet-file-shelf-maven-cache:

@@ -1,10 +1,15 @@
-# Frontend (Angular) - image za povremeno pokretanje cele aplikacije preko Docker-a.
-# Za svakodnevni razvoj i dalje se koristi `npm start` direktno - ovo je samo "brza provera".
+# Frontend (Angular): builds the application and serves it with nginx.
+# nginx also forwards /api and /hubs to the backend container, so the browser talks to one address only.
+# For everyday development `npm start` is still used; this image is for running the whole application in Docker.
 
-FROM node:22-alpine
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
-EXPOSE 4200
-CMD ["npm", "start", "--", "--host", "0.0.0.0"]
+RUN npm run build -- --configuration production
+
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+EXPOSE 80

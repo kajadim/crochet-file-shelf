@@ -85,6 +85,7 @@ public class WorkPermissionsApiTest extends ApiTestBase {
         String folderId = createFolder(alice, unique("Delete"), null);
         String workId = createSiteWork(alice, folderId, "To be deleted");
         share(alice, bob, workId, "CanEdit");
+        onCleanup(() -> bob.delete("/api/works/" + workId));
 
         assertEquals(403, bob.delete("/api/works/" + workId).status());
         assertTrue(alice.delete("/api/works/" + workId).isOk());

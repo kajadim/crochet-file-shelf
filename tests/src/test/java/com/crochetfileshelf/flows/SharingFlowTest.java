@@ -24,6 +24,7 @@ public class SharingFlowTest extends BaseUiTest {
         String workName = unique("Flow matrix");
         String folderId = createFolder(alice, unique("Flow folder"), null);
         String workId = createPatternWork(alice, folderId, workName);
+        onCleanup(() -> bob.delete("/api/works/" + workId + "/sharing/membership"));
         String code = alice.put("/api/works/" + workId + "/sharing/invitation", body("permission", "CanEdit"))
                 .json().get("code").asText();
 

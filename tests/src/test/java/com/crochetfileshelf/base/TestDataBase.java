@@ -78,6 +78,8 @@ public abstract class TestDataBase {
 
         ApiClient.Response joined = member.post("/api/works/join", body("code", code));
         assertTrue(joined.isOk(), "joining failed: " + joined.raw());
+        // The member leaves first, so that deleting the owner's folder really deletes the work instead of handing it over.
+        cleanup.push(() -> member.delete("/api/works/" + workId + "/sharing/membership"));
     }
 
     protected void onCleanup(Runnable action) {

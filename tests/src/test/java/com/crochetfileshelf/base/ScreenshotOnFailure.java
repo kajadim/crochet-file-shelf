@@ -34,8 +34,18 @@ public class ScreenshotOnFailure implements AfterTestExecutionCallback {
                     + context.getRequiredTestMethod().getName() + ".png");
             Files.write(file, screenshot.getScreenshotAs(OutputType.BYTES));
             System.out.println("Screenshot saved: " + file.toAbsolutePath());
+            printBrowserLog(driver);
         } catch (Exception ignored) {
             // a missing screenshot must never hide the real failure
+        }
+    }
+
+    private static void printBrowserLog(WebDriver driver) {
+        try {
+            driver.manage().logs().get(org.openqa.selenium.logging.LogType.BROWSER).forEach(entry ->
+                    System.out.println("Browser " + entry.getLevel() + ": " + entry.getMessage()));
+        } catch (Exception ignored) {
+            // not every browser can return its console log
         }
     }
 }

@@ -47,6 +47,7 @@ Built as a seminar project for the course Web Programming 2.
 | Frontend | Angular 21 (standalone components, signals), PrimeNG, Transloco (translations), Quill (comment editor) |
 | Styling | SCSS with CSS variables (no CSS framework) |
 | Tests | Java 17, JUnit 5, Selenium, Maven (see [`tests/`](tests/README.md)) |
+| Containers | Docker Compose: database, backend, frontend (nginx) and the tests with a Selenium browser |
 
 ## Project structure
 
@@ -54,7 +55,7 @@ Built as a seminar project for the course Web Programming 2.
 backend/     ASP.NET Core API (Controllers, Services, Repository, Models, Migrations, Hubs)
 frontend/    Angular application
 tests/       Java tests (API, browser and combined flows)
-docker-compose.yml   PostgreSQL for local development
+docker-compose.yml   PostgreSQL, and optionally the whole application and the tests (see below)
 ```
 
 ## Running it locally
@@ -112,6 +113,23 @@ The development server forwards `/api` and `/hubs` to the backend on `https://lo
 
 Open `http://localhost:4200`, register an account, enter the code from the email and sign in.
 
+## Running everything in Docker
+
+Apart from the database, the backend, the frontend and the tests can run in containers too. The commands below are run in the project root.
+
+```bash
+docker compose up -d                                  # only the database (everyday development)
+docker compose --profile app up -d --build            # the whole application: http://localhost:8080
+docker compose --profile test run --rm tests          # the automated tests, with a browser in its own container
+docker compose --profile app --profile test down      # stop and remove the containers
+```
+
+- The containerised application uses its own database (`crochetfileshelf_docker`) on the same PostgreSQL server, so the
+  development data is never touched.
+- The backend creates its tables at start-up (`Database__MigrateOnStartup`); the frontend is built and served by nginx,
+  which also forwards `/api` and `/hubs` to the backend.
+- To register users in the containerised application, put the Gmail settings in a `.env` file (see `.env.example`).
+
 ## Tests
 
 ```bash
@@ -120,8 +138,9 @@ mvn test -Dtest.groups=api     # backend only, no browser
 mvn test                       # everything, including browser tests
 ```
 
-The tests need the application running and two registered accounts. All steps, settings and what is covered are described in
-[`tests/README.md`](tests/README.md).
+The easiest way is the Docker command above (`docker compose --profile test run --rm tests`), which needs nothing but Docker.
+Running them on your own machine needs the application running and two registered accounts. All steps, settings and what is
+covered are described in [`tests/README.md`](tests/README.md).
 
 ## Good to know
 

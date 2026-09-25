@@ -11,7 +11,30 @@ They test a bit of both sides of the application:
 
 Page objects (`pages`) hide the CSS selectors from the tests, so a test reads like the user's steps.
 
-## Before running
+## Running in Docker (nothing to install)
+
+From the project root:
+
+```bash
+docker compose --profile test run --rm tests
+```
+
+This builds and starts a separate copy of the application (database, backend, frontend), creates two test accounts, starts a Chrome
+in its own container and runs all the tests. The first run downloads the images and takes a few minutes; later runs take about two
+minutes. Nothing has to be installed except Docker, and the accounts, settings and browser are all prepared.
+
+- Watch the browser while the tests run: open <http://localhost:7900> (password: `secret`).
+- Reports are written to `tests/target/surefire-reports`, screenshots of failed browser tests to `tests/screenshots`.
+- Run only some tests: `docker compose --profile test run --rm tests mvn -B test -Dtest.groups=api`.
+- After changing the tests, rebuild the image: `docker compose --profile test build tests`.
+- Stop everything: `docker compose --profile app --profile test down`.
+
+The test accounts (`test.user1@example.com` and `test.user2@example.com`, password `Test1234!`) exist only in the separate
+`crochetfileshelf_docker` database, so your own data is not touched.
+
+## Running on your own machine
+
+### Before running
 
 1. **Database** — `docker compose up -d` in the project root.
 2. **Backend** — start it (`dotnet run` in `backend`, or run it from Visual Studio).
@@ -31,7 +54,7 @@ Page objects (`pages`) hide the CSS selectors from the tests, so a test reads li
 
 Requirements: JDK 17 or newer and Maven 3.9 or newer (or run the tests from IntelliJ IDEA, which bundles Maven).
 
-## Running
+### Running
 
 ```bash
 cd tests

@@ -47,6 +47,10 @@ public abstract class BaseUiTest extends TestDataBase {
     }
 
     private static WebDriver createDriver() {
+        if (!TestConfig.REMOTE_URL.isEmpty()) {
+            return createRemoteDriver();
+        }
+
         switch (TestConfig.BROWSER) {
             case "firefox": {
                 FirefoxOptions options = new FirefoxOptions();
@@ -69,8 +73,39 @@ public abstract class BaseUiTest extends TestDataBase {
                     options.addArguments("--headless=new");
                 }
                 options.addArguments("--window-size=1440,900");
+                quietChrome(options);
                 return new ChromeDriver(options);
             }
+        }
+    }
+
+    /** Keeps Chrome's own pop-ups (save password, password breach warning) from taking the keyboard and mouse. */
+    private static void quietChrome(ChromeOptions options) {
+        options.setExperimentalOption("prefs", java.util.Map.of(
+                "credentials_enable_service", false,
+                "profile.password_manager_enabled", false,
+                "profile.password_manager_leak_detection", false));
+        options.addArguments("--disable-features=PasswordLeakDetection,PasswordCheck");
+    }
+
+    /** Used when the browser runs in its own container (Selenium Grid), for example when the tests run in Docker. */
+    private static WebDriver createRemoteDriver() {
+        try {
+            java.net.URL url = java.net.URI.create(TestConfig.REMOTE_URL).toURL();
+            switch (TestConfig.BROWSER) {
+                case "firefox":
+                    return new org.openqa.selenium.remote.RemoteWebDriver(url, new FirefoxOptions());
+                case "edge":
+                    return new org.openqa.selenium.remote.RemoteWebDriver(url, new EdgeOptions());
+                default: {
+                    ChromeOptions options = new ChromeOptions();
+                    options.addArguments("--window-size=1440,900");
+                    quietChrome(options);
+                    return new org.openqa.selenium.remote.RemoteWebDriver(url, options);
+                }
+            }
+        } catch (java.net.MalformedURLException e) {
+            throw new IllegalStateException("Invalid remote.url: " + TestConfig.REMOTE_URL, e);
         }
     }
 

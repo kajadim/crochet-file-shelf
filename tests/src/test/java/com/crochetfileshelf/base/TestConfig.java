@@ -9,6 +9,7 @@ public final class TestConfig {
     public static final String BASE_URL;
     public static final String BROWSER;
     public static final boolean HEADLESS;
+    public static final String REMOTE_URL;
 
     public static final String USER1_EMAIL;
     public static final String USER1_PASSWORD;
@@ -20,12 +21,9 @@ public final class TestConfig {
     static {
         Properties props = new Properties();
         try (InputStream in = TestConfig.class.getClassLoader().getResourceAsStream("test.properties")) {
-            if (in == null) {
-                throw new IllegalStateException(
-                        "test.properties not found. Copy src/test/resources/test.properties.example to "
-                                + "test.properties and fill in your values.");
+            if (in != null) {
+                props.load(in);
             }
-            props.load(in);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to load test.properties", e);
         }
@@ -33,6 +31,7 @@ public final class TestConfig {
         BASE_URL = read(props, "base.url", "http://localhost:4200");
         BROWSER = read(props, "browser", "chrome").toLowerCase();
         HEADLESS = Boolean.parseBoolean(read(props, "headless", "false"));
+        REMOTE_URL = read(props, "remote.url", "");
 
         USER1_EMAIL = required(props, "user1.email");
         USER1_PASSWORD = required(props, "user1.password");
@@ -56,7 +55,8 @@ public final class TestConfig {
     private static String required(Properties props, String key) {
         String value = read(props, key, "");
         if (value.isEmpty()) {
-            throw new IllegalStateException("Missing required setting '" + key + "' in test.properties");
+            throw new IllegalStateException("Missing required setting '" + key + "'. Set it in src/test/resources/test.properties "
+                    + "(copy test.properties.example) or as the environment variable " + key.toUpperCase().replace('.', '_') + ".");
         }
         return value;
     }
