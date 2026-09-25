@@ -12,6 +12,7 @@ export class VideoStore {
 
   private readonly videoState = signal<Video | null>(null);
   private readonly availableState = signal<boolean | null>(null);
+  private readonly embeddableState = signal<boolean | null>(null);
   private readonly loadingState = signal(false);
   private readonly errorState = signal<string | null>(null);
 
@@ -19,6 +20,7 @@ export class VideoStore {
 
   readonly video = this.videoState.asReadonly();
   readonly available = this.availableState.asReadonly();
+  readonly embeddable = this.embeddableState.asReadonly();
   readonly loading = this.loadingState.asReadonly();
   readonly error = this.errorState.asReadonly();
 
@@ -26,6 +28,7 @@ export class VideoStore {
     this.workId = null;
     this.videoState.set(null);
     this.availableState.set(null);
+    this.embeddableState.set(null);
     this.loadingState.set(false);
     this.errorState.set(null);
   }
@@ -67,9 +70,16 @@ export class VideoStore {
     }
 
     this.availableState.set(null);
+    this.embeddableState.set(null);
     this.api.getStatus(this.workId).subscribe({
-      next: (status) => this.availableState.set(status.available),
-      error: () => this.availableState.set(null),
+      next: (status) => {
+        this.availableState.set(status.available);
+        this.embeddableState.set(status.embeddable);
+      },
+      error: () => {
+        this.availableState.set(null);
+        this.embeddableState.set(null);
+      },
     });
   }
 }

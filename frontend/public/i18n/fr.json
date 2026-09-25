@@ -243,7 +243,8 @@
     "minutes": "min",
     "seconds": "s",
     "startTimeTooLong": "L'heure de début doit précéder la fin de la vidéo ({{duration}}).",
-    "reminderNote": "Cette plateforme ne permet pas de lancer une vidéo à un moment précis : cette heure est donc seulement enregistrée comme rappel de l'endroit où tu t'es arrêtée."
+    "reminderNote": "Cette plateforme ne permet pas de lancer une vidéo à un moment précis : cette heure est donc seulement enregistrée comme rappel de l'endroit où tu t'es arrêtée.",
+    "embedBlocked": "Instagram n'autorise pas la lecture de cette vidéo en dehors de son application ou de son site (généralement pour des raisons de droits d'auteur). Utilisez « Open original » pour la regarder."
   },
   "siteWork": {
     "openSite": "Ouvrir le site",

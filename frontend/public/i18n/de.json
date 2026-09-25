@@ -243,7 +243,8 @@
     "minutes": "Min.",
     "seconds": "Sek.",
     "startTimeTooLong": "Die Startzeit muss vor dem Ende des Videos liegen ({{duration}}).",
-    "reminderNote": "Diese Plattform erlaubt keinen Start des Videos zu einer bestimmten Zeit, daher wird diese Zeit nur als Erinnerung gespeichert, wo du aufgehört hast."
+    "reminderNote": "Diese Plattform erlaubt keinen Start des Videos zu einer bestimmten Zeit, daher wird diese Zeit nur als Erinnerung gespeichert, wo du aufgehört hast.",
+    "embedBlocked": "Instagram erlaubt es nicht, dieses Video außerhalb der eigenen App oder Website abzuspielen (meist wegen des Urheberrechts). Nutze „Open original“, um es anzusehen."
   },
   "siteWork": {
     "openSite": "Website öffnen",

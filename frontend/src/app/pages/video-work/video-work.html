@@ -1,5 +1,5 @@
-<div class="flex min-h-[calc(100vh-3.5rem)]">
-  <div class="flex min-w-0 flex-1 flex-col bg-gray-50">
+<div class="flex h-full">
+  <div class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50">
     <div class="flex items-center justify-between gap-3 px-4 py-3">
       <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
         <i class="pi pi-arrow-left"></i>
@@ -7,7 +7,7 @@
       <app-work-presence [workId]="workId" />
     </div>
 
-    <div class="flex flex-1 flex-col items-center gap-5 p-4">
+    <div class="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 p-4">
       @if (videoStore.loading()) {
         <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
       } @else if (videoStore.error()) {
@@ -15,6 +15,16 @@
       } @else if (videoStore.video()) {
         @if (videoStore.available() === false) {
           <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ 'videoWork.linkNotWorking' | transloco }}</p>
+        } @else if (videoStore.embeddable() === false) {
+          <div class="flex max-w-md flex-col items-center gap-3 rounded-lg border border-gray-300 bg-white p-6 text-center">
+            <i class="pi pi-lock text-2xl text-gray-500"></i>
+            <p class="text-sm text-gray-700">{{ 'videoWork.embedBlocked' | transloco }}</p>
+            <p-button
+              [label]="'videoWork.openOriginal' | transloco"
+              icon="pi pi-external-link"
+              (onClick)="openOriginal(videoStore.video()!.normalizedUrl)"
+            />
+          </div>
         } @else if (embedSources().length > 0) {
           @for (source of embedSources(); track source.raw) {
             <iframe
@@ -68,23 +78,25 @@
             <p class="mb-2 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ timeError() }}</p>
           }
 
-          <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="flex flex-col gap-2">
-            <div class="flex flex-col gap-1">
-              <div class="flex flex-wrap items-center gap-2">
-                <input pInputText type="number" min="0" max="99" formControlName="hours" placeholder="0" class="w-16" />
-                <span class="text-sm text-gray-500">{{ 'videoWork.hours' | transloco }}</span>
-                <input pInputText type="number" min="0" max="59" formControlName="minutes" placeholder="0" class="w-16" />
-                <span class="text-sm text-gray-500">{{ 'videoWork.minutes' | transloco }}</span>
-                <input pInputText type="number" min="0" max="59" formControlName="seconds" placeholder="0" class="w-16" />
-                <span class="text-sm text-gray-500">{{ 'videoWork.seconds' | transloco }}</span>
+          <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="flex flex-col gap-1">
+            <div class="flex items-end gap-2">
+              <div class="flex w-14 flex-col gap-1">
+                <label for="time-hours" class="truncate text-[11px] text-gray-500">{{ 'videoWork.hours' | transloco }}</label>
+                <input pInputText id="time-hours" type="number" min="0" max="99" formControlName="hours" placeholder="0" class="w-full" />
               </div>
-              @if (timeForm.invalid && timeForm.touched) {
-                <small class="text-red-600">{{ 'videoWork.startTimeInvalid' | transloco }}</small>
-              }
+              <div class="flex w-14 flex-col gap-1">
+                <label for="time-minutes" class="truncate text-[11px] text-gray-500">{{ 'videoWork.minutes' | transloco }}</label>
+                <input pInputText id="time-minutes" type="number" min="0" max="59" formControlName="minutes" placeholder="0" class="w-full" />
+              </div>
+              <div class="flex w-14 flex-col gap-1">
+                <label for="time-seconds" class="truncate text-[11px] text-gray-500">{{ 'videoWork.seconds' | transloco }}</label>
+                <input pInputText id="time-seconds" type="number" min="0" max="59" formControlName="seconds" placeholder="0" class="w-full" />
+              </div>
+              <p-button class="ml-auto" [label]="'common.save' | transloco" type="submit" [outlined]="true" [loading]="timeSaving()" />
             </div>
-            <div>
-              <p-button [label]="'common.save' | transloco" type="submit" [outlined]="true" [loading]="timeSaving()" />
-            </div>
+            @if (timeForm.invalid && timeForm.touched) {
+              <small class="text-red-600">{{ 'videoWork.startTimeInvalid' | transloco }}</small>
+            }
           </form>
 
           @if (video.platform !== 'YouTube') {

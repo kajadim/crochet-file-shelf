@@ -7,3 +7,10 @@ body {
   margin: 0;
   color-scheme: light;
 }
+
+app-dashboard,
+app-matrix-editor,
+app-video-work {
+  display: block;
+  height: 100%;
+}

@@ -243,7 +243,8 @@
     "minutes": "min",
     "seconds": "s",
     "startTimeTooLong": "The start time must be before the end of the video ({{duration}}).",
-    "reminderNote": "This platform does not allow a video to start at a set time, so this time is only saved as a reminder of where you stopped."
+    "reminderNote": "This platform does not allow a video to start at a set time, so this time is only saved as a reminder of where you stopped.",
+    "embedBlocked": "Instagram does not allow this video to be played outside its own app or site (usually because of copyright). Use \"Open original\" to watch it."
   },
   "siteWork": {
     "openSite": "Open site",

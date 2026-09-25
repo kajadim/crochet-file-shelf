@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using backend.Dtos.Videos;
 using backend.Exceptions;
 using backend.Models;
@@ -9,6 +10,8 @@ namespace backend.Services.Implementation
     {
         public const string HttpClientName = "video-links";
         private const int MaxRedirects = 3;
+
+        private static readonly Regex InstagramCopyrightBlocked = new("copyright_blocked\\\\?\"\\s*:\\s*true", RegexOptions.Compiled);
 
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -67,6 +70,31 @@ namespace backend.Services.Implementation
                 }
 
                 return status is 400 or 401 or 403 or 404 ? false : null;
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool?> CheckEmbeddableAsync(VideoPlatform platform, string normalizedUrl)
+        {
+            if (platform != VideoPlatform.Instagram)
+            {
+                return null;
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient(HttpClientName);
+                using var response = await client.GetAsync(normalizedUrl.TrimEnd('/') + "/embed");
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                var body = await response.Content.ReadAsStringAsync();
+                return !InstagramCopyrightBlocked.IsMatch(body);
             }
             catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
             {

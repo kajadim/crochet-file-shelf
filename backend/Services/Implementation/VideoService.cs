@@ -29,7 +29,8 @@ namespace backend.Services.Implementation
         {
             var video = await GetVideoAsync(userId, workId, WorkAccessLevel.Read);
             var available = await _videoLinkService.CheckAvailabilityAsync(video.Platform, video.NormalizedUrl);
-            return new VideoStatusResponse { Available = available };
+            var embeddable = await _videoLinkService.CheckEmbeddableAsync(video.Platform, video.NormalizedUrl);
+            return new VideoStatusResponse { Available = available, Embeddable = embeddable };
         }
 
         public async Task<VideoResponse> UpdateLinkAsync(Guid userId, Guid workId, UpdateVideoLinkRequest request)

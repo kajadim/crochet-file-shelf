@@ -1,5 +1,5 @@
-<div class="flex min-h-[calc(100vh-3.5rem)]">
-  <aside class="flex w-72 shrink-0 flex-col gap-3 border-r border-gray-200 p-3">
+<div class="flex h-full">
+  <aside class="flex w-72 shrink-0 flex-col gap-3 overflow-y-auto border-r border-gray-200 p-3">
     <p-button
       [label]="'dashboard.newFolder' | transloco"
       icon="pi pi-folder-plus"
@@ -48,7 +48,7 @@
     />
   </aside>
 
-  <main class="min-w-0 flex-1 p-6">
+  <main class="min-w-0 flex-1 overflow-y-auto p-6">
     @if (loadError()) {
       <p class="rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ loadError() }}</p>
     } @else if (folderStore.loaded()) {

@@ -7,5 +7,6 @@ namespace backend.Services.Interfaces
     {
         Task<VideoLinkInfo> ResolveAsync(string url);
         Task<bool?> CheckAvailabilityAsync(VideoPlatform platform, string normalizedUrl);
+        Task<bool?> CheckEmbeddableAsync(VideoPlatform platform, string normalizedUrl);
     }
 }

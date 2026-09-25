@@ -1,5 +1,5 @@
-<div class="flex min-h-[calc(100vh-3.5rem)]">
-  <div class="flex min-w-0 flex-1 flex-col bg-gray-50">
+<div class="flex h-full">
+  <div class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50">
   <div class="flex items-center justify-between gap-3 px-4 py-3">
     <a routerLink="/" class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100">
       <i class="pi pi-arrow-left"></i>
@@ -112,7 +112,7 @@
   } @else if (patternStore.error()) {
     <p class="m-6 rounded bg-red-50 px-3 py-2 text-sm text-red-800">{{ patternStore.error() }}</p>
   } @else if (patternStore.pattern(); as pattern) {
-    <div class="flex-1 overflow-auto p-4">
+    <div class="min-h-0 flex-1 overflow-auto p-4">
         <div class="mx-auto w-max">
         <div
           class="inline-grid border border-gray-300 bg-white select-none"

@@ -10,6 +10,7 @@ export interface Video {
 
 export interface VideoStatus {
   available: boolean | null;
+  embeddable: boolean | null;
 }
 
 export interface UpdateVideoLinkRequest {
