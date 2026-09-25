@@ -3,12 +3,14 @@ import { Observable, tap } from 'rxjs';
 import { CommentApi } from '../api/comment-api';
 import { WorkComment } from '../models/comment.models';
 import { extractErrorMessage } from '../utils/http-error';
+import { Realtime } from './realtime';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentStore {
   private readonly api = inject(CommentApi);
+  private readonly realtime = inject(Realtime);
 
   private readonly commentsState = signal<WorkComment[]>([]);
   private readonly loadingState = signal(false);
@@ -20,6 +22,11 @@ export class CommentStore {
   readonly comments = this.commentsState.asReadonly();
   readonly loading = this.loadingState.asReadonly();
   readonly error = this.errorState.asReadonly();
+
+  constructor() {
+    this.realtime.commentsChanged$.subscribe((event) => this.refresh(event.workId));
+    this.realtime.reconnected$.subscribe(() => this.refresh(this.workId));
+  }
 
   reset(): void {
     this.requestId++;
@@ -50,6 +57,21 @@ export class CommentStore {
         this.errorState.set(extractErrorMessage(error));
         this.loadingState.set(false);
       },
+    });
+  }
+
+  private refresh(workId: string | null): void {
+    if (!workId || workId !== this.workId) {
+      return;
+    }
+
+    this.api.getAll(workId).subscribe({
+      next: (comments) => {
+        if (workId === this.workId) {
+          this.commentsState.set(comments);
+        }
+      },
+      error: () => undefined,
     });
   }
 

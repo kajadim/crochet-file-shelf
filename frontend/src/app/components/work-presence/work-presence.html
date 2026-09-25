@@ -1,0 +1,21 @@
+@if (users().length > 0) {
+  <div class="flex items-center gap-2" [title]="'presence.alsoHere' | transloco: { names: names() }">
+    <div class="flex -space-x-2">
+      @for (user of visible(); track user.userId) {
+        <span
+          class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-teal-600 text-[10px] font-semibold text-white"
+        >
+          {{ initials(user) }}
+        </span>
+      }
+      @if (hiddenCount() > 0) {
+        <span
+          class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gray-500 text-[10px] font-semibold text-white"
+        >
+          +{{ hiddenCount() }}
+        </span>
+      }
+    </div>
+    <span class="hidden text-xs text-gray-500 sm:inline">{{ 'presence.here' | transloco }}</span>
+  </div>
+}

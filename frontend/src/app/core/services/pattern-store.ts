@@ -10,6 +10,8 @@ import {
   PatternCell,
 } from '../models/pattern.models';
 import { extractErrorMessage } from '../utils/http-error';
+import { ActiveRowChangedEvent, CellsChangedEvent, PositionChangedEvent } from '../models/realtime.models';
+import { Realtime } from './realtime';
 
 export interface LegendEntry {
   colorId: string;
@@ -34,6 +36,7 @@ function cellKey(row: number, column: number): string {
 })
 export class PatternStore {
   private readonly api = inject(PatternApi);
+  private readonly realtime = inject(Realtime);
 
   private readonly patternMeta = signal<PatternMeta | null>(null);
   private readonly cellsState = signal<ReadonlyMap<string, PatternCell>>(new Map());
@@ -62,6 +65,14 @@ export class PatternStore {
     }
     return [...byColor.values()].sort((a, b) => b.count - a.count);
   });
+
+  constructor() {
+    this.realtime.cellsChanged$.subscribe((event) => this.applyRemoteCells(event));
+    this.realtime.positionChanged$.subscribe((event) => this.applyRemotePosition(event));
+    this.realtime.activeRowChanged$.subscribe((event) => this.applyRemoteActiveRow(event));
+    this.realtime.patternReset$.subscribe((event) => this.silentReload(event.workId));
+    this.realtime.reconnected$.subscribe(() => this.silentReload(this.workId));
+  }
 
   reset(): void {
     this.workId = null;
@@ -188,6 +199,68 @@ export class PatternStore {
 
     this.api.updateActiveRow(this.workId, { row }).subscribe({
       next: (pattern) => this.applyPattern(pattern),
+    });
+  }
+
+  private applyRemoteCells(event: CellsChangedEvent): void {
+    if (event.workId !== this.workId) {
+      return;
+    }
+
+    const next = new Map(this.cellsState());
+    for (const change of event.cells) {
+      const key = cellKey(change.row, change.column);
+      if (this.pendingChanges.has(key)) {
+        continue;
+      }
+
+      if (change.colorId === null || change.hexValue === null) {
+        next.delete(key);
+      } else {
+        next.set(key, { row: change.row, column: change.column, colorId: change.colorId, hexValue: change.hexValue });
+      }
+    }
+    this.cellsState.set(next);
+  }
+
+  private applyRemotePosition(event: PositionChangedEvent): void {
+    if (event.workId !== this.workId) {
+      return;
+    }
+    this.patternMeta.update((meta) => (meta ? { ...meta, currentRow: event.row, currentColumn: event.column } : meta));
+  }
+
+  private applyRemoteActiveRow(event: ActiveRowChangedEvent): void {
+    if (event.workId !== this.workId) {
+      return;
+    }
+    this.patternMeta.update((meta) => (meta ? { ...meta, activeRow: event.row } : meta));
+  }
+
+  private silentReload(workId: string | null): void {
+    if (!workId || workId !== this.workId) {
+      return;
+    }
+
+    this.api.get(workId).subscribe({
+      next: (pattern) => {
+        const local = this.cellsState();
+        this.applyPattern(pattern);
+
+        if (this.pendingChanges.size > 0) {
+          const merged = new Map(this.cellsState());
+          for (const [key, change] of this.pendingChanges) {
+            const localCell = local.get(key);
+            if (change.colorId === null || !localCell) {
+              merged.delete(key);
+            } else {
+              merged.set(key, localCell);
+            }
+          }
+          this.cellsState.set(merged);
+        }
+      },
+      error: () => undefined,
     });
   }
 

@@ -13,12 +13,15 @@ namespace backend.Services.Implementation
         private readonly ICommentRepository _commentRepository;
         private readonly IWorkAccessService _access;
         private readonly IUserRepository _userRepository;
+        private readonly IRealtimeOutbox _outbox;
 
         public CommentService(
             ICommentRepository commentRepository,
             IWorkAccessService access,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IRealtimeOutbox outbox)
         {
+            _outbox = outbox;
             _commentRepository = commentRepository;
             _access = access;
             _userRepository = userRepository;
@@ -52,6 +55,7 @@ namespace backend.Services.Implementation
 
             await _commentRepository.AddAsync(comment);
             await _commentRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.CommentsChangedAsync(workId));
 
             return ToResponse(comment, userId, access.Role);
         }
@@ -71,6 +75,7 @@ namespace backend.Services.Implementation
             comment.PlainText = plainText;
             comment.UpdatedAt = DateTime.UtcNow;
             await _commentRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.CommentsChangedAsync(workId));
 
             return ToResponse(comment, userId, access.Role);
         }
@@ -86,6 +91,7 @@ namespace backend.Services.Implementation
 
             _commentRepository.Remove(comment);
             await _commentRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.CommentsChangedAsync(workId));
         }
 
         private async Task<WorkComment> GetCommentAsync(Guid workId, Guid commentId)

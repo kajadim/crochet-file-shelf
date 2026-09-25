@@ -7,6 +7,7 @@ import { NotificationBell } from '../../components/notification-bell/notificatio
 import { Auth } from '../../core/services/auth';
 import { Language } from '../../core/services/language';
 import { NotificationStore } from '../../core/services/notification-store';
+import { Realtime } from '../../core/services/realtime';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,13 +19,16 @@ export class MainLayout implements OnInit, OnDestroy {
   protected readonly auth = inject(Auth);
   protected readonly language = inject(Language);
   private readonly notifications = inject(NotificationStore);
+  protected readonly realtime = inject(Realtime);
 
   ngOnInit(): void {
+    void this.realtime.start();
     this.notifications.start();
   }
 
   ngOnDestroy(): void {
     this.notifications.stop();
+    void this.realtime.stop();
   }
 
   protected onLanguageChange(event: Event): void {

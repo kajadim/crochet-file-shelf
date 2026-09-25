@@ -13,14 +13,17 @@ namespace backend.Services.Implementation
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
         private readonly INotificationRepository _notificationRepository;
+        private readonly IRealtimeOutbox _outbox;
 
-        public NotificationService(INotificationRepository notificationRepository)
+        public NotificationService(INotificationRepository notificationRepository, IRealtimeOutbox outbox)
         {
             _notificationRepository = notificationRepository;
+            _outbox = outbox;
         }
 
-        public Task AddAsync(Guid recipientId, NotificationType type, Guid? workId, object payload) =>
-            _notificationRepository.AddAsync(new Notification
+        public async Task AddAsync(Guid recipientId, NotificationType type, Guid? workId, object payload)
+        {
+            var notification = new Notification
             {
                 Id = Guid.NewGuid(),
                 Type = type,
@@ -29,7 +32,11 @@ namespace backend.Services.Implementation
                 CreatedAt = DateTime.UtcNow,
                 RecipientId = recipientId,
                 WorkId = workId,
-            });
+            };
+
+            await _notificationRepository.AddAsync(notification);
+            _outbox.Enqueue(n => n.NotificationReceivedAsync(recipientId, ToResponse(notification)));
+        }
 
         public async Task<NotificationListResponse> GetAsync(Guid userId)
         {

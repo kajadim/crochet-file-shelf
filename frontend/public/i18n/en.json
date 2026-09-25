@@ -277,7 +277,8 @@
     "joined": "You joined \"{{name}}\".",
     "leaveTitle": "Leave \"{{name}}\"?",
     "leaveMessage": "You will lose access to this work.",
-    "leave": "Leave"
+    "leave": "Leave",
+    "accessLost": "You no longer have access to this work."
   },
   "notifications": {
     "title": "Notifications",
@@ -289,5 +290,12 @@
     "removedFromWork": "You were removed from \"{{workName}}\".",
     "workDeleted": "\"{{workName}}\" was deleted by its owner.",
     "ownershipTransferred": "You are now the owner of \"{{workName}}\". It is in your \"Shared with me\" folder."
+  },
+  "realtime": {
+    "reconnecting": "Connection lost. Reconnecting..."
+  },
+  "presence": {
+    "alsoHere": "Also here: {{names}}",
+    "here": "also here"
   }
 }

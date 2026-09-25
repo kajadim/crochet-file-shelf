@@ -1,33 +1,33 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { NotificationApi } from '../api/notification-api';
 import { AppNotification } from '../models/notification.models';
+import { Realtime } from './realtime';
 
-const POLL_INTERVAL_MS = 30000;
+const MAX_ITEMS = 50;
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationStore {
   private readonly api = inject(NotificationApi);
+  private readonly realtime = inject(Realtime);
 
   private readonly itemsState = signal<AppNotification[]>([]);
   private readonly unreadState = signal(0);
-  private timer: ReturnType<typeof setInterval> | null = null;
 
   readonly items = this.itemsState.asReadonly();
   readonly unreadCount = this.unreadState.asReadonly();
 
+  constructor() {
+    this.realtime.notification$.subscribe((notification) => this.receive(notification));
+    this.realtime.reconnected$.subscribe(() => this.refresh());
+  }
+
   start(): void {
-    this.stop();
     this.refresh();
-    this.timer = setInterval(() => this.refresh(), POLL_INTERVAL_MS);
   }
 
   stop(): void {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
     this.itemsState.set([]);
     this.unreadState.set(0);
   }
@@ -64,5 +64,16 @@ export class NotificationStore {
       this.unreadState.update((count) => Math.max(0, count - 1));
     }
     this.api.delete(notification.id).subscribe({ error: () => this.refresh() });
+  }
+
+  private receive(notification: AppNotification): void {
+    if (this.itemsState().some((item) => item.id === notification.id)) {
+      return;
+    }
+
+    this.itemsState.update((items) => [notification, ...items].slice(0, MAX_ITEMS));
+    if (!notification.isRead) {
+      this.unreadState.update((count) => count + 1);
+    }
   }
 }

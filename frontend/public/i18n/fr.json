@@ -277,7 +277,8 @@
     "joined": "Tu as rejoint « {{name}} ».",
     "leaveTitle": "Quitter « {{name}} » ?",
     "leaveMessage": "Tu perdras l'accès à cet ouvrage.",
-    "leave": "Quitter"
+    "leave": "Quitter",
+    "accessLost": "Tu n'as plus accès à cet ouvrage."
   },
   "notifications": {
     "title": "Notifications",
@@ -289,5 +290,12 @@
     "removedFromWork": "Tu as été retiré de « {{workName}} ».",
     "workDeleted": "« {{workName}} » a été supprimé par son propriétaire.",
     "ownershipTransferred": "Tu es maintenant propriétaire de « {{workName}} ». Il se trouve dans ton dossier « Shared with me »."
+  },
+  "realtime": {
+    "reconnecting": "Connexion perdue. Reconnexion..."
+  },
+  "presence": {
+    "alsoHere": "Aussi ici : {{names}}",
+    "here": "aussi ici"
   }
 }

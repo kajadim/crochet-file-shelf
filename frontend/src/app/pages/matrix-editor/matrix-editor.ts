@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, DestroyRef, HostListener, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,8 @@ import { DrawerModule } from 'primeng/drawer';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
 import { WorkComments } from '../../components/work-comments/work-comments';
+import { WorkPresence } from '../../components/work-presence/work-presence';
+import { WorkAccessWatcher } from '../../core/services/work-access-watcher';
 import { ImportPreview } from '../../core/models/pattern.models';
 import { WorkRole } from '../../core/models/work.models';
 import { YarnColorDialog, YarnColorDialogData } from '../../components/yarn-color-dialog/yarn-color-dialog';
@@ -21,7 +23,7 @@ type PaintTool = string | 'eraser' | null;
 
 @Component({
   selector: 'app-matrix-editor',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, DrawerModule, InputTextModule, TranslocoPipe, WorkComments],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, DrawerModule, InputTextModule, TranslocoPipe, WorkComments, WorkPresence],
   templateUrl: './matrix-editor.html',
   styleUrl: './matrix-editor.scss',
 })
@@ -30,6 +32,8 @@ export class MatrixEditor implements OnInit {
   private readonly workApi = inject(WorkApi);
   private readonly dialogService = inject(DialogService);
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly watcher = inject(WorkAccessWatcher);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly transloco = inject(TranslocoService);
 
   protected readonly patternStore = inject(PatternStore);
@@ -107,6 +111,9 @@ export class MatrixEditor implements OnInit {
   }
 
   ngOnInit(): void {
+    const access = this.watcher.watch(this.workId, (role) => this.role.set(role));
+    this.destroyRef.onDestroy(() => access.unsubscribe());
+
     this.patternStore.reset();
     this.patternStore.load(this.workId);
 

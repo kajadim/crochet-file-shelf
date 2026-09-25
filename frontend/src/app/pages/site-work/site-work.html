@@ -4,6 +4,7 @@
       <i class="pi pi-arrow-left"></i>
     </a>
     <h1 class="text-lg font-semibold">{{ workName() }}</h1>
+    <app-work-presence class="ml-auto" [workId]="workId" />
   </div>
 
   @if (siteStore.loading()) {

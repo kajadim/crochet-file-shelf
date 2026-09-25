@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
 import { catchError, map, of, switchMap, throwError } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +24,7 @@ import { JoinWorkResponse } from '../../core/models/sharing.models';
 import { Work, WorkType } from '../../core/models/work.models';
 import { FolderStore } from '../../core/services/folder-store';
 import { WorkStore } from '../../core/services/work-store';
+import { Realtime } from '../../core/services/realtime';
 import { YarnColorStore } from '../../core/services/yarn-color-store';
 import { loadDashboardFilters, PLATFORM_OPTIONS, saveDashboardFilters } from '../../core/utils/dashboard-filters-storage';
 import { extractErrorMessage } from '../../core/utils/http-error';
@@ -43,6 +45,7 @@ export class Dashboard implements OnInit {
   private readonly router = inject(Router);
   private readonly sharingApi = inject(SharingApi);
   private readonly patternApi = inject(PatternApi);
+  private readonly realtime = inject(Realtime);
 
   protected readonly loadError = signal<string | null>(null);
 
@@ -70,6 +73,8 @@ export class Dashboard implements OnInit {
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
+    this.realtime.accessChanged$.pipe(takeUntilDestroyed()).subscribe(() => this.workStore.reload());
+
     effect(() =>
       saveDashboardFilters({
         search: this.search(),

@@ -1,10 +1,12 @@
-import { Component, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkComments } from '../../components/work-comments/work-comments';
+import { WorkPresence } from '../../components/work-presence/work-presence';
+import { WorkAccessWatcher } from '../../core/services/work-access-watcher';
 import { WorkApi } from '../../core/api/work-api';
 import { WorkRole } from '../../core/models/work.models';
 import { SiteStore } from '../../core/services/site-store';
@@ -12,7 +14,7 @@ import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
   selector: 'app-site-work',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments, WorkPresence],
   templateUrl: './site-work.html',
   styleUrl: './site-work.scss',
 })
@@ -20,6 +22,8 @@ export class SiteWork implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly workApi = inject(WorkApi);
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly watcher = inject(WorkAccessWatcher);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly siteStore = inject(SiteStore);
 
@@ -58,6 +62,9 @@ export class SiteWork implements OnInit {
   }
 
   ngOnInit(): void {
+    const access = this.watcher.watch(this.workId, (role) => this.role.set(role));
+    this.destroyRef.onDestroy(() => access.unsubscribe());
+
     this.siteStore.reset();
     this.siteStore.load(this.workId);
     this.workApi.getById(this.workId).subscribe({

@@ -18,14 +18,17 @@ namespace backend.Services.Implementation
         private readonly INotificationService _notifications;
         private readonly IFolderRepository _folderRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IRealtimeOutbox _outbox;
 
         public SharingService(
             ISharingRepository sharingRepository,
             IWorkAccessService access,
             INotificationService notifications,
             IFolderRepository folderRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IRealtimeOutbox outbox)
         {
+            _outbox = outbox;
             _sharingRepository = sharingRepository;
             _access = access;
             _notifications = notifications;
@@ -94,6 +97,8 @@ namespace backend.Services.Implementation
             var member = await GetMemberWithUserAsync(workId, memberUserId);
             member.Permission = request.Permission!.Value;
             await _sharingRepository.SaveChangesAsync();
+            var newRole = RoleName(member.Permission);
+            _outbox.Enqueue(n => n.AccessChangedAsync(memberUserId, workId, newRole));
 
             return ToResponse(member);
         }
@@ -108,6 +113,7 @@ namespace backend.Services.Implementation
             await _notifications.AddAsync(
                 memberUserId, NotificationType.RemovedFromWork, workId, new { workName = access.Work.Name });
             await _sharingRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.AccessChangedAsync(memberUserId, workId, null));
         }
 
         public async Task LeaveAsync(Guid userId, Guid workId)
@@ -117,6 +123,7 @@ namespace backend.Services.Implementation
 
             _sharingRepository.RemoveMember(member);
             await _sharingRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.AccessChangedAsync(userId, workId, null));
         }
 
         public async Task<JoinWorkResponse> JoinAsync(Guid userId, JoinWorkRequest request)
@@ -159,6 +166,8 @@ namespace backend.Services.Implementation
                 work.OwnerId, NotificationType.MemberJoined, work.Id,
                 new { workName = work.Name, userName = user.DisplayName });
             await _sharingRepository.SaveChangesAsync();
+            var joinedRole = RoleName(invitation.Permission);
+            _outbox.Enqueue(n => n.AccessChangedAsync(userId, work.Id, joinedRole));
 
             return new JoinWorkResponse
             {
@@ -177,6 +186,7 @@ namespace backend.Services.Implementation
                 return false;
             }
 
+            var previousOwnerId = work.OwnerId;
             var successor = members
                 .Where(m => m.Permission == WorkPermission.CanEdit)
                 .OrderBy(m => m.JoinedAt)
@@ -188,7 +198,10 @@ namespace backend.Services.Implementation
                 {
                     await _notifications.AddAsync(
                         member.UserId, NotificationType.WorkDeleted, null, new { workName = work.Name });
+                    var lostUserId = member.UserId;
+                    _outbox.Enqueue(n => n.AccessChangedAsync(lostUserId, work.Id, null));
                 }
+                _outbox.Enqueue(n => n.AccessChangedAsync(previousOwnerId, work.Id, null));
                 return false;
             }
 
@@ -208,6 +221,8 @@ namespace backend.Services.Implementation
                     _sharingRepository.RemoveMember(member);
                     await _notifications.AddAsync(
                         member.UserId, NotificationType.WorkDeleted, null, new { workName = work.Name });
+                    var lostUserId = member.UserId;
+                    _outbox.Enqueue(n => n.AccessChangedAsync(lostUserId, work.Id, null));
                 }
             }
 
@@ -219,6 +234,9 @@ namespace backend.Services.Implementation
 
             await _notifications.AddAsync(
                 successor.UserId, NotificationType.OwnershipTransferred, work.Id, new { workName = work.Name });
+            var successorId = successor.UserId;
+            _outbox.Enqueue(n => n.AccessChangedAsync(successorId, work.Id, "Owner"));
+            _outbox.Enqueue(n => n.AccessChangedAsync(previousOwnerId, work.Id, null));
 
             return true;
         }
@@ -270,6 +288,9 @@ namespace backend.Services.Implementation
 
             throw new InvalidOperationException("Could not generate a unique invitation code.");
         }
+
+        private static string RoleName(WorkPermission permission) =>
+            permission == WorkPermission.CanEdit ? "Editor" : "Viewer";
 
         private static string NormalizeCode(string input) =>
             new string(input.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();

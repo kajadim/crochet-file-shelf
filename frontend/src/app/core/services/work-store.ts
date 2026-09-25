@@ -87,6 +87,10 @@ export class WorkStore {
       .pipe(tap(() => this.worksState.update((works) => works.filter((work) => work.id !== id))));
   }
 
+  reload(): void {
+    this.load(this.currentQuery);
+  }
+
   dropLocal(id: string): void {
     this.worksState.update((works) => works.filter((work) => work.id !== id));
   }

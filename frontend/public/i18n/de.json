@@ -277,7 +277,8 @@
     "joined": "Du bist „{{name}}“ beigetreten.",
     "leaveTitle": "„{{name}}“ verlassen?",
     "leaveMessage": "Du verlierst den Zugriff auf dieses Werk.",
-    "leave": "Verlassen"
+    "leave": "Verlassen",
+    "accessLost": "Du hast keinen Zugriff mehr auf dieses Werk."
   },
   "notifications": {
     "title": "Benachrichtigungen",
@@ -289,5 +290,12 @@
     "removedFromWork": "Du wurdest aus „{{workName}}“ entfernt.",
     "workDeleted": "„{{workName}}“ wurde vom Besitzer gelöscht.",
     "ownershipTransferred": "Du bist jetzt Besitzer von „{{workName}}“. Es liegt in deinem Ordner „Shared with me“."
+  },
+  "realtime": {
+    "reconnecting": "Verbindung unterbrochen. Verbindung wird wiederhergestellt..."
+  },
+  "presence": {
+    "alsoHere": "Auch hier: {{names}}",
+    "here": "auch hier"
   }
 }

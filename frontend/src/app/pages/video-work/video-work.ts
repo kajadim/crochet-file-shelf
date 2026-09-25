@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, computed, effect, inject, signal, untracked, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, OnInit, computed, effect, inject, signal, untracked, viewChild } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -6,6 +6,8 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkComments } from '../../components/work-comments/work-comments';
+import { WorkPresence } from '../../components/work-presence/work-presence';
+import { WorkAccessWatcher } from '../../core/services/work-access-watcher';
 import { WorkApi } from '../../core/api/work-api';
 import { WorkRole } from '../../core/models/work.models';
 import { VideoStore } from '../../core/services/video-store';
@@ -15,7 +17,7 @@ import { formatTimestamp, splitTimestamp } from '../../core/utils/time';
 
 @Component({
   selector: 'app-video-work',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments, WorkPresence],
   templateUrl: './video-work.html',
   styleUrl: './video-work.scss',
 })
@@ -24,6 +26,8 @@ export class VideoWork implements OnInit {
   private readonly workApi = inject(WorkApi);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly watcher = inject(WorkAccessWatcher);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly transloco = inject(TranslocoService);
   private readonly youtube = inject(YouTubePlayerService);
 
@@ -107,6 +111,9 @@ export class VideoWork implements OnInit {
   }
 
   ngOnInit(): void {
+    const access = this.watcher.watch(this.workId, (role) => this.role.set(role));
+    this.destroyRef.onDestroy(() => access.unsubscribe());
+
     this.videoStore.reset();
     this.videoStore.load(this.workId);
     this.workApi.getById(this.workId).subscribe({

@@ -16,12 +16,15 @@ namespace backend.Services.Implementation
         private readonly IPatternRepository _patternRepository;
         private readonly IWorkAccessService _access;
         private readonly IYarnColorRepository _yarnColorRepository;
+        private readonly IRealtimeOutbox _outbox;
 
         public PatternExcelService(
             IPatternRepository patternRepository,
             IWorkAccessService access,
-            IYarnColorRepository yarnColorRepository)
+            IYarnColorRepository yarnColorRepository,
+            IRealtimeOutbox outbox)
         {
+            _outbox = outbox;
             _patternRepository = patternRepository;
             _access = access;
             _yarnColorRepository = yarnColorRepository;
@@ -132,6 +135,7 @@ namespace backend.Services.Implementation
             }
 
             await _patternRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.PatternResetAsync(workId));
 
             return PatternService.ToResponse(pattern, cells);
         }

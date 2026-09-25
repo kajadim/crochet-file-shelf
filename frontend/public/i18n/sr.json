@@ -277,7 +277,8 @@
     "joined": "Pridružila si se radu \"{{name}}\".",
     "leaveTitle": "Napustiti \"{{name}}\"?",
     "leaveMessage": "Izgubićeš pristup ovom radu.",
-    "leave": "Napusti"
+    "leave": "Napusti",
+    "accessLost": "Više nemaš pristup ovom radu."
   },
   "notifications": {
     "title": "Obaveštenja",
@@ -289,5 +290,12 @@
     "removedFromWork": "Uklonjena si sa rada \"{{workName}}\".",
     "workDeleted": "Vlasnik je obrisao rad \"{{workName}}\".",
     "ownershipTransferred": "Sada si vlasnik rada \"{{workName}}\". Nalazi se u tvom folderu \"Shared with me\"."
+  },
+  "realtime": {
+    "reconnecting": "Veza je prekinuta. Ponovno povezivanje..."
+  },
+  "presence": {
+    "alsoHere": "Još su ovde: {{names}}",
+    "here": "još su ovde"
   }
 }

@@ -11,15 +11,18 @@ namespace backend.Services.Implementation
         private readonly IPatternRepository _patternRepository;
         private readonly IWorkAccessService _access;
         private readonly IYarnColorRepository _yarnColorRepository;
+        private readonly IRealtimeOutbox _outbox;
 
         public PatternService(
             IPatternRepository patternRepository,
             IWorkAccessService access,
-            IYarnColorRepository yarnColorRepository)
+            IYarnColorRepository yarnColorRepository,
+            IRealtimeOutbox outbox)
         {
             _patternRepository = patternRepository;
             _access = access;
             _yarnColorRepository = yarnColorRepository;
+            _outbox = outbox;
         }
 
         public async Task<PatternResponse> GetAsync(Guid userId, Guid workId)
@@ -73,6 +76,7 @@ namespace backend.Services.Implementation
             pattern.CurrentRow = row;
             pattern.CurrentColumn = column;
             await _patternRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.PositionChangedAsync(workId, row, column));
 
             var cells = await _patternRepository.GetAllCellsAsync(pattern.Id);
             return ToResponse(pattern, cells);
@@ -89,6 +93,7 @@ namespace backend.Services.Implementation
 
             pattern.ActiveRow = request.Row;
             await _patternRepository.SaveChangesAsync();
+            _outbox.Enqueue(n => n.ActiveRowChangedAsync(workId, request.Row));
 
             var cells = await _patternRepository.GetAllCellsAsync(pattern.Id);
             return ToResponse(pattern, cells);
@@ -117,6 +122,7 @@ namespace backend.Services.Implementation
             }
 
             await _patternRepository.ApplyExpansionAsync(cells, request.Top, request.Left);
+            _outbox.Enqueue(n => n.PatternResetAsync(workId));
 
             return ToResponse(pattern, cells);
         }
@@ -159,6 +165,7 @@ namespace backend.Services.Implementation
             }
 
             await _patternRepository.ApplyExpansionAsync(remaining, -request.Top, -request.Left);
+            _outbox.Enqueue(n => n.PatternResetAsync(workId));
 
             return ToResponse(pattern, remaining);
         }
@@ -182,6 +189,7 @@ namespace backend.Services.Implementation
             }
 
             var colorIds = changes.Values.Where(c => c.ColorId.HasValue).Select(c => c.ColorId!.Value).Distinct();
+            var hexByColor = new Dictionary<Guid, string>();
             foreach (var colorId in colorIds)
             {
                 var color = await _yarnColorRepository.GetActiveByIdAsync(colorId, userId);
@@ -189,6 +197,7 @@ namespace backend.Services.Implementation
                 {
                     throw new NotFoundException(ErrorCode.ColorNotFound);
                 }
+                hexByColor[colorId] = color.HexValue;
             }
 
             var existingCells = await _patternRepository.GetAllCellsAsync(pattern.Id);
@@ -225,6 +234,11 @@ namespace backend.Services.Implementation
             }
 
             await _patternRepository.SaveChangesAsync();
+
+            var events = changes.Values
+                .Select(c => new CellEvent(c.Row, c.Column, c.ColorId, c.ColorId.HasValue ? hexByColor[c.ColorId.Value] : null))
+                .ToList();
+            _outbox.Enqueue(n => n.CellsChangedAsync(workId, events));
 
             var updatedCells = await _patternRepository.GetAllCellsAsync(pattern.Id);
             return ToResponse(pattern, updatedCells);

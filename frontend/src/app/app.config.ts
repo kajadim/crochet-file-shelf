@@ -17,6 +17,7 @@ import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
+import { connectionIdInterceptor } from './core/interceptors/connection-id-interceptor';
 import { languageInterceptor } from './core/interceptors/language-interceptor';
 import { Auth } from './core/services/auth';
 import { TranslocoHttpLoader } from './core/i18n/transloco-http-loader';
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([languageInterceptor, authInterceptor])),
+    provideHttpClient(withInterceptors([languageInterceptor, connectionIdInterceptor, authInterceptor])),
     provideTransloco({
       config: {
         availableLangs: SUPPORTED_LANGUAGES.map((option) => option.code),
