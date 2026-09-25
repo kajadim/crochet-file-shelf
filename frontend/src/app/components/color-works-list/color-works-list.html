@@ -1,7 +1,7 @@
 @if (loading()) {
   <p class="works-list__note">{{ 'common.loading' | transloco }}</p>
 } @else if (error()) {
-  <p class="alert alert--error">{{ error() }}</p>
+  <p role="alert" class="alert alert--error">{{ error() }}</p>
 } @else if (works().length === 0) {
   <p class="works-list__note">{{ 'palette.notUsedYet' | transloco }}</p>
 } @else {

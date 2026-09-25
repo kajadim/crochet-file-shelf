@@ -55,6 +55,25 @@ export class MatrixEditor implements OnInit {
     return meta ? Array.from({ length: meta.width }, (_, i) => i) : [];
   });
 
+  protected readonly focusCell = signal<{ row: number; column: number } | null>(null);
+  protected readonly gridFocused = signal(false);
+
+  protected readonly focusAnnouncement = computed(() => {
+    const cell = this.focusCell();
+    if (!cell) {
+      return '';
+    }
+
+    const painted = this.patternStore.cellAt(cell.row, cell.column);
+    const colorName = painted
+      ? (this.colorStore.colors().find((color) => color.id === painted.colorId)?.name ?? painted.hexValue)
+      : this.transloco.translate('matrixEditor.emptyCell');
+
+    return this.transloco.translate('matrixEditor.cellLabel', { row: cell.row + 1, column: cell.column + 1, color: colorName });
+  });
+
+  private flushTimer: ReturnType<typeof setTimeout> | null = null;
+
   protected readonly selectedTool = signal<PaintTool>(null);
   protected readonly isPainting = signal(false);
   protected readonly sidebarCollapsed = signal(false);
@@ -215,6 +234,147 @@ export class MatrixEditor implements OnInit {
       return;
     }
     this.patternStore.paintCell(row, column, null);
+    this.patternStore.flushPendingChanges();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  protected onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.patternStore.saveState() === 'saving') {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  }
+
+  protected onGridFocus(): void {
+    this.gridFocused.set(true);
+    if (!this.focusCell()) {
+      const meta = this.patternStore.pattern();
+      this.focusCell.set({ row: meta?.currentRow ?? 0, column: meta?.currentColumn ?? 0 });
+    }
+  }
+
+  protected onGridBlur(): void {
+    this.gridFocused.set(false);
+    this.flushNow();
+  }
+
+  protected onGridKeydown(event: KeyboardEvent): void {
+    if (event.target !== event.currentTarget || event.altKey || event.metaKey) {
+      return;
+    }
+
+    const meta = this.patternStore.pattern();
+    const current = this.focusCell();
+    if (!meta || !current) {
+      return;
+    }
+
+    let { row, column } = current;
+    let moved = true;
+
+    switch (event.key) {
+      case 'ArrowUp':
+        row -= 1;
+        break;
+      case 'ArrowDown':
+        row += 1;
+        break;
+      case 'ArrowLeft':
+        column -= 1;
+        break;
+      case 'ArrowRight':
+        column += 1;
+        break;
+      case 'PageUp':
+        row -= 10;
+        break;
+      case 'PageDown':
+        row += 10;
+        break;
+      case 'Home':
+        column = 0;
+        if (event.ctrlKey) {
+          row = 0;
+        }
+        break;
+      case 'End':
+        column = meta.width - 1;
+        if (event.ctrlKey) {
+          row = meta.height - 1;
+        }
+        break;
+      case ' ':
+      case 'Enter':
+        event.preventDefault();
+        this.paintFocused(row, column);
+        return;
+      case 'Delete':
+      case 'Backspace':
+        event.preventDefault();
+        this.eraseFocused(row, column);
+        return;
+      case 'c':
+      case 'C':
+        event.preventDefault();
+        if (this.canEdit()) {
+          this.patternStore.updatePosition(row, column);
+        }
+        return;
+      case 'r':
+      case 'R':
+        event.preventDefault();
+        this.onRowArrowClick(row);
+        return;
+      default:
+        moved = false;
+    }
+
+    if (!moved) {
+      return;
+    }
+
+    event.preventDefault();
+    row = Math.min(Math.max(row, 0), meta.height - 1);
+    column = Math.min(Math.max(column, 0), meta.width - 1);
+    this.focusCell.set({ row, column });
+
+    if (event.shiftKey && this.canEdit()) {
+      this.paintFocused(row, column);
+    }
+
+    requestAnimationFrame(() =>
+      document.getElementById(`cell-${row}-${column}`)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }),
+    );
+  }
+
+  private paintFocused(row: number, column: number): void {
+    if (!this.canEdit()) {
+      return;
+    }
+    this.paintAt(row, column);
+    this.scheduleFlush();
+  }
+
+  private eraseFocused(row: number, column: number): void {
+    if (!this.canEdit()) {
+      return;
+    }
+    this.patternStore.paintCell(row, column, null);
+    this.scheduleFlush();
+  }
+
+  private scheduleFlush(): void {
+    if (this.flushTimer) {
+      clearTimeout(this.flushTimer);
+    }
+    this.flushTimer = setTimeout(() => this.flushNow(), 300);
+  }
+
+  private flushNow(): void {
+    if (this.flushTimer) {
+      clearTimeout(this.flushTimer);
+      this.flushTimer = null;
+    }
     this.patternStore.flushPendingChanges();
   }
 

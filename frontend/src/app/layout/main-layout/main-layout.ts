@@ -24,6 +24,11 @@ export class MainLayout implements OnInit, OnDestroy {
     this.notifications.start();
   }
 
+  protected skipToContent(event: Event): void {
+    event.preventDefault();
+    document.getElementById('main-content')?.focus();
+  }
+
   ngOnDestroy(): void {
     this.notifications.stop();
     void this.realtime.stop();

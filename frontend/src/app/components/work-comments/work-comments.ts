@@ -1,5 +1,5 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit, inject, input, signal } from '@angular/core';
+import { Component, HostListener, OnInit, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
@@ -37,6 +37,14 @@ export class WorkComments implements OnInit {
   protected readonly editText = signal('');
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
+
+  @HostListener('window:beforeunload', ['$event'])
+  protected onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (hasContent(this.newText())) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  }
 
   ngOnInit(): void {
     this.store.reset();

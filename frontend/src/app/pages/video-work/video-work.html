@@ -11,10 +11,10 @@
       @if (videoStore.loading()) {
         <p class="video__note">{{ 'common.loading' | transloco }}</p>
       } @else if (videoStore.error()) {
-        <p class="alert alert--error">{{ videoStore.error() }}</p>
+        <p role="alert" class="alert alert--error">{{ videoStore.error() }}</p>
       } @else if (videoStore.video()) {
         @if (videoStore.available() === false) {
-          <p class="alert alert--error">{{ 'videoWork.linkNotWorking' | transloco }}</p>
+          <p role="alert" class="alert alert--error">{{ 'videoWork.linkNotWorking' | transloco }}</p>
         } @else if (videoStore.embeddable() === false) {
           <div class="video__blocked">
             <i class="pi pi-lock video__blocked-icon"></i>
@@ -76,7 +76,7 @@
           <p class="section-label video__section-label">{{ 'videoWork.startTime' | transloco }}</p>
 
           @if (timeError()) {
-            <p class="alert alert--error video__alert">{{ timeError() }}</p>
+            <p role="alert" class="alert alert--error video__alert">{{ timeError() }}</p>
           }
 
           <form [formGroup]="timeForm" (ngSubmit)="saveTimestamp()" class="video__form">
@@ -111,7 +111,7 @@
           <p class="section-label video__section-label">{{ 'videoWork.link' | transloco }}</p>
 
           @if (linkError()) {
-            <p class="alert alert--error video__alert">{{ linkError() }}</p>
+            <p role="alert" class="alert alert--error video__alert">{{ linkError() }}</p>
           }
 
           <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="video__form">

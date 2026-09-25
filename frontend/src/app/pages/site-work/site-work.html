@@ -18,7 +18,7 @@
         @if (siteStore.loading()) {
           <p class="site__note">{{ 'common.loading' | transloco }}</p>
         } @else if (siteStore.error()) {
-          <p class="alert alert--error">{{ siteStore.error() }}</p>
+          <p role="alert" class="alert alert--error">{{ siteStore.error() }}</p>
         } @else if (siteStore.site(); as site) {
           <div class="site__card">
             <div class="site__card-head">
@@ -50,7 +50,7 @@
               <p class="section-label site__section-label">{{ 'siteWork.link' | transloco }}</p>
 
               @if (linkError()) {
-                <p class="alert alert--error site__alert">{{ linkError() }}</p>
+                <p role="alert" class="alert alert--error site__alert">{{ linkError() }}</p>
               }
 
               <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="site__form">

@@ -90,3 +90,37 @@
   min-height: 0;
   overflow-y: auto;
 }
+
+@media (max-width: 719.98px) {
+  .topbar {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+
+    &__left {
+      gap: 0.5rem;
+    }
+
+    &__brand {
+      font-size: 0.95rem;
+    }
+
+    &__link {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    &__profile {
+      padding-right: 0.25rem;
+    }
+
+    &__profile-name {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 519.98px) {
+  .topbar__brand {
+    display: none;
+  }
+}

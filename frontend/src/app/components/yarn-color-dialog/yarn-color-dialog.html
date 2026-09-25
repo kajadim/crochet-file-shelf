@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
   @if (error()) {
-    <p class="alert alert--error">{{ error() }}</p>
+    <p role="alert" class="alert alert--error">{{ error() }}</p>
   }
 
   <div class="field">

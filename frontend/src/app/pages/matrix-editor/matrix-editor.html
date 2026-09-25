@@ -4,7 +4,27 @@
     <a routerLink="/" class="matrix__back">
       <i class="pi pi-arrow-left"></i>
     </a>
-    <app-work-presence [workId]="workId" />
+    <div class="matrix__topbar-end">
+      @if (canEdit()) {
+        <span class="matrix__status" role="status" aria-live="polite">
+          @switch (patternStore.saveState()) {
+            @case ('saving') {
+              <i class="pi pi-spin pi-spinner"></i>
+              {{ 'matrixEditor.saving' | transloco }}
+            }
+            @case ('saved') {
+              <i class="pi pi-check"></i>
+              {{ 'matrixEditor.saved' | transloco }}
+            }
+            @case ('error') {
+              <i class="pi pi-exclamation-triangle"></i>
+              {{ 'matrixEditor.saveFailed' | transloco }}
+            }
+          }
+        </span>
+      }
+      <app-work-presence [workId]="workId" />
+    </div>
   </div>
 
   <p-drawer [(visible)]="commentsOpen" position="right" [style]="{ width: '28rem' }" [header]="'comments.title' | transloco">
@@ -21,11 +41,11 @@
       <p class="matrix__setup-subtitle">{{ 'matrixEditor.setupSubtitle' | transloco }}</p>
 
       @if (setupError()) {
-        <p class="alert alert--error matrix__alert">{{ setupError() }}</p>
+        <p role="alert" class="alert alert--error matrix__alert">{{ setupError() }}</p>
       }
 
       @if (importError()) {
-        <p class="alert alert--error matrix__alert">{{ importError() }}</p>
+        <p role="alert" class="alert alert--error matrix__alert">{{ importError() }}</p>
       }
 
       @if (importPreview(); as preview) {
@@ -54,7 +74,7 @@
           <p class="matrix__hint">{{ 'matrixEditor.importColorsHint' | transloco }}</p>
 
           @if (preview.skippedCells > 0) {
-            <div class="alert alert--warning">
+            <div role="status" class="alert alert--warning">
               <p class="matrix__warn-title">{{ 'matrixEditor.importSkipped' | transloco: { count: preview.skippedCells } }}</p>
               <ul class="matrix__warn-list">
                 @for (warning of preview.warnings; track warning.cell) {
@@ -110,12 +130,21 @@
   } @else if (patternStore.loading()) {
     <p class="matrix__note">{{ 'common.loading' | transloco }}</p>
   } @else if (patternStore.error()) {
-    <p class="alert alert--error matrix__alert matrix__alert--page">{{ patternStore.error() }}</p>
+    <p role="alert" class="alert alert--error matrix__alert matrix__alert--page">{{ patternStore.error() }}</p>
   } @else if (patternStore.pattern(); as pattern) {
     <div class="matrix__scroll">
         <div class="matrix__board">
+        <p id="matrix-help" class="sr-only">{{ 'matrixEditor.keyboardHelp' | transloco }}</p>
+        <p class="sr-only" aria-live="polite">{{ focusAnnouncement() }}</p>
         <div
           class="matrix__grid"
+          tabindex="0"
+          role="application"
+          [attr.aria-label]="'matrixEditor.gridLabel' | transloco"
+          aria-describedby="matrix-help"
+          (keydown)="onGridKeydown($event)"
+          (focus)="onGridFocus()"
+          (blur)="onGridBlur()"
           [style.grid-template-columns]="edgeSize() + 'px repeat(' + pattern.width + ', ' + cellSize() + 'px) ' + edgeSize() + 'px'"
           [style.grid-template-rows]="headerSize() + 'px repeat(' + pattern.height + ', ' + cellSize() + 'px) ' + headerSize() + 'px'"
         >
@@ -143,6 +172,8 @@
             @for (col of columns(); track col) {
               <div
                 class="matrix__cell"
+                [id]="'cell-' + row + '-' + col"
+                [class.is-focus]="gridFocused() && focusCell()?.row === row && focusCell()?.column === col"
                 [style.height.px]="cellSize()"
                 [style.width.px]="cellSize()"
                 [class.is-current]="row === pattern.currentRow && col === pattern.currentColumn"
@@ -283,6 +314,7 @@
                 type="button"
                 class="matrix__tool matrix__tool--eraser"
                 [class.is-selected]="selectedTool() === 'eraser'"
+                [attr.aria-pressed]="selectedTool() === 'eraser'"
                 [attr.aria-label]="'matrixEditor.noColor' | transloco"
                 [title]="'matrixEditor.noColor' | transloco"
                 (click)="selectTool('eraser')"
@@ -295,6 +327,8 @@
                   type="button"
                   class="matrix__tool"
                   [class.is-selected]="selectedTool() === color.id"
+                  [attr.aria-pressed]="selectedTool() === color.id"
+                  [attr.aria-label]="color.name"
                   [style.background-color]="color.hexValue"
                   [title]="color.name"
                   (click)="selectTool(color.id)"
@@ -341,7 +375,7 @@
 
           @if (isOpen('add')) {
             @if (expandError()) {
-              <p class="alert alert--error matrix__alert-inline">{{ expandError() }}</p>
+              <p role="alert" class="alert alert--error matrix__alert-inline">{{ expandError() }}</p>
             }
 
             <form [formGroup]="expandForm" (ngSubmit)="expandPattern()" class="matrix__cells-form">
@@ -383,7 +417,7 @@
 
           @if (isOpen('remove')) {
             @if (shrinkError()) {
-              <p class="alert alert--error matrix__alert-inline">{{ shrinkError() }}</p>
+              <p role="alert" class="alert alert--error matrix__alert-inline">{{ shrinkError() }}</p>
             }
 
             <form [formGroup]="shrinkForm" (ngSubmit)="shrinkPattern()" class="matrix__cells-form">

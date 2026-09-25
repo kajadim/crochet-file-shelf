@@ -250,3 +250,21 @@
     color: var(--c-text-muted);
   }
 }
+
+@media (max-width: 639.98px) {
+  .profile {
+    padding: 1rem;
+
+    &__identity {
+      flex-wrap: wrap;
+    }
+
+    &__names {
+      min-width: 10rem;
+    }
+
+    &__tiles {
+      gap: 0.5rem;
+    }
+  }
+}

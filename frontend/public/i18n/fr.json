@@ -86,7 +86,8 @@
       "dashboard": "Tableau de bord",
       "palette": "Palette"
     },
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "skipToContent": "Aller au contenu"
   },
   "dashboard": {
     "newFolder": "Nouveau dossier",
@@ -120,7 +121,8 @@
     "folderEmpty": "Vide",
     "filterSharing": "Partage",
     "sharingShared": "Partagé",
-    "sharingPrivate": "Non partagé"
+    "sharingPrivate": "Non partagé",
+    "foldersToggle": "Afficher les dossiers"
   },
   "palette": {
     "title": "Ma palette",
@@ -221,11 +223,21 @@
     "importWarningUnresolvedColor": "couleur non prise en charge",
     "importWarningUnsupportedFill": "motif de remplissage non pris en charge",
     "viewOnlyBadge": "Lecture seule",
-    "notSetUpYet": "Le propriétaire n'a pas encore configuré cette grille."
+    "notSetUpYet": "Le propriétaire n'a pas encore configuré cette grille.",
+    "saving": "Enregistrement...",
+    "saved": "Toutes les modifications sont enregistrées",
+    "saveFailed": "Échec de l'enregistrement. La matrice a été rechargée.",
+    "gridLabel": "Grille de la matrice",
+    "keyboardHelp": "Utilisez les flèches pour passer d'une cellule à l'autre. Espace ou Entrée colorie avec la couleur choisie, Suppr efface la cellule, C la marque comme position actuelle, R marque sa ligne, Maj avec une flèche colorie en se déplaçant.",
+    "cellLabel": "Ligne {{row}}, colonne {{column}}, {{color}}",
+    "emptyCell": "vide"
   },
   "folderTree": {
     "newSubfolder": "Nouveau sous-dossier",
-    "folderActions": "Actions sur le dossier"
+    "folderActions": "Actions sur le dossier",
+    "collapse": "Réduire le dossier",
+    "expand": "Développer le dossier",
+    "label": "Dossiers"
   },
   "workCard": {
     "matrix": "Grille",
@@ -316,7 +328,8 @@
     "removedFromWork": "Tu as été retiré de « {{workName}} ».",
     "workDeleted": "« {{workName}} » a été supprimé par son propriétaire.",
     "ownershipTransferred": "Tu es maintenant propriétaire de « {{workName}} ». Il se trouve dans ton dossier « Shared with me ».",
-    "commentAdded": "{{userName}} a commenté « {{workName}} »."
+    "commentAdded": "{{userName}} a commenté « {{workName}} ».",
+    "panel": "Notifications"
   },
   "realtime": {
     "reconnecting": "Connexion perdue. Reconnexion..."
@@ -344,6 +357,10 @@
     "changePhoto": "Changer la photo",
     "removePhoto": "Supprimer la photo",
     "bio": "À propos de vous",
-    "avatarReadError": "Ce fichier n'a pas pu être lu comme une image"
+    "avatarReadError": "Ce fichier n'a pas pu être lu comme une image",
+    "theme": "Thème",
+    "theme_system": "Suivre le système",
+    "theme_light": "Clair",
+    "theme_dark": "Sombre"
   }
 }

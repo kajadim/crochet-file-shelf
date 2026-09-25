@@ -1,4 +1,4 @@
-<nav class="tree" aria-label="Folders">
+<nav class="tree" [attr.aria-label]="'folderTree.label' | transloco">
   @for (row of rows(); track row.kind === 'folder' ? row.folder.id : row.work.id) {
     @if (row.kind === 'folder') {
       <div class="tree__row" [class.is-selected]="row.folder.id === selectedId()" [style.padding-left.rem]="row.depth">
@@ -6,7 +6,8 @@
           type="button"
           class="tree__toggle"
           [class.is-hidden]="!row.hasChildren"
-          [attr.aria-label]="row.expanded ? 'Collapse folder' : 'Expand folder'"
+          [attr.aria-label]="(row.expanded ? 'folderTree.collapse' : 'folderTree.expand') | transloco"
+          [attr.aria-expanded]="row.expanded"
           (click)="toggleFolder.emit(row.folder.id)"
         >
           <i class="pi" [class.pi-chevron-down]="row.expanded" [class.pi-chevron-right]="!row.expanded"></i>

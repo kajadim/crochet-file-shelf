@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, effect, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES } from '../i18n/languages';
 
@@ -8,6 +8,12 @@ export class Language {
 
   readonly options = SUPPORTED_LANGUAGES;
   readonly current = this.transloco.activeLang;
+
+  constructor() {
+    effect(() => {
+      document.documentElement.lang = this.current();
+    });
+  }
 
   setLanguage(code: string): void {
     if (!SUPPORTED_LANGUAGES.some((option) => option.code === code)) {

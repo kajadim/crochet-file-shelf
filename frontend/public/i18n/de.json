@@ -86,7 +86,8 @@
       "dashboard": "Übersicht",
       "palette": "Palette"
     },
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "skipToContent": "Zum Inhalt springen"
   },
   "dashboard": {
     "newFolder": "Neuer Ordner",
@@ -120,7 +121,8 @@
     "folderEmpty": "Leer",
     "filterSharing": "Teilen",
     "sharingShared": "Geteilt",
-    "sharingPrivate": "Nicht geteilt"
+    "sharingPrivate": "Nicht geteilt",
+    "foldersToggle": "Ordner anzeigen"
   },
   "palette": {
     "title": "Meine Palette",
@@ -221,11 +223,21 @@
     "importWarningUnresolvedColor": "nicht unterstützte Farbe",
     "importWarningUnsupportedFill": "nicht unterstütztes Füllmuster",
     "viewOnlyBadge": "Nur ansehen",
-    "notSetUpYet": "Der Besitzer hat diese Matrix noch nicht eingerichtet."
+    "notSetUpYet": "Der Besitzer hat diese Matrix noch nicht eingerichtet.",
+    "saving": "Speichern...",
+    "saved": "Alle Änderungen gespeichert",
+    "saveFailed": "Speichern fehlgeschlagen. Die Matrix wurde neu geladen.",
+    "gridLabel": "Matrixraster",
+    "keyboardHelp": "Mit den Pfeiltasten bewegst du dich zwischen den Feldern. Leertaste oder Enter färbt mit der gewählten Farbe, Entf leert das Feld, C markiert es als aktuelle Position, R markiert die Reihe, Umschalt mit Pfeil färbt beim Bewegen.",
+    "cellLabel": "Reihe {{row}}, Spalte {{column}}, {{color}}",
+    "emptyCell": "leer"
   },
   "folderTree": {
     "newSubfolder": "Neuer Unterordner",
-    "folderActions": "Ordneraktionen"
+    "folderActions": "Ordneraktionen",
+    "collapse": "Ordner einklappen",
+    "expand": "Ordner ausklappen",
+    "label": "Ordner"
   },
   "workCard": {
     "matrix": "Matrix",
@@ -316,7 +328,8 @@
     "removedFromWork": "Du wurdest aus „{{workName}}“ entfernt.",
     "workDeleted": "„{{workName}}“ wurde vom Besitzer gelöscht.",
     "ownershipTransferred": "Du bist jetzt Besitzer von „{{workName}}“. Es liegt in deinem Ordner „Shared with me“.",
-    "commentAdded": "{{userName}} hat \"{{workName}}\" kommentiert."
+    "commentAdded": "{{userName}} hat \"{{workName}}\" kommentiert.",
+    "panel": "Benachrichtigungen"
   },
   "realtime": {
     "reconnecting": "Verbindung unterbrochen. Verbindung wird wiederhergestellt..."
@@ -344,6 +357,10 @@
     "changePhoto": "Foto ändern",
     "removePhoto": "Foto entfernen",
     "bio": "Über dich",
-    "avatarReadError": "Diese Datei konnte nicht als Bild gelesen werden"
+    "avatarReadError": "Diese Datei konnte nicht als Bild gelesen werden",
+    "theme": "Design",
+    "theme_system": "Wie System",
+    "theme_light": "Hell",
+    "theme_dark": "Dunkel"
   }
 }

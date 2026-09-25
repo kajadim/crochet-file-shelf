@@ -2,6 +2,7 @@
   type="button"
   class="action-menu__trigger"
   [attr.aria-label]="ariaLabel() | transloco"
+  aria-haspopup="menu"
   [attr.aria-expanded]="open()"
   (click)="toggle($event)"
 >
@@ -9,10 +10,11 @@
 </button>
 
 @if (open()) {
-  <div class="action-menu__panel" [style.top.px]="position().top" [style.left.px]="position().left">
+  <div class="action-menu__panel" role="menu" [style.top.px]="position().top" [style.left.px]="position().left">
     @for (item of items(); track item.label) {
       <button
         type="button"
+        role="menuitem"
         class="action-menu__item"
         [class.action-menu__item--danger]="item.danger"
         (click)="select($event, item)"

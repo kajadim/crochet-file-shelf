@@ -1,3 +1,5 @@
+<a class="skip-link" href="#main-content" (click)="skipToContent($event)">{{ 'layout.skipToContent' | transloco }}</a>
+
 <p-toast />
 
 @if (realtime.state() === 'reconnecting' || realtime.state() === 'disconnected') {
@@ -34,12 +36,12 @@
     >
       @if (auth.user(); as user) {
         <app-avatar [userId]="user.id" [name]="user.displayName" [version]="user.avatarVersion" [size]="28" />
-        {{ user.displayName }}
+        <span class="topbar__profile-name">{{ user.displayName }}</span>
       }
     </a>
   </div>
 </header>
 
-<main class="content">
+<main class="content" id="main-content" tabindex="-1">
   <router-outlet />
 </main>

@@ -2,7 +2,7 @@
   @if (loading()) {
     <p class="profile__note">{{ 'common.loading' | transloco }}</p>
   } @else if (error()) {
-    <p class="alert alert--error">{{ error() }}</p>
+    <p role="alert" class="alert alert--error">{{ error() }}</p>
   } @else if (profile(); as p) {
     <section class="profile__card">
       <div class="profile__identity">
@@ -32,7 +32,7 @@
       } @else {
         <div class="profile__edit">
           @if (avatarError()) {
-            <p class="alert alert--error">{{ avatarError() }}</p>
+            <p role="alert" class="alert alert--error">{{ avatarError() }}</p>
           }
           <div class="profile__avatar-actions">
             <input #avatarInput type="file" accept="image/*" class="profile__file" (change)="onAvatarSelected($event)" />
@@ -58,7 +58,7 @@
           </div>
 
           @if (editError()) {
-            <p class="alert alert--error">{{ editError() }}</p>
+            <p role="alert" class="alert alert--error">{{ editError() }}</p>
           }
 
           <form [formGroup]="form" (ngSubmit)="save()" class="profile__form">
@@ -211,8 +211,17 @@
         </select>
       </div>
 
+      <div class="profile__row">
+        <label for="profile-theme" class="field__label">{{ 'profile.theme' | transloco }}</label>
+        <select id="profile-theme" class="native-select" (change)="onThemeChange($event)">
+          @for (mode of theme.options; track mode) {
+            <option [value]="mode" [selected]="mode === theme.mode()">{{ 'profile.theme_' + mode | transloco }}</option>
+          }
+        </select>
+      </div>
+
       @if (resetError()) {
-        <p class="alert alert--error">{{ resetError() }}</p>
+        <p role="alert" class="alert alert--error">{{ resetError() }}</p>
       }
 
       <div class="profile__buttons">

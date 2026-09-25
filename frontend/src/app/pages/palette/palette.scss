@@ -162,3 +162,18 @@
     }
   }
 }
+
+@media (max-width: 639.98px) {
+  .palette {
+    padding: 1rem;
+
+    &__search {
+      flex: 1 1 100%;
+    }
+
+    &__search-input,
+    &__sort {
+      width: 100%;
+    }
+  }
+}

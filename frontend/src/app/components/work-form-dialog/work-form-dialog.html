@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
   @if (error()) {
-    <p class="alert alert--error">{{ error() }}</p>
+    <p role="alert" class="alert alert--error">{{ error() }}</p>
   }
 
   <div>
@@ -68,7 +68,7 @@
         <input #matrixFile type="file" accept=".xlsx" class="work-form__file" (change)="onFileSelected($event)" />
 
         @if (importError()) {
-          <p class="alert alert--error">{{ importError() }}</p>
+          <p role="alert" class="alert alert--error">{{ importError() }}</p>
         }
 
         @if (importPreview(); as preview) {

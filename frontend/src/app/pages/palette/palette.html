@@ -9,7 +9,7 @@
   </div>
 
   @if (loadError()) {
-    <p class="alert alert--error">{{ loadError() }}</p>
+    <p role="alert" class="alert alert--error">{{ loadError() }}</p>
   } @else if (!store.loaded()) {
     <p class="palette__note">{{ 'common.loading' | transloco }}</p>
   } @else if (store.colors().length === 0 && !search() && !searchInput()) {
@@ -25,6 +25,7 @@
           pInputText
           type="text"
           class="palette__search-input"
+          [attr.aria-label]="'palette.searchPlaceholder' | transloco"
           maxlength="100"
           [ngModel]="searchInput()"
           (ngModelChange)="onSearchInput($event ?? '')"

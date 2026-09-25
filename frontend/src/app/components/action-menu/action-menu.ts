@@ -38,6 +38,7 @@ export class ActionMenu {
       left: Math.min(Math.max(8, rect.right - width), window.innerWidth - width - 8),
     });
     this.open.set(true);
+    setTimeout(() => this.elementRef.nativeElement.querySelector('.action-menu__item')?.focus());
   }
 
   protected select(event: MouseEvent, item: ActionMenuItem): void {

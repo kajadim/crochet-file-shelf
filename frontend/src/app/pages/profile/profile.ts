@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, OnInit, computed, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -14,6 +14,7 @@ import { ProfileApi } from '../../core/api/profile-api';
 import { Profile, ProfileSharedWork } from '../../core/models/profile.models';
 import { Auth } from '../../core/services/auth';
 import { Language } from '../../core/services/language';
+import { Theme, ThemeMode } from '../../core/services/theme';
 import { cropToAvatar } from '../../core/utils/avatar-image';
 import { extractErrorMessage } from '../../core/utils/http-error';
 import { USERNAME_PATTERN, usernameAvailableValidator } from '../../core/utils/username';
@@ -34,6 +35,7 @@ export class ProfilePage implements OnInit {
 
   protected readonly auth = inject(Auth);
   protected readonly language = inject(Language);
+  protected readonly theme = inject(Theme);
 
   protected readonly profile = signal<Profile | null>(null);
   protected readonly loading = signal(true);
@@ -70,6 +72,14 @@ export class ProfilePage implements OnInit {
       { key: 'workCard.site', icon: 'pi-globe', count: counts?.site ?? 0 },
     ];
   });
+
+  @HostListener('window:beforeunload', ['$event'])
+  protected onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.editing() && this.form.dirty) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  }
 
   ngOnInit(): void {
     this.api.get().subscribe({
@@ -189,6 +199,10 @@ export class ProfilePage implements OnInit {
   protected openWork(work: ProfileSharedWork): void {
     const routes = { Pattern: 'matrix', Video: 'video', Site: 'site' };
     this.router.navigate(['/works', work.workId, routes[work.type]]);
+  }
+
+  protected onThemeChange(event: Event): void {
+    this.theme.setMode((event.target as HTMLSelectElement).value as ThemeMode);
   }
 
   protected onLanguageChange(event: Event): void {

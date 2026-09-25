@@ -4,7 +4,7 @@
   }
 
   @if (error()) {
-    <p class="alert alert--error">{{ error() }}</p>
+    <p role="alert" class="alert alert--error">{{ error() }}</p>
   }
 
   @if (canWrite()) {
@@ -45,7 +45,7 @@
   @if (store.loading()) {
     <p class="comments__note">{{ 'common.loading' | transloco }}</p>
   } @else if (store.error()) {
-    <p class="alert alert--error">{{ store.error() }}</p>
+    <p role="alert" class="alert alert--error">{{ store.error() }}</p>
   } @else if (store.comments().length === 0) {
     <p class="comments__note">{{ 'comments.empty' | transloco }}</p>
   } @else {

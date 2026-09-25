@@ -20,6 +20,8 @@ import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { connectionIdInterceptor } from './core/interceptors/connection-id-interceptor';
 import { languageInterceptor } from './core/interceptors/language-interceptor';
 import { Auth } from './core/services/auth';
+import { Language } from './core/services/language';
+import { Theme } from './core/services/theme';
 import { TranslocoHttpLoader } from './core/i18n/transloco-http-loader';
 import { SUPPORTED_LANGUAGES, getInitialLanguage } from './core/i18n/languages';
 
@@ -42,9 +44,13 @@ export const appConfig: ApplicationConfig = {
       const transloco = inject(TranslocoService);
       return firstValueFrom(transloco.load(transloco.getActiveLang()));
     }),
+    provideAppInitializer(() => {
+      inject(Theme);
+      inject(Language);
+    }),
     provideAppInitializer(() => inject(Auth).restoreSession()),
     provideAnimationsAsync(),
-    providePrimeNG({ theme: { preset: CrochetTheme, options: { darkModeSelector: false } } }),
+    providePrimeNG({ theme: { preset: CrochetTheme, options: { darkModeSelector: '[data-theme="dark"]' } } }),
     DialogService,
     MessageService,
   ],

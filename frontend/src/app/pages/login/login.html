@@ -5,10 +5,10 @@
     <p class="auth-card__title">{{ 'auth.login.title' | transloco }}</p>
 
     @if (notice()) {
-      <p class="alert alert--success auth-card__alert">{{ notice() }}</p>
+      <p role="status" class="alert alert--success auth-card__alert">{{ notice() }}</p>
     }
     @if (error()) {
-      <p class="alert alert--error auth-card__alert">{{ error() }}</p>
+      <p role="alert" class="alert alert--error auth-card__alert">{{ error() }}</p>
     }
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="auth-card__form">

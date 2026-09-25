@@ -86,7 +86,8 @@
       "dashboard": "Početna",
       "palette": "Paleta"
     },
-    "logout": "Odjava"
+    "logout": "Odjava",
+    "skipToContent": "Pređi na sadržaj"
   },
   "dashboard": {
     "newFolder": "Novi folder",
@@ -120,7 +121,8 @@
     "folderEmpty": "Prazan",
     "filterSharing": "Deljenje",
     "sharingShared": "Podeljeno",
-    "sharingPrivate": "Nije podeljeno"
+    "sharingPrivate": "Nije podeljeno",
+    "foldersToggle": "Prikaži foldere"
   },
   "palette": {
     "title": "Moja paleta",
@@ -221,11 +223,21 @@
     "importWarningUnresolvedColor": "boja nije podržana",
     "importWarningUnsupportedFill": "uzorak popune nije podržan",
     "viewOnlyBadge": "Samo pregled",
-    "notSetUpYet": "Vlasnik još nije podesio ovu matricu."
+    "notSetUpYet": "Vlasnik još nije podesio ovu matricu.",
+    "saving": "Čuvanje...",
+    "saved": "Sve izmene su sačuvane",
+    "saveFailed": "Čuvanje nije uspelo. Matrica je ponovo učitana.",
+    "gridLabel": "Mreža matrice",
+    "keyboardHelp": "Strelicama se krećeš između polja. Razmak ili Enter boji izabranom bojom, Delete briše polje, C ga označava kao trenutnu poziciju, R označava njegov red, a Shift sa strelicom boji dok se krećeš.",
+    "cellLabel": "Red {{row}}, kolona {{column}}, {{color}}",
+    "emptyCell": "prazno"
   },
   "folderTree": {
     "newSubfolder": "Novi podfolder",
-    "folderActions": "Akcije nad folderom"
+    "folderActions": "Akcije nad folderom",
+    "collapse": "Skupi folder",
+    "expand": "Raširi folder",
+    "label": "Folderi"
   },
   "workCard": {
     "matrix": "Matrica",
@@ -316,7 +328,8 @@
     "removedFromWork": "Uklonjena si sa rada \"{{workName}}\".",
     "workDeleted": "Vlasnik je obrisao rad \"{{workName}}\".",
     "ownershipTransferred": "Sada si vlasnik rada \"{{workName}}\". Nalazi se u tvom folderu \"Shared with me\".",
-    "commentAdded": "{{userName}} je ostavio/la komentar na radu \"{{workName}}\"."
+    "commentAdded": "{{userName}} je ostavio/la komentar na radu \"{{workName}}\".",
+    "panel": "Obaveštenja"
   },
   "realtime": {
     "reconnecting": "Veza je prekinuta. Ponovno povezivanje..."
@@ -344,6 +357,10 @@
     "changePhoto": "Promeni sliku",
     "removePhoto": "Ukloni sliku",
     "bio": "O vama",
-    "avatarReadError": "Ovaj fajl nije moguće pročitati kao sliku"
+    "avatarReadError": "Ovaj fajl nije moguće pročitati kao sliku",
+    "theme": "Tema",
+    "theme_system": "Prema sistemu",
+    "theme_light": "Svetla",
+    "theme_dark": "Tamna"
   }
 }

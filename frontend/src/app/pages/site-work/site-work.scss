@@ -131,3 +131,25 @@
     border-left: 1px solid var(--c-border);
   }
 }
+
+@media (max-width: 1023.98px) {
+  .site {
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+
+    &__stage {
+      flex: none;
+    }
+
+    &__scroll {
+      overflow: visible;
+    }
+
+    &__comments {
+      width: 100%;
+      border-top: 1px solid var(--c-border);
+      border-left: 0;
+    }
+  }
+}

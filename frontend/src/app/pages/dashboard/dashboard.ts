@@ -53,6 +53,7 @@ export class Dashboard implements OnInit {
   private readonly realtime = inject(Realtime);
 
   protected readonly loadError = signal<string | null>(null);
+  protected readonly sidebarOpen = signal(false);
 
   protected readonly typeOptions: { value: WorkType; label: string }[] = [
     { value: 'Pattern', label: 'workCard.matrix' },
@@ -189,11 +190,13 @@ export class Dashboard implements OnInit {
   }
 
   protected openWork(work: Work): void {
+    this.sidebarOpen.set(false);
     const routes = { Pattern: 'matrix', Video: 'video', Site: 'site' };
     this.router.navigate(['/works', work.id, routes[work.type]]);
   }
 
   protected selectFolder(id: string | null): void {
+    this.sidebarOpen.set(false);
     this.sharedView.set(false);
     this.folderStore.select(id);
   }
@@ -214,6 +217,7 @@ export class Dashboard implements OnInit {
   }
 
   protected selectShared(): void {
+    this.sidebarOpen.set(false);
     this.sharedView.set(true);
   }
 

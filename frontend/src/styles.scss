@@ -1,6 +1,8 @@
 @import "primeicons/primeicons.css";
 
 :root {
+  color-scheme: light;
+
   --c-bg: #faf6f0;
   --c-surface: #fffdf9;
   --c-surface-soft: #f4eee5;
@@ -9,23 +11,23 @@
   --c-border-strong: #d9ccba;
 
   --c-text: #3d342c;
-  --c-text-soft: #6f6357;
-  --c-text-muted: #8a7d6f;
-  --c-text-faint: #b1a597;
+  --c-text-soft: #665a4d;
+  --c-text-muted: #74675a;
+  --c-text-faint: #948879;
 
-  --c-primary: #b5705a;
-  --c-primary-hover: #a1604b;
+  --c-primary: #a8634d;
+  --c-primary-hover: #93553f;
   --c-primary-dark: #8b5140;
   --c-primary-soft: #f7e6df;
 
   --c-sage: #8ea48a;
-  --c-sage-dark: #5f7a5b;
+  --c-sage-dark: #4d6a49;
   --c-sage-soft: #e6ece2;
 
   --c-amber-soft: #f6e8c6;
   --c-amber-text: #7a5b1c;
 
-  --c-danger: #b5554b;
+  --c-danger: #a3453c;
   --c-danger-soft: #f8e3e0;
   --c-success-soft: #e6ece2;
   --c-success-text: #4d6a49;
@@ -53,7 +55,6 @@ html,
 body {
   height: 100%;
   margin: 0;
-  color-scheme: light;
 }
 
 body {
@@ -134,6 +135,44 @@ small {
 :focus-visible {
   outline: 2px solid var(--c-primary);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--c-primary-hover);
+  border-radius: var(--radius-sm);
+
+  &:focus {
+    top: 0.75rem;
+  }
 }
 
 app-dashboard,
@@ -320,5 +359,63 @@ app-video-work {
   &--view-only {
     color: var(--c-amber-text);
     background: var(--c-amber-soft);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-bg: #1a1613;
+  --c-surface: #231e1a;
+  --c-surface-soft: #2e2823;
+  --c-surface-hover: #372f29;
+  --c-border: #3d3630;
+  --c-border-strong: #524941;
+
+  --c-text: #f0e8dc;
+  --c-text-soft: #cdbfae;
+  --c-text-muted: #a99b89;
+  --c-text-faint: #8a7d6f;
+
+  --c-primary: #d3937c;
+  --c-primary-hover: #e2b3a2;
+  --c-primary-dark: #e2b3a2;
+  --c-primary-soft: #3b2b25;
+
+  --c-sage: #a3b89f;
+  --c-sage-dark: #b7cbb3;
+  --c-sage-soft: #2a3328;
+
+  --c-amber-soft: #3d3320;
+  --c-amber-text: #e8cf94;
+
+  --c-danger: #e08a80;
+  --c-danger-soft: #3f2622;
+  --c-success-soft: #2a3328;
+  --c-success-text: #b7cbb3;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  .alert--error {
+    color: #f2b8b0;
+  }
+}
+
+.p-dialog {
+  max-width: 95vw;
+}
+
+.p-drawer {
+  max-width: 100vw;
+}
+
+@media (max-width: 1023.98px) {
+  app-dashboard,
+  app-matrix-editor,
+  app-site-work,
+  app-video-work {
+    height: auto;
+    min-height: 100%;
   }
 }

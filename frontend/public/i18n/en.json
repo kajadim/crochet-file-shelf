@@ -86,7 +86,8 @@
       "dashboard": "Dashboard",
       "palette": "Palette"
     },
-    "logout": "Log out"
+    "logout": "Log out",
+    "skipToContent": "Skip to content"
   },
   "dashboard": {
     "newFolder": "New folder",
@@ -120,7 +121,8 @@
     "folderEmpty": "Empty",
     "filterSharing": "Sharing",
     "sharingShared": "Shared",
-    "sharingPrivate": "Not shared"
+    "sharingPrivate": "Not shared",
+    "foldersToggle": "Show folders"
   },
   "palette": {
     "title": "My palette",
@@ -221,11 +223,21 @@
     "importWarningUnresolvedColor": "unsupported color",
     "importWarningUnsupportedFill": "unsupported fill pattern",
     "viewOnlyBadge": "View only",
-    "notSetUpYet": "The owner has not set up this matrix yet."
+    "notSetUpYet": "The owner has not set up this matrix yet.",
+    "saving": "Saving...",
+    "saved": "All changes saved",
+    "saveFailed": "Could not save. Reloaded the matrix.",
+    "gridLabel": "Matrix grid",
+    "keyboardHelp": "Use the arrow keys to move between cells. Space or Enter paints the selected color, Delete clears the cell, C marks it as the current position, R marks its row, Shift with an arrow paints while moving.",
+    "cellLabel": "Row {{row}}, column {{column}}, {{color}}",
+    "emptyCell": "empty"
   },
   "folderTree": {
     "newSubfolder": "New subfolder",
-    "folderActions": "Folder actions"
+    "folderActions": "Folder actions",
+    "collapse": "Collapse folder",
+    "expand": "Expand folder",
+    "label": "Folders"
   },
   "workCard": {
     "matrix": "Matrix",
@@ -316,7 +328,8 @@
     "removedFromWork": "You were removed from \"{{workName}}\".",
     "workDeleted": "\"{{workName}}\" was deleted by its owner.",
     "ownershipTransferred": "You are now the owner of \"{{workName}}\". It is in your \"Shared with me\" folder.",
-    "commentAdded": "{{userName}} commented on \"{{workName}}\"."
+    "commentAdded": "{{userName}} commented on \"{{workName}}\".",
+    "panel": "Notifications"
   },
   "realtime": {
     "reconnecting": "Connection lost. Reconnecting..."
@@ -344,6 +357,10 @@
     "changePhoto": "Change photo",
     "removePhoto": "Remove photo",
     "bio": "About you",
-    "avatarReadError": "This file could not be read as an image"
+    "avatarReadError": "This file could not be read as an image",
+    "theme": "Theme",
+    "theme_system": "Follow system",
+    "theme_light": "Light",
+    "theme_dark": "Dark"
   }
 }

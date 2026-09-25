@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { ActionMenu, ActionMenuItem } from '../action-menu/action-menu';
 import { Folder, TreeRow } from '../../core/models/folder.models';
 import { Work } from '../../core/models/work.models';
 
 @Component({
   selector: 'app-folder-tree',
-  imports: [ActionMenu],
+  imports: [ActionMenu, TranslocoPipe],
   templateUrl: './folder-tree.html',
   styleUrl: './folder-tree.scss',
 })

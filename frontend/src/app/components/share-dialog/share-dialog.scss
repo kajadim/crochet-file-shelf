@@ -81,3 +81,12 @@
     color: var(--c-text-muted);
   }
 }
+
+@media (max-width: 519.98px) {
+  .share {
+    &__code-box,
+    &__member {
+      flex-wrap: wrap;
+    }
+  }
+}

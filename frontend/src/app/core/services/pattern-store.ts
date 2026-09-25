@@ -27,6 +27,8 @@ export interface PatternMeta {
   activeRow: number | null;
 }
 
+export type SaveState = 'idle' | 'saving' | 'saved' | 'error';
+
 function cellKey(row: number, column: number): string {
   return `${row}:${column}`;
 }
@@ -44,7 +46,10 @@ export class PatternStore {
   private readonly notFoundState = signal(false);
   private readonly errorState = signal<string | null>(null);
 
+  private readonly saveStateSignal = signal<SaveState>('idle');
+
   private workId: string | null = null;
+  private inflight = 0;
   private readonly pendingChanges = new Map<string, CellChange>();
 
   readonly pattern = this.patternMeta.asReadonly();
@@ -52,6 +57,7 @@ export class PatternStore {
   readonly loading = this.loadingState.asReadonly();
   readonly notFound = this.notFoundState.asReadonly();
   readonly error = this.errorState.asReadonly();
+  readonly saveState = this.saveStateSignal.asReadonly();
 
   readonly legend = computed<LegendEntry[]>(() => {
     const byColor = new Map<string, LegendEntry>();
@@ -82,6 +88,8 @@ export class PatternStore {
     this.notFoundState.set(false);
     this.errorState.set(null);
     this.pendingChanges.clear();
+    this.inflight = 0;
+    this.saveStateSignal.set('idle');
   }
 
   load(workId: string): void {
@@ -123,6 +131,7 @@ export class PatternStore {
 
     this.cellsState.set(next);
     this.pendingChanges.set(key, { row, column, colorId });
+    this.saveStateSignal.set('saving');
   }
 
   flushPendingChanges(): void {
@@ -132,10 +141,15 @@ export class PatternStore {
 
     const changes = [...this.pendingChanges.values()];
     this.pendingChanges.clear();
+    this.beginSave();
 
     this.api.setCells(this.workId, { cells: changes }).subscribe({
-      next: (pattern) => this.applyPattern(pattern),
+      next: (pattern) => {
+        this.applyPattern(pattern);
+        this.endSave(true);
+      },
       error: () => {
+        this.endSave(false);
         if (this.workId) {
           this.load(this.workId);
         }
@@ -148,8 +162,13 @@ export class PatternStore {
       return;
     }
 
+    this.beginSave();
     this.api.updatePosition(this.workId, { row, column }).subscribe({
-      next: (pattern) => this.applyPattern(pattern),
+      next: (pattern) => {
+        this.applyPattern(pattern);
+        this.endSave(true);
+      },
+      error: () => this.endSave(false),
     });
   }
 
@@ -197,9 +216,28 @@ export class PatternStore {
       return;
     }
 
+    this.beginSave();
     this.api.updateActiveRow(this.workId, { row }).subscribe({
-      next: (pattern) => this.applyPattern(pattern),
+      next: (pattern) => {
+        this.applyPattern(pattern);
+        this.endSave(true);
+      },
+      error: () => this.endSave(false),
     });
+  }
+
+  private beginSave(): void {
+    this.inflight++;
+    this.saveStateSignal.set('saving');
+  }
+
+  private endSave(ok: boolean): void {
+    this.inflight = Math.max(0, this.inflight - 1);
+    if (!ok) {
+      this.saveStateSignal.set('error');
+    } else if (this.inflight === 0 && this.pendingChanges.size === 0) {
+      this.saveStateSignal.set('saved');
+    }
   }
 
   private applyRemoteCells(event: CellsChangedEvent): void {

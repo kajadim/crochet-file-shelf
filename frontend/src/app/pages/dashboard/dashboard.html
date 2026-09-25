@@ -1,5 +1,7 @@
 <div class="dashboard">
-  <aside class="dashboard__sidebar">
+  <div class="dashboard__backdrop" [class.is-open]="sidebarOpen()" (click)="sidebarOpen.set(false)"></div>
+
+  <aside class="dashboard__sidebar" [class.is-open]="sidebarOpen()">
     <p-button
       [label]="'dashboard.newFolder' | transloco"
       icon="pi pi-folder-plus"
@@ -45,9 +47,19 @@
 
   <main class="dashboard__main">
     @if (loadError()) {
-      <p class="alert alert--error">{{ loadError() }}</p>
+      <p role="alert" class="alert alert--error">{{ loadError() }}</p>
     } @else if (folderStore.loaded()) {
       <div class="dashboard__head">
+        <div class="dashboard__title-row">
+          <button
+            type="button"
+            class="dashboard__folders-toggle"
+            [attr.aria-expanded]="sidebarOpen()"
+            [attr.aria-label]="'dashboard.foldersToggle' | transloco"
+            (click)="sidebarOpen.set(!sidebarOpen())"
+          >
+            <i class="pi pi-bars"></i>
+          </button>
         <h1 class="dashboard__title">
           @if (sharedView()) {
             {{ 'dashboard.sharedWithMe' | transloco }}
@@ -64,6 +76,7 @@
             {{ 'dashboard.allWorks' | transloco }}
           }
         </h1>
+        </div>
 
         <span
           class="dashboard__new-work"
@@ -85,6 +98,7 @@
             pInputText
             type="text"
             class="dashboard__search-input"
+            [attr.aria-label]="'dashboard.searchPlaceholder' | transloco"
             maxlength="200"
             [value]="searchInput()"
             [placeholder]="'dashboard.searchPlaceholder' | transloco"
@@ -180,7 +194,7 @@
           <p-button [label]="'dashboard.newFolder' | transloco" icon="pi pi-folder-plus" (onClick)="openCreateFolder(null)" />
         </div>
       } @else if (workStore.error()) {
-        <p class="alert alert--error">{{ workStore.error() }}</p>
+        <p role="alert" class="alert alert--error">{{ workStore.error() }}</p>
       } @else if (workStore.loading()) {
         <p class="dashboard__note">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
