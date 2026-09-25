@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Router, RouterLink } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { AuthApi } from '../../core/api/auth-api';
 import { Auth } from '../../core/services/auth';
 import { USERNAME_PATTERN, usernameAvailableValidator } from '../../core/utils/username';
@@ -34,7 +35,17 @@ export class Register {
   readonly error = signal<string | null>(null);
 
   submit(): void {
-    if (this.form.invalid || this.form.pending) {
+    if (this.form.pending) {
+      this.form.statusChanges
+        .pipe(
+          filter((status) => status !== 'PENDING'),
+          take(1),
+        )
+        .subscribe(() => this.submit());
+      return;
+    }
+
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }

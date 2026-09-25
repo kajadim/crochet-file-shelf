@@ -1,0 +1,15 @@
+# Where the running application is served (the Angular dev server; it proxies /api to the backend).
+base.url=http://localhost:4200
+
+# Browser used by the UI tests: chrome, edge or firefox. Selenium Manager downloads the driver itself.
+browser=chrome
+headless=false
+
+# Two existing, verified accounts. Register them in the app once (registration needs the emailed code).
+# The tests only create and delete their own uniquely named data, so the accounts stay clean.
+user1.email=first.user@example.com
+user1.password=YourPassword1
+user1.username=firstuser
+user2.email=second.user@example.com
+user2.password=YourPassword2
+user2.username=seconduser

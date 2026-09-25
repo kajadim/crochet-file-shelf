@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, HostListener, OnInit, computed, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -111,7 +112,17 @@ export class ProfilePage implements OnInit {
   }
 
   protected save(): void {
-    if (this.form.invalid || this.form.pending) {
+    if (this.form.pending) {
+      this.form.statusChanges
+        .pipe(
+          filter((status) => status !== 'PENDING'),
+          take(1),
+        )
+        .subscribe(() => this.save());
+      return;
+    }
+
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
