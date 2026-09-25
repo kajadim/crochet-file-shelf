@@ -15,13 +15,23 @@ namespace backend.Services.Implementation
             _yarnColorRepository = yarnColorRepository;
         }
 
-        public async Task<List<YarnColorResponse>> GetAllAsync(Guid userId)
+        public async Task<List<YarnColorResponse>> GetAllAsync(Guid userId, YarnColorQueryRequest query)
         {
-            var colors = await _yarnColorRepository.GetActiveByOwnerAsync(userId);
+            var colors = await _yarnColorRepository.GetActiveByOwnerAsync(userId, query.Search, query.Sort ?? YarnColorSort.NameAsc);
             var usageCounts = await _yarnColorRepository.GetWorksUsingCountsAsync(userId);
 
             return colors
                 .Select(color => ToResponse(color, usageCounts.GetValueOrDefault(color.Id)))
+                .ToList();
+        }
+
+        public async Task<List<YarnColorWorkResponse>> GetWorksAsync(Guid userId, Guid colorId)
+        {
+            await GetOwnedColorAsync(userId, colorId);
+            var works = await _yarnColorRepository.GetAccessibleWorksUsingColorAsync(colorId, userId);
+
+            return works
+                .Select(work => new YarnColorWorkResponse { Id = work.Id, Name = work.Name, Type = work.Type })
                 .ToList();
         }
 

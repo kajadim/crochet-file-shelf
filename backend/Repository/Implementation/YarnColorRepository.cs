@@ -14,11 +14,34 @@ namespace backend.Repository.Implementation
             _context = context;
         }
 
-        public Task<List<YarnColor>> GetActiveByOwnerAsync(Guid ownerId) =>
-            _context.YarnColors
-                .Where(c => c.OwnerId == ownerId && !c.IsArchived)
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+        public Task<List<YarnColor>> GetActiveByOwnerAsync(Guid ownerId, string? search = null, YarnColorSort sort = YarnColorSort.NameAsc)
+        {
+            var query = _context.YarnColors.Where(c => c.OwnerId == ownerId && !c.IsArchived);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim();
+                var textPattern = "%" + EscapeLike(term) + "%";
+                var hexPattern = "%" + EscapeLike(term.TrimStart('#')) + "%";
+                query = query.Where(c =>
+                    EF.Functions.ILike(c.Name, textPattern, "\\")
+                    || EF.Functions.ILike(c.HexValue, hexPattern, "\\")
+                    || (c.Notes != null && EF.Functions.ILike(c.Notes, textPattern, "\\")));
+            }
+
+            var ordered = sort switch
+            {
+                YarnColorSort.NameDesc => query.OrderByDescending(c => c.Name),
+                YarnColorSort.HexAsc => query.OrderBy(c => c.HexValue.ToLower()).ThenBy(c => c.Name),
+                YarnColorSort.HexDesc => query.OrderByDescending(c => c.HexValue.ToLower()).ThenBy(c => c.Name),
+                _ => query.OrderBy(c => c.Name),
+            };
+
+            return ordered.ToListAsync();
+        }
+
+        private static string EscapeLike(string value) =>
+            value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
 
         public Task<YarnColor?> GetActiveByIdAsync(Guid id, Guid ownerId) =>
             _context.YarnColors.FirstOrDefaultAsync(c => c.Id == id && c.OwnerId == ownerId && !c.IsArchived);
@@ -36,7 +59,8 @@ namespace backend.Repository.Implementation
 
         public Task<Dictionary<Guid, int>> GetWorksUsingCountsAsync(Guid ownerId) =>
             _context.PatternCells
-                .Where(cell => cell.YarnColor.OwnerId == ownerId)
+                .Where(cell => cell.YarnColor.OwnerId == ownerId
+                    && (cell.Pattern.Work.OwnerId == ownerId || cell.Pattern.Work.Members.Any(m => m.UserId == ownerId)))
                 .GroupBy(cell => cell.YarnColorId)
                 .Select(group => new { ColorId = group.Key, Count = group.Select(cell => cell.PatternId).Distinct().Count() })
                 .ToDictionaryAsync(item => item.ColorId, item => item.Count);
@@ -47,6 +71,14 @@ namespace backend.Repository.Implementation
                 .Select(cell => cell.PatternId)
                 .Distinct()
                 .CountAsync();
+
+        public Task<List<Work>> GetAccessibleWorksUsingColorAsync(Guid colorId, Guid userId) =>
+            _context.Works
+                .Where(work => work.Pattern != null
+                    && work.Pattern.Cells.Any(cell => cell.YarnColorId == colorId)
+                    && (work.OwnerId == userId || work.Members.Any(m => m.UserId == userId)))
+                .OrderBy(work => work.Name)
+                .ToListAsync();
 
         public async Task AddAsync(YarnColor color) =>
             await _context.YarnColors.AddAsync(color);

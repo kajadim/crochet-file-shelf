@@ -6,6 +6,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
+import { ColorWorksList } from '../color-works-list/color-works-list';
 import { Observable } from 'rxjs';
 import { YarnColor, YarnColorRequest } from '../../core/models/yarn-color.models';
 import { extractErrorMessage } from '../../core/utils/http-error';
@@ -20,7 +21,7 @@ const HEX_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
 @Component({
   selector: 'app-yarn-color-dialog',
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, Textarea, TranslocoPipe],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, Textarea, TranslocoPipe, ColorWorksList],
   templateUrl: './yarn-color-dialog.html',
   styleUrl: './yarn-color-dialog.scss',
 })

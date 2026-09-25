@@ -132,7 +132,16 @@
     "deleteTitle": "„{{name}}“ löschen?",
     "deleteMessageInUse": "Diese Farbe wird in {{count}} {{unit}} verwendet. Sie wird aus deiner Palette entfernt, aber Werke, die sie bereits verwenden, behalten sie.",
     "colorNamePlaceholder": "z. B. Sage Green",
-    "notesPlaceholder": "Marke, Färbe-Charge, Knäuelnummer..."
+    "notesPlaceholder": "Marke, Färbe-Charge, Knäuelnummer...",
+    "searchPlaceholder": "Nach Name, Hex-Wert oder Notizen suchen...",
+    "sortLabel": "Sortieren nach",
+    "sortNameAsc": "Name (A-Z)",
+    "sortNameDesc": "Name (Z-A)",
+    "sortHexAsc": "Hex (aufsteigend)",
+    "sortHexDesc": "Hex (absteigend)",
+    "noResults": "Keine Farbe passt zu deiner Suche.",
+    "usedInTitle": "Arbeiten mit „{{name}}“",
+    "notUsedYet": "Noch in keiner Arbeit verwendet."
   },
   "dialogs": {
     "folderName": {

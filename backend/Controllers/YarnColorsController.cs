@@ -19,9 +19,15 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<YarnColorResponse>>> GetAll()
+        public async Task<ActionResult<List<YarnColorResponse>>> GetAll([FromQuery] YarnColorQueryRequest query)
         {
-            return Ok(await _yarnColorService.GetAllAsync(User.GetUserId()));
+            return Ok(await _yarnColorService.GetAllAsync(User.GetUserId(), query));
+        }
+
+        [HttpGet("{id:guid}/works")]
+        public async Task<ActionResult<List<YarnColorWorkResponse>>> GetWorks(Guid id)
+        {
+            return Ok(await _yarnColorService.GetWorksAsync(User.GetUserId(), id));
         }
 
         [HttpPost]

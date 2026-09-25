@@ -132,7 +132,16 @@
     "deleteTitle": "Delete \"{{name}}\"?",
     "deleteMessageInUse": "This color is used in {{count}} {{unit}}. It will be removed from your palette, but works that already use it will keep it.",
     "colorNamePlaceholder": "e.g. Sage Green",
-    "notesPlaceholder": "Brand, dye lot, skein number..."
+    "notesPlaceholder": "Brand, dye lot, skein number...",
+    "searchPlaceholder": "Search by name, hex or notes...",
+    "sortLabel": "Sort by",
+    "sortNameAsc": "Name (A-Z)",
+    "sortNameDesc": "Name (Z-A)",
+    "sortHexAsc": "Hex (low to high)",
+    "sortHexDesc": "Hex (high to low)",
+    "noResults": "No colors match your search.",
+    "usedInTitle": "Works using \"{{name}}\"",
+    "notUsedYet": "Not used in any work yet."
   },
   "dialogs": {
     "folderName": {

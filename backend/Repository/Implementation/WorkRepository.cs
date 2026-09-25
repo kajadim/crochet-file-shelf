@@ -64,9 +64,9 @@ namespace backend.Repository.Implementation
             {
                 var pattern = "%" + EscapeLike(search.Trim()) + "%";
                 query = query.Where(w =>
-                    EF.Functions.ILike(w.Name, pattern)
-                    || (w.Description != null && EF.Functions.ILike(w.Description, pattern))
-                    || w.Comments.Any(c => EF.Functions.ILike(c.PlainText, pattern)));
+                    EF.Functions.ILike(w.Name, pattern, "\\")
+                    || (w.Description != null && EF.Functions.ILike(w.Description, pattern, "\\"))
+                    || w.Comments.Any(c => EF.Functions.ILike(c.PlainText, pattern, "\\")));
             }
 
             return query;

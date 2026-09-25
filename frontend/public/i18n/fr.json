@@ -132,7 +132,16 @@
     "deleteTitle": "Supprimer « {{name}} » ?",
     "deleteMessageInUse": "Cette couleur est utilisée dans {{count}} {{unit}}. Elle sera retirée de ta palette, mais les ouvrages qui l'utilisent déjà la conserveront.",
     "colorNamePlaceholder": "ex. Sage Green",
-    "notesPlaceholder": "Marque, lot de teinture, numéro de pelote..."
+    "notesPlaceholder": "Marque, lot de teinture, numéro de pelote...",
+    "searchPlaceholder": "Rechercher par nom, valeur hex ou notes...",
+    "sortLabel": "Trier par",
+    "sortNameAsc": "Nom (A-Z)",
+    "sortNameDesc": "Nom (Z-A)",
+    "sortHexAsc": "Hex (croissant)",
+    "sortHexDesc": "Hex (décroissant)",
+    "noResults": "Aucune couleur ne correspond à votre recherche.",
+    "usedInTitle": "Travaux utilisant « {{name}} »",
+    "notUsedYet": "Pas encore utilisée dans un travail."
   },
   "dialogs": {
     "folderName": {

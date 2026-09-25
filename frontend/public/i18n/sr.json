@@ -132,7 +132,16 @@
     "deleteTitle": "Obriši „{{name}}”?",
     "deleteMessageInUse": "Ova boja se koristi u {{count}} {{unit}}. Biće uklonjena iz palete, ali radovi koji je već koriste je zadržavaju.",
     "colorNamePlaceholder": "npr. Sage Green",
-    "notesPlaceholder": "Proizvođač, partija bojenja, broj klupka..."
+    "notesPlaceholder": "Proizvođač, partija bojenja, broj klupka...",
+    "searchPlaceholder": "Pretraga po imenu, heksa vrednosti ili beleškama...",
+    "sortLabel": "Sortiraj po",
+    "sortNameAsc": "Ime (A-Z)",
+    "sortNameDesc": "Ime (Z-A)",
+    "sortHexAsc": "Heksa (rastuće)",
+    "sortHexDesc": "Heksa (opadajuće)",
+    "noResults": "Nijedna boja ne odgovara pretrazi.",
+    "usedInTitle": "Radovi u kojima se koristi „{{name}}\"",
+    "notUsedYet": "Još se ne koristi ni u jednom radu."
   },
   "dialogs": {
     "folderName": {
