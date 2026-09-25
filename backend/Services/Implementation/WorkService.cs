@@ -43,9 +43,9 @@ namespace backend.Services.Implementation
             return await ToResponsesAsync(userId, works);
         }
 
-        public async Task<List<WorkResponse>> GetSharedAsync(Guid userId)
+        public async Task<List<WorkResponse>> GetSharedAsync(Guid userId, WorkQueryRequest query)
         {
-            var works = await _workRepository.GetSharedWithAsync(userId);
+            var works = await _workRepository.GetSharedWithAsync(userId, query.Search, query.Type, query.ColorId, query.Platform);
             return await ToResponsesAsync(userId, works);
         }
 

@@ -11,12 +11,8 @@ export class WorkApi {
   private readonly baseUrl = '/api/works';
 
   getAll(query: WorkQuery): Observable<Work[]> {
-    if (query.shared) {
-      return this.http.get<Work[]>(`${this.baseUrl}/shared`);
-    }
-
     let params = new HttpParams();
-    if (query.folderId) {
+    if (query.folderId && !query.shared) {
       params = params.set('folderId', query.folderId);
     }
     if (query.search) {
@@ -31,7 +27,7 @@ export class WorkApi {
     if (query.platform) {
       params = params.set('platform', query.platform);
     }
-    return this.http.get<Work[]>(this.baseUrl, { params });
+    return this.http.get<Work[]>(query.shared ? `${this.baseUrl}/shared` : this.baseUrl, { params });
   }
 
   getById(id: string): Observable<Work> {

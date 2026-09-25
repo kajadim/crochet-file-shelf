@@ -22,9 +22,9 @@ namespace backend.Controllers
         }
 
         [HttpGet("shared")]
-        public async Task<ActionResult<List<WorkResponse>>> GetShared()
+        public async Task<ActionResult<List<WorkResponse>>> GetShared([FromQuery] WorkQueryRequest query)
         {
-            return Ok(await _workService.GetSharedAsync(User.GetUserId()));
+            return Ok(await _workService.GetSharedAsync(User.GetUserId(), query));
         }
 
         [HttpPost("join")]

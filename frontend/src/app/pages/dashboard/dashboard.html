@@ -83,7 +83,6 @@
         </span>
       </div>
 
-      @if (!sharedView()) {
       <div class="mb-6 flex flex-wrap items-center gap-2">
         <span class="relative">
           <i class="pi pi-search pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm text-gray-400"></i>
@@ -149,7 +148,6 @@
           <p-button [label]="'dashboard.resetFilters' | transloco" icon="pi pi-times" [text]="true" (onClick)="resetFilters()" />
         }
       </div>
-      }
 
       @if (visibleFolders().length > 0) {
         <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -180,10 +178,10 @@
         <p class="text-gray-500">{{ 'common.loading' | transloco }}</p>
       } @else if (workStore.works().length === 0) {
         <p class="text-gray-500">
-          @if (sharedView()) {
-            {{ 'dashboard.emptyShared' | transloco }}
-          } @else if (filtersActive()) {
+          @if (filtersActive()) {
             {{ 'dashboard.noResults' | transloco }}
+          } @else if (sharedView()) {
+            {{ 'dashboard.emptyShared' | transloco }}
           } @else if (folderStore.selectedFolder()) {
             {{ 'dashboard.emptyWorksInFolder' | transloco }}
           } @else {

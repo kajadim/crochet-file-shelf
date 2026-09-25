@@ -34,14 +34,19 @@ namespace backend.Repository.Implementation
                 query = query.Where(w => w.FolderId == folderId.Value);
             }
 
-            if (type.HasValue)
-            {
-                query = query.Where(w => w.Type == type.Value);
-            }
-
             if (colorId.HasValue)
             {
                 query = query.Where(w => w.Pattern != null && w.Pattern.Cells.Any(c => c.YarnColorId == colorId.Value));
+            }
+
+            return ApplyFilters(query, search, type, platform).OrderBy(w => w.Name).ToListAsync();
+        }
+
+        private static IQueryable<Work> ApplyFilters(IQueryable<Work> query, string? search, WorkType? type, VideoPlatform? platform)
+        {
+            if (type.HasValue)
+            {
+                query = query.Where(w => w.Type == type.Value);
             }
 
             if (platform.HasValue)
@@ -58,18 +63,40 @@ namespace backend.Repository.Implementation
                     || w.Comments.Any(c => EF.Functions.ILike(c.PlainText, pattern)));
             }
 
-            return query.OrderBy(w => w.Name).ToListAsync();
+            return query;
         }
 
         private static string EscapeLike(string value) =>
             value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
 
-        public Task<List<Work>> GetSharedWithAsync(Guid userId) =>
-            _context.Works
+        public async Task<List<Work>> GetSharedWithAsync(
+            Guid userId,
+            string? search,
+            WorkType? type,
+            Guid? colorId,
+            VideoPlatform? platform)
+        {
+            var query = _context.Works
                 .Include(w => w.Owner)
-                .Where(w => w.Members.Any(m => m.UserId == userId))
-                .OrderBy(w => w.Name)
-                .ToListAsync();
+                .Where(w => w.Members.Any(m => m.UserId == userId));
+
+            if (colorId.HasValue)
+            {
+                var hex = await _context.YarnColors
+                    .Where(c => c.Id == colorId.Value && c.OwnerId == userId)
+                    .Select(c => c.HexValue.ToLower())
+                    .FirstOrDefaultAsync();
+
+                if (hex is null)
+                {
+                    return [];
+                }
+
+                query = query.Where(w => w.Pattern != null && w.Pattern.Cells.Any(c => c.YarnColor.HexValue.ToLower() == hex));
+            }
+
+            return await ApplyFilters(query, search, type, platform).OrderBy(w => w.Name).ToListAsync();
+        }
 
         public Task<Work?> GetByIdAsync(Guid id) =>
             _context.Works.Include(w => w.Owner).FirstOrDefaultAsync(w => w.Id == id);

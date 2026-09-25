@@ -5,7 +5,7 @@ namespace backend.Services.Interfaces
     public interface IWorkService
     {
         Task<List<WorkResponse>> GetAsync(Guid userId, WorkQueryRequest query);
-        Task<List<WorkResponse>> GetSharedAsync(Guid userId);
+        Task<List<WorkResponse>> GetSharedAsync(Guid userId, WorkQueryRequest query);
         Task<WorkResponse> GetByIdAsync(Guid userId, Guid workId);
         Task<WorkResponse> CreateAsync(Guid userId, CreateWorkRequest request);
         Task<WorkResponse> UpdateAsync(Guid userId, Guid workId, UpdateWorkRequest request);

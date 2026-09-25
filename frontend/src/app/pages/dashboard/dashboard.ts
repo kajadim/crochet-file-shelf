@@ -103,7 +103,7 @@ export class Dashboard implements OnInit {
 
       untracked(() => {
         if (shared) {
-          this.workStore.load({ shared: true });
+          this.workStore.load({ shared: true, search, type, colorId, platform });
         } else if (this.filtersActive()) {
           this.workStore.load({ folderId, search, type, colorId, platform });
         } else {
