@@ -11,6 +11,7 @@ export interface Work {
   updatedAt: string;
   role: WorkRole;
   ownerName: string | null;
+  isShared: boolean;
 }
 
 export interface CreateWorkRequest {
@@ -30,6 +31,7 @@ export interface WorkQuery {
   type?: WorkType | null;
   colorId?: string | null;
   platform?: string | null;
+  isShared?: boolean | null;
 }
 
 export interface UpdateWorkRequest {

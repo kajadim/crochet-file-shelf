@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
+import { DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkPresence } from '../../components/work-presence/work-presence';
@@ -17,7 +18,7 @@ import { formatTimestamp, splitTimestamp } from '../../core/utils/time';
 
 @Component({
   selector: 'app-video-work',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, WorkComments, WorkPresence],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, DrawerModule, InputTextModule, TranslocoPipe, WorkComments, WorkPresence],
   templateUrl: './video-work.html',
   styleUrl: './video-work.scss',
 })
@@ -39,6 +40,8 @@ export class VideoWork implements OnInit {
   protected readonly canEdit = computed(() => this.role() === 'Owner' || this.role() === 'Editor');
   protected readonly isOwner = computed(() => this.role() === 'Owner');
 
+  protected commentsOpen = false;
+
   private readonly player = viewChild<ElementRef<HTMLIFrameElement>>('player');
   protected readonly duration = signal<number | null>(null);
 
@@ -58,7 +61,7 @@ export class VideoWork implements OnInit {
   protected readonly frameClass = computed(() => {
     switch (this.videoStore.video()?.platform) {
       case 'YouTube':
-        return 'aspect-video w-full';
+        return 'aspect-video w-full max-w-5xl';
       case 'TikTok':
         return 'h-[740px] w-full max-w-[340px]';
       case 'Instagram':

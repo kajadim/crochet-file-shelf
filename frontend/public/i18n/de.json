@@ -117,7 +117,10 @@
     "emptyShared": "Es wurde noch nichts mit dir geteilt.",
     "deleteSharedWorkMessage": "Dieses Werk ist mit {{count}} Personen geteilt. Kann eine davon bearbeiten, geht es an die Person, die zuerst beigetreten ist. Sonst wird es für alle gelöscht.",
     "selectFolderFirst": "Wähle zuerst einen Ordner aus",
-    "folderEmpty": "Leer"
+    "folderEmpty": "Leer",
+    "filterSharing": "Teilen",
+    "sharingShared": "Geteilt",
+    "sharingPrivate": "Nicht geteilt"
   },
   "palette": {
     "title": "Meine Palette",
@@ -224,7 +227,8 @@
     "site": "Website",
     "share": "Teilen",
     "leave": "Verlassen",
-    "sharedBy": "Geteilt von {{name}}"
+    "sharedBy": "Geteilt von {{name}}",
+    "shared": "Geteilt"
   },
   "colorActions": "Farbaktionen",
   "videoWork": {

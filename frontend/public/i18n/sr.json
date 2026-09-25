@@ -117,7 +117,10 @@
     "emptyShared": "Još ništa nije podeljeno sa tobom.",
     "deleteSharedWorkMessage": "Ovaj rad je podeljen sa {{count}} osoba. Ako neko od njih može da ga menja, rad prelazi na onoga ko se prvi pridružio. Inače se briše za sve.",
     "selectFolderFirst": "Prvo izaberi folder",
-    "folderEmpty": "Prazan"
+    "folderEmpty": "Prazan",
+    "filterSharing": "Deljenje",
+    "sharingShared": "Podeljeno",
+    "sharingPrivate": "Nije podeljeno"
   },
   "palette": {
     "title": "Moja paleta",
@@ -224,7 +227,8 @@
     "site": "Sajt",
     "share": "Podeli",
     "leave": "Napusti",
-    "sharedBy": "Podelio/la: {{name}}"
+    "sharedBy": "Podelio/la: {{name}}",
+    "shared": "Podeljeno"
   },
   "colorActions": "Akcije nad bojom",
   "videoWork": {

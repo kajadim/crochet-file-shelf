@@ -17,5 +17,7 @@ namespace backend.Dtos.Works
 
         [EnumDataType(typeof(VideoPlatform))]
         public VideoPlatform? Platform { get; set; }
+
+        public bool? IsShared { get; set; }
     }
 }

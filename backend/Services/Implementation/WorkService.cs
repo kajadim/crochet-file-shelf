@@ -34,11 +34,12 @@ namespace backend.Services.Implementation
             var filtersActive = !string.IsNullOrWhiteSpace(query.Search)
                 || query.Type.HasValue
                 || query.ColorId.HasValue
-                || query.Platform.HasValue;
+                || query.Platform.HasValue
+                || query.IsShared.HasValue;
             var includeShared = filtersActive && !query.FolderId.HasValue;
 
             var works = await _workRepository.GetByOwnerAsync(
-                userId, query.FolderId, query.Search, query.Type, query.ColorId, query.Platform, includeShared);
+                userId, query.FolderId, query.Search, query.Type, query.ColorId, query.Platform, includeShared, query.IsShared);
 
             return await ToResponsesAsync(userId, works);
         }
@@ -52,7 +53,8 @@ namespace backend.Services.Implementation
         public async Task<WorkResponse> GetByIdAsync(Guid userId, Guid workId)
         {
             var access = await _access.RequireAsync(userId, workId, WorkAccessLevel.Read);
-            return ToResponse(access.Work, access.Role, access.Role == WorkRole.Owner ? null : access.Work.Owner.DisplayName);
+            var isShared = access.Role == WorkRole.Owner && await IsSharedAsync(workId);
+            return ToResponse(access.Work, access.Role, access.Role == WorkRole.Owner ? null : access.Work.Owner.DisplayName, isShared);
         }
 
         public async Task<WorkResponse> CreateAsync(Guid userId, CreateWorkRequest request)
@@ -141,7 +143,7 @@ namespace backend.Services.Implementation
             work.UpdatedAt = DateTime.UtcNow;
             await _workRepository.SaveChangesAsync();
 
-            return ToResponse(work, WorkRole.Owner, null);
+            return ToResponse(work, WorkRole.Owner, null, await IsSharedAsync(work.Id));
         }
 
         public async Task<WorkResponse> MoveAsync(Guid userId, Guid workId, MoveWorkRequest request)
@@ -153,7 +155,7 @@ namespace backend.Services.Implementation
             work.UpdatedAt = DateTime.UtcNow;
             await _workRepository.SaveChangesAsync();
 
-            return ToResponse(work, WorkRole.Owner, null);
+            return ToResponse(work, WorkRole.Owner, null, await IsSharedAsync(work.Id));
         }
 
         public async Task DeleteAsync(Guid userId, Guid workId)
@@ -176,11 +178,16 @@ namespace backend.Services.Implementation
                 ? new Dictionary<Guid, WorkPermission>()
                 : await _workRepository.GetMemberPermissionsAsync(userId, foreignIds);
 
+            var ownedIds = works.Where(w => w.OwnerId == userId).Select(w => w.Id).ToList();
+            var sharedIds = ownedIds.Count == 0
+                ? new HashSet<Guid>()
+                : await _workRepository.GetSharedWorkIdsAsync(ownedIds);
+
             return works.Select(work =>
             {
                 if (work.OwnerId == userId)
                 {
-                    return ToResponse(work, WorkRole.Owner, null);
+                    return ToResponse(work, WorkRole.Owner, null, sharedIds.Contains(work.Id));
                 }
 
                 var role = permissions.GetValueOrDefault(work.Id) == WorkPermission.CanEdit
@@ -189,6 +196,9 @@ namespace backend.Services.Implementation
                 return ToResponse(work, role, work.Owner.DisplayName);
             }).ToList();
         }
+
+        private async Task<bool> IsSharedAsync(Guid workId) =>
+            (await _workRepository.GetSharedWorkIdsAsync([workId])).Count > 0;
 
         private async Task EnsureFolderOwnedAsync(Guid userId, Guid folderId)
         {
@@ -205,7 +215,7 @@ namespace backend.Services.Implementation
             return string.IsNullOrEmpty(trimmed) ? null : trimmed;
         }
 
-        private static WorkResponse ToResponse(Work work, WorkRole role, string? ownerName) => new()
+        private static WorkResponse ToResponse(Work work, WorkRole role, string? ownerName, bool isShared = false) => new()
         {
             Id = work.Id,
             Name = work.Name,
@@ -216,6 +226,7 @@ namespace backend.Services.Implementation
             UpdatedAt = work.UpdatedAt,
             Role = role,
             OwnerName = ownerName,
+            IsShared = isShared,
         };
     }
 }

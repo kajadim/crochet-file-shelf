@@ -27,6 +27,9 @@ export class WorkApi {
     if (query.platform) {
       params = params.set('platform', query.platform);
     }
+    if (query.isShared !== undefined && query.isShared !== null && !query.shared) {
+      params = params.set('isShared', query.isShared);
+    }
     return this.http.get<Work[]>(query.shared ? `${this.baseUrl}/shared` : this.baseUrl, { params });
   }
 

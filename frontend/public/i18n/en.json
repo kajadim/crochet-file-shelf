@@ -117,7 +117,10 @@
     "emptyShared": "Nothing has been shared with you yet.",
     "deleteSharedWorkMessage": "This work is shared with {{count}} people. If any of them can edit, it moves to the one who joined first. Otherwise it is deleted for everyone.",
     "selectFolderFirst": "Select a folder first",
-    "folderEmpty": "Empty"
+    "folderEmpty": "Empty",
+    "filterSharing": "Sharing",
+    "sharingShared": "Shared",
+    "sharingPrivate": "Not shared"
   },
   "palette": {
     "title": "My palette",
@@ -224,7 +227,8 @@
     "site": "Site",
     "share": "Share",
     "leave": "Leave",
-    "sharedBy": "Shared by {{name}}"
+    "sharedBy": "Shared by {{name}}",
+    "shared": "Shared"
   },
   "colorActions": "Color actions",
   "videoWork": {

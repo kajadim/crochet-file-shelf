@@ -117,7 +117,10 @@
     "emptyShared": "Rien n'a encore été partagé avec toi.",
     "deleteSharedWorkMessage": "Cet ouvrage est partagé avec {{count}} personnes. Si l'une d'elles peut modifier, il passe à celle qui a rejoint en premier. Sinon il est supprimé pour tout le monde.",
     "selectFolderFirst": "Sélectionne d'abord un dossier",
-    "folderEmpty": "Vide"
+    "folderEmpty": "Vide",
+    "filterSharing": "Partage",
+    "sharingShared": "Partagé",
+    "sharingPrivate": "Non partagé"
   },
   "palette": {
     "title": "Ma palette",
@@ -224,7 +227,8 @@
     "site": "Site",
     "share": "Partager",
     "leave": "Quitter",
-    "sharedBy": "Partagé par {{name}}"
+    "sharedBy": "Partagé par {{name}}",
+    "shared": "Partagé"
   },
   "colorActions": "Actions sur la couleur",
   "videoWork": {

@@ -21,7 +21,8 @@ namespace backend.Repository.Implementation
             WorkType? type,
             Guid? colorId,
             VideoPlatform? platform,
-            bool includeShared)
+            bool includeShared,
+            bool? isShared)
         {
             var query = includeShared
                 ? _context.Works
@@ -37,6 +38,11 @@ namespace backend.Repository.Implementation
             if (colorId.HasValue)
             {
                 query = query.Where(w => w.Pattern != null && w.Pattern.Cells.Any(c => c.YarnColorId == colorId.Value));
+            }
+
+            if (isShared.HasValue)
+            {
+                query = isShared.Value ? query.Where(w => w.Members.Any()) : query.Where(w => !w.Members.Any());
             }
 
             return ApplyFilters(query, search, type, platform).OrderBy(w => w.Name).ToListAsync();
@@ -103,6 +109,14 @@ namespace backend.Repository.Implementation
 
         public Task<WorkMember?> GetMemberAsync(Guid workId, Guid userId) =>
             _context.WorkMembers.FirstOrDefaultAsync(m => m.WorkId == workId && m.UserId == userId);
+
+        public async Task<HashSet<Guid>> GetSharedWorkIdsAsync(IReadOnlyCollection<Guid> workIds) =>
+            (await _context.WorkMembers
+                .Where(m => workIds.Contains(m.WorkId))
+                .Select(m => m.WorkId)
+                .Distinct()
+                .ToListAsync())
+            .ToHashSet();
 
         public Task<Dictionary<Guid, WorkPermission>> GetMemberPermissionsAsync(Guid userId, IReadOnlyCollection<Guid> workIds) =>
             _context.WorkMembers

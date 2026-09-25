@@ -63,6 +63,19 @@ export class WorkStore {
     });
   }
 
+  refresh(): void {
+    const requestId = this.requestId;
+
+    this.api.getAll(this.currentQuery).subscribe({
+      next: (works) => {
+        if (requestId === this.requestId) {
+          this.worksState.set(this.sorted(works));
+        }
+      },
+      error: () => undefined,
+    });
+  }
+
   create(request: CreateWorkRequest): Observable<Work> {
     return this.api.create(request).pipe(
       tap((work) => {
@@ -114,7 +127,7 @@ export class WorkStore {
 
   private isFiltered(): boolean {
     const query = this.currentQuery;
-    return !!(query.search || query.type || query.colorId || query.platform);
+    return !!(query.search || query.type || query.colorId || query.platform || query.isShared !== undefined && query.isShared !== null);
   }
 
   private isVisibleInCurrentView(work: Work): boolean {

@@ -111,6 +111,22 @@
           <ng-template #item let-option>{{ option.label | transloco }}</ng-template>
         </p-select>
 
+        @if (!sharedView()) {
+          <p-select
+            [options]="sharingOptions"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="sharingFilter()"
+            (ngModelChange)="sharingFilter.set($event)"
+            [showClear]="true"
+            [placeholder]="'dashboard.filterSharing' | transloco"
+            styleClass="w-44"
+          >
+            <ng-template #selectedItem let-option>{{ option.label | transloco }}</ng-template>
+            <ng-template #item let-option>{{ option.label | transloco }}</ng-template>
+          </p-select>
+        }
+
         <p-select
           [options]="colorStore.colors()"
           optionLabel="name"

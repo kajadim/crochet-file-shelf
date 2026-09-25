@@ -26,7 +26,12 @@ import { FolderStore } from '../../core/services/folder-store';
 import { WorkStore } from '../../core/services/work-store';
 import { Realtime } from '../../core/services/realtime';
 import { YarnColorStore } from '../../core/services/yarn-color-store';
-import { loadDashboardFilters, PLATFORM_OPTIONS, saveDashboardFilters } from '../../core/utils/dashboard-filters-storage';
+import {
+  loadDashboardFilters,
+  PLATFORM_OPTIONS,
+  saveDashboardFilters,
+  SharingFilter,
+} from '../../core/utils/dashboard-filters-storage';
 import { extractErrorMessage } from '../../core/utils/http-error';
 
 @Component({
@@ -55,6 +60,10 @@ export class Dashboard implements OnInit {
     { value: 'Site', label: 'workCard.site' },
   ];
   protected readonly platformOptions = PLATFORM_OPTIONS;
+  protected readonly sharingOptions: { value: SharingFilter; label: string }[] = [
+    { value: 'shared', label: 'dashboard.sharingShared' },
+    { value: 'private', label: 'dashboard.sharingPrivate' },
+  ];
 
   private readonly storedFilters = loadDashboardFilters();
 
@@ -65,6 +74,7 @@ export class Dashboard implements OnInit {
   protected readonly typeFilter = signal<WorkType | null>(this.storedFilters.type);
   protected readonly colorFilter = signal<string | null>(this.storedFilters.colorId);
   protected readonly platformFilter = signal<string | null>(this.storedFilters.platform);
+  protected readonly sharingFilter = signal<SharingFilter | null>(this.storedFilters.sharing);
 
   protected readonly treeRows = computed(() => this.folderStore.treeRows(this.workStore.index()));
 
@@ -73,13 +83,27 @@ export class Dashboard implements OnInit {
   );
 
   protected readonly filtersActive = computed(
-    () => !!(this.search() || this.typeFilter() || this.colorFilter() || this.platformFilter()),
+    () =>
+      !!(
+        this.search() ||
+        this.typeFilter() ||
+        this.colorFilter() ||
+        this.platformFilter() ||
+        (this.sharingFilter() && !this.sharedView())
+      ),
   );
 
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.realtime.accessChanged$.pipe(takeUntilDestroyed()).subscribe(() => this.workStore.reload());
+    this.realtime.notification$
+      .pipe(takeUntilDestroyed())
+      .subscribe((notification) => {
+        if (notification.type === 'MemberJoined') {
+          this.workStore.refresh();
+        }
+      });
 
     effect(() =>
       saveDashboardFilters({
@@ -87,6 +111,7 @@ export class Dashboard implements OnInit {
         type: this.typeFilter(),
         colorId: this.colorFilter(),
         platform: this.platformFilter(),
+        sharing: this.sharingFilter(),
       }),
     );
 
@@ -100,12 +125,20 @@ export class Dashboard implements OnInit {
       const type = this.typeFilter();
       const colorId = this.colorFilter();
       const platform = this.platformFilter();
+      const sharing = this.sharingFilter();
 
       untracked(() => {
         if (shared) {
           this.workStore.load({ shared: true, search, type, colorId, platform });
         } else if (this.filtersActive()) {
-          this.workStore.load({ folderId, search, type, colorId, platform });
+          this.workStore.load({
+            folderId,
+            search,
+            type,
+            colorId,
+            platform,
+            isShared: sharing === null ? null : sharing === 'shared',
+          });
         } else {
           this.workStore.load({ folderId });
         }
@@ -132,6 +165,7 @@ export class Dashboard implements OnInit {
     this.typeFilter.set(null);
     this.colorFilter.set(null);
     this.platformFilter.set(null);
+    this.sharingFilter.set(null);
   }
 
   ngOnInit(): void {
@@ -203,7 +237,7 @@ export class Dashboard implements OnInit {
   }
 
   protected openShare(work: Work): void {
-    this.dialogService.open<ShareDialog, ShareDialogData>(ShareDialog, {
+    const ref = this.dialogService.open<ShareDialog, ShareDialogData>(ShareDialog, {
       header: this.transloco.translate('sharing.shareTitle', { name: work.name }),
       width: '520px',
       modal: true,
@@ -212,6 +246,8 @@ export class Dashboard implements OnInit {
       dismissableMask: true,
       data: { work },
     });
+
+    ref?.onClose.subscribe(() => this.workStore.refresh());
   }
 
   protected leaveWork(work: Work): void {

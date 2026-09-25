@@ -13,5 +13,6 @@ namespace backend.Dtos.Works
         public DateTime UpdatedAt { get; set; }
         public WorkRole Role { get; set; }
         public string? OwnerName { get; set; }
+        public bool IsShared { get; set; }
     }
 }
