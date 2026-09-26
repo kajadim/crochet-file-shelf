@@ -13,6 +13,8 @@ namespace backend.Exceptions
         InvalidRefreshToken,
         InvalidOrExpiredCode,
         PendingRegistrationNotFound,
+        EmailNotVerified,
+        IncorrectPassword,
         PatternNotFound,
         PatternAlreadyExists,
         PatternOutOfBounds,

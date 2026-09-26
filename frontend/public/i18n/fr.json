@@ -63,7 +63,9 @@
       "codePattern": "Le code contient exactement 6 chiffres",
       "submit": "Vérifier et créer le compte",
       "resend": "Envoyer un nouveau code",
-      "back": "Retour à l'inscription"
+      "back": "Retour à l'inscription",
+      "haveCode": "Vous avez un code de vérification ?",
+      "newCodeSent": "Votre adresse email n'est pas encore vérifiée. Nous vous avons envoyé un nouveau code."
     },
     "forgotPassword": {
       "title": "Mot de passe oublié ?",
@@ -230,7 +232,11 @@
     "gridLabel": "Grille de la matrice",
     "keyboardHelp": "Utilisez les flèches pour passer d'une cellule à l'autre. Espace ou Entrée colorie avec la couleur choisie, Suppr efface la cellule, C la marque comme position actuelle, R marque sa ligne, Maj avec une flèche colorie en se déplaçant.",
     "cellLabel": "Ligne {{row}}, colonne {{column}}, {{color}}",
-    "emptyCell": "vide"
+    "emptyCell": "vide",
+    "sharedPalette": "Palette partagée",
+    "sharedPaletteHint": "Couleurs utilisées dans ce travail qui ne sont pas dans votre palette.",
+    "copyToMyPalette": "Copier dans ma palette",
+    "colorCopied": "{{name}} a été ajoutée à votre palette"
   },
   "folderTree": {
     "newSubfolder": "Nouveau sous-dossier",
@@ -286,7 +292,8 @@
     "orderedList": "Liste numérotée",
     "bulletList": "Liste à puces",
     "link": "Lien",
-    "clean": "Effacer la mise en forme"
+    "clean": "Effacer la mise en forme",
+    "deletedUser": "Utilisateur supprimé"
   },
   "sharing": {
     "codeTitle": "Code d'invitation",
@@ -361,6 +368,12 @@
     "theme": "Thème",
     "theme_system": "Suivre le système",
     "theme_light": "Clair",
-    "theme_dark": "Sombre"
+    "theme_dark": "Sombre",
+    "deleteAccount": "Supprimer le compte",
+    "deleteTitle": "Supprimer votre compte ?",
+    "deleteWarning": "Cela supprime définitivement votre compte, vos dossiers, votre palette et les travaux dont vous êtes propriétaire ({{count}}). Cette action est irréversible.",
+    "deleteSharedHint": "Un travail que vous partagez avec des personnes pouvant le modifier reste à celle qui l'a rejoint en premier, avec les couleurs qu'il utilise. Les personnes en lecture seule perdent le travail et en sont informées.",
+    "deletePassword": "Saisissez votre mot de passe pour confirmer",
+    "deleteConfirm": "Supprimer mon compte"
   }
 }

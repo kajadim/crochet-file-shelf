@@ -74,14 +74,18 @@
             <div class="comment__meta">
               <span class="comment__author">
                 <app-avatar
-                  [userId]="comment.authorId"
-                  [name]="comment.authorName"
+                  [userId]="comment.authorId ?? ''"
+                  [name]="comment.authorId ? comment.authorName : '?'"
                   [version]="comment.authorAvatarVersion"
                   [size]="22"
                 />
                 <span class="comment__author-text">
-                  <span class="comment__name">{{ comment.authorName }}</span>
-                  <span class="comment__username">&#64;{{ comment.authorUsername }}</span>
+                  @if (comment.authorId) {
+                    <span class="comment__name">{{ comment.authorName }}</span>
+                    <span class="comment__username">&#64;{{ comment.authorUsername }}</span>
+                  } @else {
+                    <span class="comment__name">{{ 'comments.deletedUser' | transloco }}</span>
+                  }
                   · {{ (comment.updatedAt ?? comment.createdAt) | date: 'short' }}
                   @if (comment.updatedAt) {
                     · {{ 'comments.edited' | transloco }}

@@ -343,6 +343,53 @@
         </div>
         }
 
+        @if (sharedPalette().length > 0) {
+        <div>
+          <div class="matrix__section-head">
+            <button
+              type="button"
+              class="matrix__toggle"
+              [attr.aria-expanded]="isOpen('shared')"
+              (click)="toggleSection('shared')"
+            >
+              <i class="pi matrix__chevron" [class.pi-chevron-down]="isOpen('shared')" [class.pi-chevron-right]="!isOpen('shared')"></i>
+              <span class="matrix__toggle-label">{{ 'matrixEditor.sharedPalette' | transloco }}</span>
+            </button>
+          </div>
+
+          @if (isOpen('shared')) {
+            <p class="matrix__hint matrix__hint--spaced">{{ 'matrixEditor.sharedPaletteHint' | transloco }}</p>
+            <ul class="matrix__shared">
+              @for (color of sharedPalette(); track color.id) {
+                <li class="matrix__shared-row">
+                  <button
+                    type="button"
+                    class="matrix__tool matrix__tool--small"
+                    [class.is-selected]="selectedTool() === color.id"
+                    [attr.aria-pressed]="selectedTool() === color.id"
+                    [attr.aria-label]="color.name"
+                    [style.background-color]="color.hexValue"
+                    [title]="color.name"
+                    [disabled]="!canEdit()"
+                    (click)="selectTool(color.id)"
+                  ></button>
+                  <span class="matrix__shared-name">{{ color.name }}</span>
+                  <button
+                    type="button"
+                    class="matrix__icon-button"
+                    [attr.aria-label]="'matrixEditor.copyToMyPalette' | transloco"
+                    [title]="'matrixEditor.copyToMyPalette' | transloco"
+                    (click)="copyToMyPalette(color)"
+                  >
+                    <i class="pi pi-copy"></i>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+        }
+
         <div>
           <p class="section-label matrix__section-label">{{ 'matrixEditor.legend' | transloco }}</p>
           @if (patternStore.legend().length === 0) {

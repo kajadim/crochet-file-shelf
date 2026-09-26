@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Avatar } from '../../components/avatar/avatar';
 import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialog/confirm-dialog';
+import { DeleteAccountDialog, DeleteAccountDialogData } from '../../components/delete-account-dialog/delete-account-dialog';
 import { AuthApi } from '../../core/api/auth-api';
 import { ProfileApi } from '../../core/api/profile-api';
 import { Profile, ProfileSharedWork } from '../../core/models/profile.models';
@@ -218,6 +219,15 @@ export class ProfilePage implements OnInit {
 
   protected onLanguageChange(event: Event): void {
     this.language.setLanguage((event.target as HTMLSelectElement).value);
+  }
+
+  protected deleteAccount(): void {
+    this.dialogService.open<DeleteAccountDialog, DeleteAccountDialogData>(DeleteAccountDialog, {
+      header: this.transloco.translate('profile.deleteTitle'),
+      width: '480px',
+      modal: true,
+      data: { totalWorks: this.totalWorks() },
+    });
   }
 
   protected resetPassword(profile: Profile): void {

@@ -91,6 +91,12 @@
   <data name="PendingRegistrationNotFound" xml:space="preserve">
     <value>Keine ausstehende Registrierung für diese E-Mail gefunden.</value>
   </data>
+  <data name="EmailNotVerified" xml:space="preserve">
+    <value>Deine E-Mail-Adresse ist noch nicht bestätigt. Wir haben dir einen neuen Bestätigungscode gesendet.</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Das Passwort ist nicht korrekt.</value>
+  </data>
   <data name="PatternNotFound" xml:space="preserve">
     <value>Matrix nicht gefunden.</value>
   </data>

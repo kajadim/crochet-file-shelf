@@ -91,6 +91,12 @@
   <data name="PendingRegistrationNotFound" xml:space="preserve">
     <value>Nije pronađena registracija u toku za ovaj email.</value>
   </data>
+  <data name="EmailNotVerified" xml:space="preserve">
+    <value>Email još nije potvrđen. Poslali smo ti novi verifikacioni kod.</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Lozinka nije ispravna.</value>
+  </data>
   <data name="PatternNotFound" xml:space="preserve">
     <value>Matrica nije pronađena.</value>
   </data>

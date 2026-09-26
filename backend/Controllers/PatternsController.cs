@@ -1,4 +1,5 @@
 using backend.Dtos.Patterns;
+using backend.Dtos.YarnColors;
 using backend.Extensions;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +16,13 @@ namespace backend.Controllers
 
         private readonly IPatternService _patternService;
         private readonly IPatternExcelService _excelService;
+        private readonly IPatternColorService _colorService;
 
-        public PatternsController(IPatternService patternService, IPatternExcelService excelService)
+        public PatternsController(IPatternService patternService, IPatternExcelService excelService, IPatternColorService colorService)
         {
             _patternService = patternService;
             _excelService = excelService;
+            _colorService = colorService;
         }
 
         [HttpGet]
@@ -79,6 +82,18 @@ namespace backend.Controllers
         {
             var pattern = await _excelService.ImportAsync(User.GetUserId(), workId, file);
             return StatusCode(StatusCodes.Status201Created, pattern);
+        }
+
+        [HttpGet("colors")]
+        public async Task<ActionResult<List<PatternColorResponse>>> GetColors(Guid workId)
+        {
+            return Ok(await _colorService.GetForWorkAsync(User.GetUserId(), workId));
+        }
+
+        [HttpPost("colors/{colorId:guid}/copy")]
+        public async Task<ActionResult<YarnColorResponse>> CopyColor(Guid workId, Guid colorId)
+        {
+            return Ok(await _colorService.CopyToPaletteAsync(User.GetUserId(), workId, colorId));
         }
 
         [HttpPut("cells")]

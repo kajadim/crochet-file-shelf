@@ -157,13 +157,18 @@ namespace backend.Services.Implementation
                 throw new PendingRegistrationNotFoundException();
             }
 
+            await SendNewVerificationCodeAsync(pending);
+        }
+
+        private async Task SendNewVerificationCodeAsync(PendingRegistration pending)
+        {
             var code = _verificationCodeService.GenerateCode();
             pending.CodeHash = _verificationCodeService.HashCode(code);
             pending.ExpiresAt = DateTime.UtcNow.Add(VerificationCodeLifetime);
             await _pendingRegistrationRepository.SaveChangesAsync();
 
             await _emailSender.SendAsync(
-                normalizedEmail,
+                pending.Email,
                 "Your new Crochet File Shelf verification code",
                 $"<p>Your verification code is:</p><h2>{code}</h2><p>This code expires in 15 minutes.</p>");
         }
@@ -175,6 +180,14 @@ namespace backend.Services.Implementation
 
             if (user is null)
             {
+                var pending = await _pendingRegistrationRepository.GetByEmailAsync(normalizedEmail);
+                if (pending is not null
+                    && _passwordHasher.VerifyHashedPassword(new User(), pending.PasswordHash, request.Password) != PasswordVerificationResult.Failed)
+                {
+                    await SendNewVerificationCodeAsync(pending);
+                    throw new EmailNotVerifiedException();
+                }
+
                 throw new InvalidCredentialsException();
             }
 

@@ -63,7 +63,9 @@
       "codePattern": "Der Code besteht aus genau 6 Ziffern",
       "submit": "Bestätigen und Konto erstellen",
       "resend": "Neuen Code senden",
-      "back": "Zurück zur Registrierung"
+      "back": "Zurück zur Registrierung",
+      "haveCode": "Du hast einen Bestätigungscode?",
+      "newCodeSent": "Deine E-Mail-Adresse ist noch nicht bestätigt. Wir haben dir einen neuen Code gesendet."
     },
     "forgotPassword": {
       "title": "Passwort vergessen?",
@@ -230,7 +232,11 @@
     "gridLabel": "Matrixraster",
     "keyboardHelp": "Mit den Pfeiltasten bewegst du dich zwischen den Feldern. Leertaste oder Enter färbt mit der gewählten Farbe, Entf leert das Feld, C markiert es als aktuelle Position, R markiert die Reihe, Umschalt mit Pfeil färbt beim Bewegen.",
     "cellLabel": "Reihe {{row}}, Spalte {{column}}, {{color}}",
-    "emptyCell": "leer"
+    "emptyCell": "leer",
+    "sharedPalette": "Geteilte Palette",
+    "sharedPaletteHint": "In dieser Arbeit verwendete Farben, die nicht in deiner Palette sind.",
+    "copyToMyPalette": "In meine Palette kopieren",
+    "colorCopied": "{{name}} wurde zu deiner Palette hinzugefügt"
   },
   "folderTree": {
     "newSubfolder": "Neuer Unterordner",
@@ -286,7 +292,8 @@
     "orderedList": "Nummerierte Liste",
     "bulletList": "Aufzählung",
     "link": "Link",
-    "clean": "Formatierung entfernen"
+    "clean": "Formatierung entfernen",
+    "deletedUser": "Gelöschter Benutzer"
   },
   "sharing": {
     "codeTitle": "Einladungscode",
@@ -361,6 +368,12 @@
     "theme": "Design",
     "theme_system": "Wie System",
     "theme_light": "Hell",
-    "theme_dark": "Dunkel"
+    "theme_dark": "Dunkel",
+    "deleteAccount": "Konto löschen",
+    "deleteTitle": "Konto löschen?",
+    "deleteWarning": "Dadurch werden dein Konto, deine Ordner, deine Palette und die Arbeiten, die dir gehören ({{count}}), endgültig gelöscht. Das kann nicht rückgängig gemacht werden.",
+    "deleteSharedHint": "Eine Arbeit, die du mit Personen teilst, die sie bearbeiten dürfen, bleibt bei der Person, die zuerst beigetreten ist, samt den verwendeten Farben. Personen mit reinem Leserecht verlieren die Arbeit und werden benachrichtigt.",
+    "deletePassword": "Gib zur Bestätigung dein Passwort ein",
+    "deleteConfirm": "Mein Konto löschen"
   }
 }

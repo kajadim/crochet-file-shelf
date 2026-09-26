@@ -19,6 +19,7 @@ namespace backend.Services.Implementation
         private readonly IFolderRepository _folderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IRealtimeOutbox _outbox;
+        private readonly IPatternColorService _patternColors;
 
         public SharingService(
             ISharingRepository sharingRepository,
@@ -26,9 +27,11 @@ namespace backend.Services.Implementation
             INotificationService notifications,
             IFolderRepository folderRepository,
             IUserRepository userRepository,
-            IRealtimeOutbox outbox)
+            IRealtimeOutbox outbox,
+            IPatternColorService patternColors)
         {
             _outbox = outbox;
+            _patternColors = patternColors;
             _sharingRepository = sharingRepository;
             _access = access;
             _notifications = notifications;
@@ -209,6 +212,7 @@ namespace backend.Services.Implementation
             work.OwnerId = successor.UserId;
             work.FolderId = folder.Id;
             work.UpdatedAt = DateTime.UtcNow;
+            await _patternColors.MoveColorsToOwnerAsync(work.Id, successor.UserId);
 
             foreach (var member in members)
             {

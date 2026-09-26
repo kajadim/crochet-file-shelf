@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-stack">
+  <p class="form-hint">{{ 'profile.deleteWarning' | transloco: { count: data.totalWorks } }}</p>
+  <p class="form-hint">{{ 'profile.deleteSharedHint' | transloco }}</p>
+
+  @if (error()) {
+    <p role="alert" class="alert alert--error">{{ error() }}</p>
+  }
+
+  <div class="field">
+    <label for="delete-password" class="field__label">{{ 'profile.deletePassword' | transloco }}</label>
+    <p-password
+      inputId="delete-password"
+      formControlName="password"
+      autocomplete="current-password"
+      [toggleMask]="true"
+      [feedback]="false"
+      [fluid]="true"
+    />
+    @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+      <small class="field__error">{{ 'common.passwordRequired' | transloco }}</small>
+    }
+  </div>
+
+  <div class="form-actions">
+    <p-button [label]="'common.cancel' | transloco" type="button" [text]="true" (onClick)="dialogRef.close()" />
+    <p-button [label]="'profile.deleteConfirm' | transloco" type="submit" severity="danger" [loading]="loading()" />
+  </div>
+</form>

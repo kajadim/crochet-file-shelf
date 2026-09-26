@@ -17,6 +17,8 @@ public final class TestConfig {
     public static final String USER2_EMAIL;
     public static final String USER2_PASSWORD;
     public static final String USER2_USERNAME;
+    public static final String USER3_EMAIL;
+    public static final String USER3_PASSWORD;
 
     static {
         Properties props = new Properties();
@@ -39,6 +41,8 @@ public final class TestConfig {
         USER2_EMAIL = required(props, "user2.email");
         USER2_PASSWORD = required(props, "user2.password");
         USER2_USERNAME = required(props, "user2.username");
+        USER3_EMAIL = read(props, "user3.email", "");
+        USER3_PASSWORD = read(props, "user3.password", "");
     }
 
     private TestConfig() {

@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/services/auth';
@@ -10,7 +12,7 @@ import { LanguageSelect } from '../../components/language-select/language-select
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, TranslocoPipe, LanguageSelect],
+  imports: [ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, PasswordModule, TranslocoPipe, LanguageSelect],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -47,6 +49,13 @@ export class Login {
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => this.router.navigateByUrl(this.safeReturnUrl()),
       error: (err) => {
+        if (err instanceof HttpErrorResponse && err.error?.code === 'EmailNotVerified') {
+          this.router.navigate(['/verify-email'], {
+            queryParams: { email: this.form.controls.email.value, resent: '1' },
+          });
+          return;
+        }
+
         this.error.set(extractErrorMessage(err));
         this.loading.set(false);
       },

@@ -1,3 +1,11 @@
+export interface PatternColor {
+  id: string;
+  name: string;
+  hexValue: string;
+  notes: string | null;
+  isMine: boolean;
+}
+
 export interface PatternCell {
   row: number;
   column: number;

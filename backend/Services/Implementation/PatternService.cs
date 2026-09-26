@@ -193,6 +193,11 @@ namespace backend.Services.Implementation
             foreach (var colorId in colorIds)
             {
                 var color = await _yarnColorRepository.GetActiveByIdAsync(colorId, userId);
+                if (color is null && await _yarnColorRepository.IsUsedInPatternAsync(colorId, pattern.Id))
+                {
+                    color = await _yarnColorRepository.GetByIdAsync(colorId);
+                }
+
                 if (color is null)
                 {
                     throw new NotFoundException(ErrorCode.ColorNotFound);

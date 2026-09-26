@@ -22,7 +22,7 @@ namespace backend.Exceptions
 
             httpContext.Response.StatusCode = (int)appException.StatusCode;
             var message = _localizer[appException.Code.ToString()].Value;
-            await httpContext.Response.WriteAsJsonAsync(new { message }, cancellationToken);
+            await httpContext.Response.WriteAsJsonAsync(new { message, code = appException.Code.ToString() }, cancellationToken);
             return true;
         }
     }

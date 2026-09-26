@@ -8,7 +8,9 @@ import {
   PatternEdges,
   Pattern,
   PatternCell,
+  PatternColor,
 } from '../models/pattern.models';
+import { YarnColor } from '../models/yarn-color.models';
 import { extractErrorMessage } from '../utils/http-error';
 import { ActiveRowChangedEvent, CellsChangedEvent, PositionChangedEvent } from '../models/realtime.models';
 import { Realtime } from './realtime';
@@ -47,6 +49,8 @@ export class PatternStore {
   private readonly errorState = signal<string | null>(null);
 
   private readonly saveStateSignal = signal<SaveState>('idle');
+  private readonly sharedColorsState = signal<PatternColor[]>([]);
+  private loadingColors = false;
 
   private workId: string | null = null;
   private inflight = 0;
@@ -58,6 +62,7 @@ export class PatternStore {
   readonly notFound = this.notFoundState.asReadonly();
   readonly error = this.errorState.asReadonly();
   readonly saveState = this.saveStateSignal.asReadonly();
+  readonly sharedColors = this.sharedColorsState.asReadonly();
 
   readonly legend = computed<LegendEntry[]>(() => {
     const byColor = new Map<string, LegendEntry>();
@@ -90,6 +95,29 @@ export class PatternStore {
     this.pendingChanges.clear();
     this.inflight = 0;
     this.saveStateSignal.set('idle');
+    this.sharedColorsState.set([]);
+    this.loadingColors = false;
+  }
+
+  loadSharedColors(): void {
+    if (!this.workId || this.loadingColors) {
+      return;
+    }
+
+    this.loadingColors = true;
+    this.api.getColors(this.workId).subscribe({
+      next: (colors) => {
+        this.sharedColorsState.set(colors);
+        this.loadingColors = false;
+      },
+      error: () => {
+        this.loadingColors = false;
+      },
+    });
+  }
+
+  copyColor(colorId: string): Observable<YarnColor> {
+    return this.api.copyColor(this.workId!, colorId);
   }
 
   load(workId: string): void {

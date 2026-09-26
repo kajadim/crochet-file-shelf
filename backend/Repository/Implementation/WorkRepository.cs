@@ -107,6 +107,12 @@ namespace backend.Repository.Implementation
         public Task<Work?> GetByIdAsync(Guid id) =>
             _context.Works.Include(w => w.Owner).FirstOrDefaultAsync(w => w.Id == id);
 
+        public Task<List<Guid>> GetOwnedIdsAsync(Guid ownerId) =>
+            _context.Works.Where(w => w.OwnerId == ownerId).Select(w => w.Id).ToListAsync();
+
+        public Task<List<Guid>> GetMemberWorkIdsAsync(Guid userId) =>
+            _context.WorkMembers.Where(m => m.UserId == userId).Select(m => m.WorkId).ToListAsync();
+
         public Task<WorkMember?> GetMemberAsync(Guid workId, Guid userId) =>
             _context.WorkMembers.FirstOrDefaultAsync(m => m.WorkId == workId && m.UserId == userId);
 

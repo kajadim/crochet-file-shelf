@@ -77,18 +77,52 @@ This starts PostgreSQL on port `5433` (database `crochetfileshelf`, user `postgr
 
 ### 2. Backend
 
-Create `backend/appsettings.Development.json` from the example and fill in your values:
+`backend/appsettings.json` only holds empty defaults, and your own settings are not committed to git. Create
+`backend/appsettings.Development.json` (copy `appsettings.Development.json.example`, or paste the content below) and fill in your values:
 
-```bash
-cd backend
-cp appsettings.Development.json.example appsettings.Development.json
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "CrochetFileShelfDb": "Host=<HOST>;Port=<PORT>;Database=<DATABASE>;Username=<USERNAME>;Password=<PASSWORD>"
+  },
+  "Cors": {
+    "AllowedOrigins": [ "<FRONTEND_URL>" ]
+  },
+  "Jwt": {
+    "Issuer": "CrochetFileShelf",
+    "Audience": "CrochetFileShelfClient",
+    "Secret": "REPLACE_WITH_A_LONG_RANDOM_STRING_OF_AT_LEAST_32_CHARACTERS",
+    "AccessTokenExpiryMinutes": 15
+  },
+  "RefreshToken": {
+    "ExpiryDays": 30
+  },
+  "Email": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": 587,
+    "SenderEmail": "your.address@gmail.com",
+    "SenderName": "Crochet File Shelf",
+    "Username": "your.address@gmail.com",
+    "Password": "your-16-character-app-password"
+  }
+}
 ```
 
 | Setting | Meaning |
 |---|---|
-| `ConnectionStrings:CrochetFileShelfDb` | Use `password` as the password to match `docker-compose.yml` |
-| `Jwt:Secret` | Any long random string |
-| `Email:*` | Gmail address and app password used to send verification codes |
+| `ConnectionStrings:CrochetFileShelfDb` | Connection to the database from step 1. With the `docker-compose.yml` from this repository: `<HOST>` = `localhost`, `<PORT>` = `5433`, `<DATABASE>` = `crochetfileshelf`, `<USERNAME>` = `postgres`, `<PASSWORD>` = `password` |
+| `Cors:AllowedOrigins` | Address of the frontend. For `npm start` it is `http://localhost:4200` |
+| `Jwt:Secret` | Any long random string (32+ characters); it signs the login tokens and must not stay empty |
+| `Email:*` | Gmail address and **app password** used to send verification codes (see below) |
+
+The `Password` in `Email` is a Gmail **app password**, not the password of the account. Create one at
+<https://myaccount.google.com/apppasswords> (2-step verification has to be turned on for the account) and write it without spaces.
 
 Create the tables and start the API:
 
@@ -128,7 +162,24 @@ docker compose --profile app --profile test down      # stop and remove the cont
   development data is never touched.
 - The backend creates its tables at start-up (`Database__MigrateOnStartup`); the frontend is built and served by nginx,
   which also forwards `/api` and `/hubs` to the backend.
-- To register users in the containerised application, put the Gmail settings in a `.env` file (see `.env.example`).
+- The containerised backend reads its e-mail settings from `backend/appsettings.Development.json` (see below), so that
+  file has to exist before `--profile app` or `--profile test` is started. The optional `.env` file only holds the token
+  signing secret (see `.env.example`).
+
+### Settings the containers need
+
+Docker uses the **same** `backend/appsettings.Development.json` as running the backend on your machine, so create it as in
+step 2 (all sections, not only `Email`) before `--profile app` or `--profile test` is started. The file is mounted read-only
+into the backend container as `appsettings.Production.json`; if it is missing, Docker creates an empty folder with that name
+and the backend does not start properly.
+
+Of everything in that file the container only takes the `Email` section. The connection string (`Database=crochetfileshelf_docker`,
+host `postgres`), the token secret and the cookie settings are given by `docker-compose.yml` and override the file, and CORS is
+not needed because the browser talks only to nginx. So the other values may stay as in the template, but `Email` has to hold
+real values, otherwise registering a user fails with a server error (Gmail rejects the sign-in).
+
+- The file is read when the backend starts. After changing it, run `docker compose --profile app restart backend`.
+- The automated tests do not need working e-mail settings, because their accounts are created directly in the database.
 
 ## Tests
 

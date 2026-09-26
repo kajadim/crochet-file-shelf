@@ -91,6 +91,12 @@
   <data name="PendingRegistrationNotFound" xml:space="preserve">
     <value>Aucune inscription en attente trouvée pour cet email.</value>
   </data>
+  <data name="EmailNotVerified" xml:space="preserve">
+    <value>Votre adresse email n'est pas encore vérifiée. Nous vous avons envoyé un nouveau code de vérification.</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Le mot de passe est incorrect.</value>
+  </data>
   <data name="PatternNotFound" xml:space="preserve">
     <value>Grille introuvable.</value>
   </data>

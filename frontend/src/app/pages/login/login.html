@@ -24,7 +24,14 @@
 
       <div class="field">
         <label for="password" class="field__label">{{ 'common.password' | transloco }}</label>
-        <input pInputText id="password" type="password" formControlName="password" autocomplete="current-password" />
+        <p-password
+          inputId="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [toggleMask]="true"
+          [feedback]="false"
+          [fluid]="true"
+        />
         @if (form.controls.password.hasError('required') && form.controls.password.touched) {
           <small class="field__error">{{ 'common.passwordRequired' | transloco }}</small>
         }
@@ -36,6 +43,7 @@
     <div class="auth-card__links">
       <a routerLink="/forgot-password" class="text-link">{{ 'auth.login.forgotPassword' | transloco }}</a>
       <a routerLink="/register" class="text-link">{{ 'auth.login.createAccount' | transloco }}</a>
+      <a routerLink="/verify-email" class="text-link">{{ 'auth.verifyEmail.haveCode' | transloco }}</a>
     </div>
   </div>
 </div>

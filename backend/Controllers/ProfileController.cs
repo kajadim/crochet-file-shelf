@@ -14,10 +14,12 @@ namespace backend.Controllers
         private const long MaxUploadBytes = 400 * 1024;
 
         private readonly IProfileService _profileService;
+        private readonly IAccountService _accountService;
 
-        public ProfileController(IProfileService profileService)
+        public ProfileController(IProfileService profileService, IAccountService accountService)
         {
             _profileService = profileService;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -37,6 +39,13 @@ namespace backend.Controllers
         public async Task<ActionResult<ProfileResponse>> SetAvatar(IFormFile file)
         {
             return Ok(await _profileService.SetAvatarAsync(User.GetUserId(), file));
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteAccount(DeleteAccountRequest request)
+        {
+            await _accountService.DeleteAsync(User.GetUserId(), request);
+            return NoContent();
         }
 
         [HttpDelete("avatar")]

@@ -239,6 +239,13 @@
           [outlined]="true"
           (onClick)="auth.logout()"
         />
+        <p-button
+          [label]="'profile.deleteAccount' | transloco"
+          icon="pi pi-trash"
+          severity="danger"
+          [text]="true"
+          (onClick)="deleteAccount()"
+        />
       </div>
     </section>
   }

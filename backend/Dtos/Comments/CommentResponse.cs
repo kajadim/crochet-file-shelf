@@ -4,7 +4,7 @@ namespace backend.Dtos.Comments
     {
         public Guid Id { get; set; }
         public string Text { get; set; } = null!;
-        public Guid AuthorId { get; set; }
+        public Guid? AuthorId { get; set; }
         public string AuthorName { get; set; } = null!;
         public string AuthorUsername { get; set; } = null!;
         public long? AuthorAvatarVersion { get; set; }

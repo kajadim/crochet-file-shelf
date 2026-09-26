@@ -11,7 +11,7 @@
         public Guid WorkId { get; set; }
         public Work Work { get; set; } = null!;
 
-        public Guid AuthorId { get; set; }
-        public User Author { get; set; } = null!;
+        public Guid? AuthorId { get; set; }
+        public User? Author { get; set; }
     }
 }

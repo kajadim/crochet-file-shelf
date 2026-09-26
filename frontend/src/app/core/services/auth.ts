@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, finalize, firstValueFrom, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { AuthApi } from '../api/auth-api';
+import { ProfileApi } from '../api/profile-api';
 import { clearDashboardFilters } from '../utils/dashboard-filters-storage';
 import {
   AuthResponse,
@@ -19,6 +20,7 @@ import {
 export class Auth {
   private readonly api = inject(AuthApi);
   private readonly router = inject(Router);
+  private readonly profileApi = inject(ProfileApi);
 
   private readonly accessTokenState = signal<string | null>(null);
   private readonly userState = signal<UserSummary | null>(null);
@@ -99,6 +101,15 @@ export class Auth {
         this.clearSession();
         this.router.navigate(['/login']);
       });
+  }
+
+  deleteAccount(password: string): Observable<void> {
+    return this.profileApi.deleteAccount(password).pipe(
+      tap(() => {
+        this.clearSession();
+        this.router.navigate(['/login']);
+      }),
+    );
   }
 
   updateUser(changes: Partial<UserSummary>): void {

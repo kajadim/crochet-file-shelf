@@ -490,6 +490,38 @@
     font-size: 0.875rem;
   }
 
+  &__shared {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  &__shared-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__shared-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.875rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__tool--small {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+
   &__cells-form {
     display: flex;
     flex-direction: column;

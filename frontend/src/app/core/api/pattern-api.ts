@@ -6,10 +6,12 @@ import {
   ImportPreview,
   PatternEdges,
   Pattern,
+  PatternColor,
   SetCellsRequest,
   UpdateActiveRowRequest,
   UpdatePositionRequest,
 } from '../models/pattern.models';
+import { YarnColor } from '../models/yarn-color.models';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +45,14 @@ export class PatternApi {
 
   shrink(workId: string, request: PatternEdges): Observable<Pattern> {
     return this.http.put<Pattern>(`${this.baseUrl(workId)}/shrink`, request);
+  }
+
+  getColors(workId: string): Observable<PatternColor[]> {
+    return this.http.get<PatternColor[]>(`${this.baseUrl(workId)}/colors`);
+  }
+
+  copyColor(workId: string, colorId: string): Observable<YarnColor> {
+    return this.http.post<YarnColor>(`${this.baseUrl(workId)}/colors/${colorId}/copy`, {});
   }
 
   exportFile(workId: string): Observable<Blob> {

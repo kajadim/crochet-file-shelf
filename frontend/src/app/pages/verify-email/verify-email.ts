@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, translate } from '@jsverse/transloco';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/services/auth';
 import { extractErrorMessage } from '../../core/utils/http-error';
@@ -28,7 +28,9 @@ export class VerifyEmail {
   readonly loading = signal(false);
   readonly resending = signal(false);
   readonly error = signal<string | null>(null);
-  readonly info = signal<string | null>(null);
+  readonly info = signal<string | null>(
+    this.route.snapshot.queryParamMap.get('resent') === '1' ? translate('auth.verifyEmail.newCodeSent') : null,
+  );
 
   submit(): void {
     if (this.form.invalid) {

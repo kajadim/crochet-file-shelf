@@ -13,3 +13,8 @@ user1.username=firstuser
 user2.email=second.user@example.com
 user2.password=YourPassword2
 user2.username=seconduser
+
+# Optional third account, used only by the account deletion test (the test deletes it, so it is skipped when this is empty).
+# The Docker setup creates it again before every run.
+user3.email=
+user3.password=

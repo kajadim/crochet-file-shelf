@@ -63,7 +63,9 @@
       "codePattern": "Kod ima tačno 6 cifara",
       "submit": "Potvrdi i napravi nalog",
       "resend": "Pošalji nov kod",
-      "back": "Nazad na registraciju"
+      "back": "Nazad na registraciju",
+      "haveCode": "Imaš verifikacioni kod?",
+      "newCodeSent": "Email još nije potvrđen. Poslali smo ti novi kod."
     },
     "forgotPassword": {
       "title": "Zaboravljena lozinka?",
@@ -230,7 +232,11 @@
     "gridLabel": "Mreža matrice",
     "keyboardHelp": "Strelicama se krećeš između polja. Razmak ili Enter boji izabranom bojom, Delete briše polje, C ga označava kao trenutnu poziciju, R označava njegov red, a Shift sa strelicom boji dok se krećeš.",
     "cellLabel": "Red {{row}}, kolona {{column}}, {{color}}",
-    "emptyCell": "prazno"
+    "emptyCell": "prazno",
+    "sharedPalette": "Deljena paleta",
+    "sharedPaletteHint": "Boje korišćene u ovom radu koje nisu u tvojoj paleti.",
+    "copyToMyPalette": "Kopiraj u moju paletu",
+    "colorCopied": "{{name}} je dodata u tvoju paletu"
   },
   "folderTree": {
     "newSubfolder": "Novi podfolder",
@@ -286,7 +292,8 @@
     "orderedList": "Numerisana lista",
     "bulletList": "Lista sa tačkama",
     "link": "Link",
-    "clean": "Ukloni formatiranje"
+    "clean": "Ukloni formatiranje",
+    "deletedUser": "Obrisan korisnik"
   },
   "sharing": {
     "codeTitle": "Kod za pridruživanje",
@@ -361,6 +368,12 @@
     "theme": "Tema",
     "theme_system": "Prema sistemu",
     "theme_light": "Svetla",
-    "theme_dark": "Tamna"
+    "theme_dark": "Tamna",
+    "deleteAccount": "Obriši nalog",
+    "deleteTitle": "Obrisati nalog?",
+    "deleteWarning": "Ovim trajno brišeš nalog, svoje foldere, paletu i radove čiji si vlasnik ({{count}}). Ovo ne može da se poništi.",
+    "deleteSharedHint": "Rad koji deliš sa ljudima koji mogu da ga menjaju ostaje onome ko mu se prvi pridružio, zajedno sa bojama koje koristi. Ljudi sa pravom samo pregleda gube rad i dobijaju obaveštenje.",
+    "deletePassword": "Unesi lozinku da potvrdiš",
+    "deleteConfirm": "Obriši moj nalog"
   }
 }

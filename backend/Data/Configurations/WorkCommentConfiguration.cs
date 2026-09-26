@@ -20,7 +20,7 @@ namespace backend.Data.Configurations
             builder.HasOne(c => c.Author)
                 .WithMany()
                 .HasForeignKey(c => c.AuthorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasIndex(c => c.WorkId);
         }

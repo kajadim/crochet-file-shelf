@@ -10,7 +10,7 @@ import { ConfirmDialog, ConfirmDialogData } from '../../components/confirm-dialo
 import { WorkComments } from '../../components/work-comments/work-comments';
 import { WorkPresence } from '../../components/work-presence/work-presence';
 import { WorkAccessWatcher } from '../../core/services/work-access-watcher';
-import { ImportPreview } from '../../core/models/pattern.models';
+import { ImportPreview, PatternColor } from '../../core/models/pattern.models';
 import { WorkRole } from '../../core/models/work.models';
 import { YarnColorDialog, YarnColorDialogData } from '../../components/yarn-color-dialog/yarn-color-dialog';
 import { WorkApi } from '../../core/api/work-api';
@@ -18,6 +18,7 @@ import { PatternStore } from '../../core/services/pattern-store';
 import { YarnColorStore } from '../../core/services/yarn-color-store';
 import { saveBlob } from '../../core/utils/download';
 import { extractErrorMessage } from '../../core/utils/http-error';
+import { MessageService } from 'primeng/api';
 
 type PaintTool = string | 'eraser' | null;
 
@@ -35,6 +36,7 @@ export class MatrixEditor implements OnInit {
   private readonly watcher = inject(WorkAccessWatcher);
   private readonly destroyRef = inject(DestroyRef);
   private readonly transloco = inject(TranslocoService);
+  private readonly messages = inject(MessageService);
 
   protected readonly patternStore = inject(PatternStore);
   protected readonly colorStore = inject(YarnColorStore);
@@ -66,7 +68,7 @@ export class MatrixEditor implements OnInit {
 
     const painted = this.patternStore.cellAt(cell.row, cell.column);
     const colorName = painted
-      ? (this.colorStore.colors().find((color) => color.id === painted.colorId)?.name ?? painted.hexValue)
+      ? (this.colorName(painted.colorId) ?? painted.hexValue)
       : this.transloco.translate('matrixEditor.emptyCell');
 
     return this.transloco.translate('matrixEditor.cellLabel', { row: cell.row + 1, column: cell.column + 1, color: colorName });
@@ -77,7 +79,8 @@ export class MatrixEditor implements OnInit {
   protected readonly selectedTool = signal<PaintTool>(null);
   protected readonly isPainting = signal(false);
   protected readonly sidebarCollapsed = signal(false);
-  protected readonly openSections = signal<ReadonlySet<string>>(new Set(['palette']));
+  protected readonly openSections = signal<ReadonlySet<string>>(new Set(['palette', 'shared']));
+  protected readonly sharedPalette = computed(() => this.patternStore.sharedColors().filter((color) => !color.isMine));
 
   protected readonly zoom = signal(100);
   protected readonly cellSize = computed(() => Math.round((22 * this.zoom()) / 100));
@@ -120,6 +123,20 @@ export class MatrixEditor implements OnInit {
 
   constructor() {
     effect(() => {
+      if (!this.colorStore.loaded()) {
+        return;
+      }
+
+      const known = new Set([
+        ...this.colorStore.colors().map((color) => color.id),
+        ...this.patternStore.sharedColors().map((color) => color.id),
+      ]);
+      if (this.patternStore.legend().some((entry) => !known.has(entry.colorId))) {
+        untracked(() => this.patternStore.loadSharedColors());
+      }
+    });
+
+    effect(() => {
       const meta = this.patternStore.pattern();
       if (meta) {
         untracked(() =>
@@ -135,6 +152,7 @@ export class MatrixEditor implements OnInit {
 
     this.patternStore.reset();
     this.patternStore.load(this.workId);
+    this.patternStore.loadSharedColors();
 
     this.colorStore.reset();
     this.colorStore.load().subscribe();
@@ -195,6 +213,20 @@ export class MatrixEditor implements OnInit {
     }
     const current = this.patternStore.pattern()?.activeRow;
     this.patternStore.updateActiveRow(current === row ? null : row);
+  }
+
+  protected copyToMyPalette(color: PatternColor): void {
+    this.patternStore.copyColor(color.id).subscribe({
+      next: () => {
+        this.colorStore.load().subscribe();
+        this.patternStore.loadSharedColors();
+        this.messages.add({
+          severity: 'success',
+          summary: this.transloco.translate('matrixEditor.colorCopied', { name: color.name }),
+        });
+      },
+      error: (err) => this.messages.add({ severity: 'error', summary: extractErrorMessage(err) }),
+    });
   }
 
   protected selectTool(tool: PaintTool): void {
@@ -545,6 +577,13 @@ export class MatrixEditor implements OnInit {
     });
   }
 
+  private colorName(colorId: string): string | undefined {
+    return (
+      this.colorStore.colors().find((color) => color.id === colorId) ??
+      this.patternStore.sharedColors().find((color) => color.id === colorId)
+    )?.name;
+  }
+
   private paintAt(row: number, column: number): void {
     const tool = this.selectedTool();
     if (tool === null) {
@@ -556,7 +595,10 @@ export class MatrixEditor implements OnInit {
       return;
     }
 
-    const hex = this.colorStore.colors().find((color) => color.id === tool)?.hexValue;
+    const hex = (
+      this.colorStore.colors().find((color) => color.id === tool) ??
+      this.patternStore.sharedColors().find((color) => color.id === tool)
+    )?.hexValue;
     this.patternStore.paintCell(row, column, tool, hex);
   }
 }

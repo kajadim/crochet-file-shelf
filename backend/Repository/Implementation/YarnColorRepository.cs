@@ -46,6 +46,37 @@ namespace backend.Repository.Implementation
         public Task<YarnColor?> GetActiveByIdAsync(Guid id, Guid ownerId) =>
             _context.YarnColors.FirstOrDefaultAsync(c => c.Id == id && c.OwnerId == ownerId && !c.IsArchived);
 
+        public Task<YarnColor?> GetByIdAsync(Guid id) =>
+            _context.YarnColors.FirstOrDefaultAsync(c => c.Id == id);
+
+        public Task<List<YarnColor>> GetUsedInPatternAsync(Guid patternId) =>
+            _context.PatternCells
+                .Where(cell => cell.PatternId == patternId)
+                .Select(cell => cell.YarnColor)
+                .Distinct()
+                .OrderBy(color => color.Name)
+                .ToListAsync();
+
+        public Task<bool> IsUsedInPatternAsync(Guid colorId, Guid patternId) =>
+            _context.PatternCells.AnyAsync(cell => cell.PatternId == patternId && cell.YarnColorId == colorId);
+
+        public async Task<List<(Guid WorkId, Guid OwnerId)>> GetWorksUsingColorsOfAsync(Guid colorOwnerId)
+        {
+            var rows = await _context.PatternCells
+                .Where(cell => cell.YarnColor.OwnerId == colorOwnerId)
+                .Select(cell => new { cell.Pattern.WorkId, cell.Pattern.Work.OwnerId })
+                .Distinct()
+                .ToListAsync();
+
+            return rows.Select(row => (row.WorkId, row.OwnerId)).ToList();
+        }
+
+        public Task<YarnColor?> FindActiveByHexAsync(Guid ownerId, string hexValue)
+        {
+            var hex = hexValue.ToUpper();
+            return _context.YarnColors.FirstOrDefaultAsync(c => c.OwnerId == ownerId && !c.IsArchived && c.HexValue.ToUpper() == hex);
+        }
+
         public Task<bool> NameExistsAsync(Guid ownerId, string name, Guid? excludeColorId)
         {
             var lowerName = name.ToLower();

@@ -23,6 +23,10 @@ export class ProfileApi {
     return this.http.put<Profile>('/api/profile/avatar', body);
   }
 
+  deleteAccount(password: string): Observable<void> {
+    return this.http.post<void>('/api/profile/delete', { password });
+  }
+
   removeAvatar(): Observable<Profile> {
     return this.http.delete<Profile>('/api/profile/avatar');
   }

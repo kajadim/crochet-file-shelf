@@ -60,7 +60,14 @@
 
       <div class="field">
         <label for="password" class="field__label">{{ 'common.password' | transloco }}</label>
-        <input pInputText id="password" type="password" formControlName="password" autocomplete="new-password" />
+        <p-password
+          inputId="password"
+          formControlName="password"
+          autocomplete="new-password"
+          [toggleMask]="true"
+          [feedback]="false"
+          [fluid]="true"
+        />
         <small class="field__hint">{{ 'common.passwordHint' | transloco }}</small>
         @if (form.controls.password.hasError('required') && form.controls.password.touched) {
           <small class="field__error">{{ 'common.passwordRequired' | transloco }}</small>
@@ -75,6 +82,9 @@
     <p class="auth-card__footer">
       {{ 'auth.register.haveAccount' | transloco }}
       <a routerLink="/login" class="text-link">{{ 'auth.register.login' | transloco }}</a>
+    </p>
+    <p class="auth-card__footer">
+      <a routerLink="/verify-email" class="text-link">{{ 'auth.verifyEmail.haveCode' | transloco }}</a>
     </p>
   </div>
 </div>

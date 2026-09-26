@@ -63,7 +63,9 @@
       "codePattern": "The code has exactly 6 digits",
       "submit": "Verify and create account",
       "resend": "Send a new code",
-      "back": "Back to registration"
+      "back": "Back to registration",
+      "haveCode": "Have a verification code?",
+      "newCodeSent": "Your email is not verified yet. We sent you a new code."
     },
     "forgotPassword": {
       "title": "Forgot your password?",
@@ -230,7 +232,11 @@
     "gridLabel": "Matrix grid",
     "keyboardHelp": "Use the arrow keys to move between cells. Space or Enter paints the selected color, Delete clears the cell, C marks it as the current position, R marks its row, Shift with an arrow paints while moving.",
     "cellLabel": "Row {{row}}, column {{column}}, {{color}}",
-    "emptyCell": "empty"
+    "emptyCell": "empty",
+    "sharedPalette": "Shared palette",
+    "sharedPaletteHint": "Colors used in this work that are not in your palette.",
+    "copyToMyPalette": "Copy to my palette",
+    "colorCopied": "{{name}} was added to your palette"
   },
   "folderTree": {
     "newSubfolder": "New subfolder",
@@ -286,7 +292,8 @@
     "orderedList": "Numbered list",
     "bulletList": "Bulleted list",
     "link": "Link",
-    "clean": "Clear formatting"
+    "clean": "Clear formatting",
+    "deletedUser": "Deleted user"
   },
   "sharing": {
     "codeTitle": "Invitation code",
@@ -361,6 +368,12 @@
     "theme": "Theme",
     "theme_system": "Follow system",
     "theme_light": "Light",
-    "theme_dark": "Dark"
+    "theme_dark": "Dark",
+    "deleteAccount": "Delete account",
+    "deleteTitle": "Delete your account?",
+    "deleteWarning": "This permanently deletes your account, your folders, your palette and the works you own ({{count}}). This cannot be undone.",
+    "deleteSharedHint": "A work you share with people who can edit it stays with the one who joined first, together with the colors it uses. People with view-only access lose the work and are notified.",
+    "deletePassword": "Enter your password to confirm",
+    "deleteConfirm": "Delete my account"
   }
 }

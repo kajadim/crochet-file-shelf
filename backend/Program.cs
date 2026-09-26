@@ -128,6 +128,7 @@ builder.Services.AddScoped<IYarnColorRepository, YarnColorRepository>();
 builder.Services.AddScoped<IYarnColorService, YarnColorService>();
 builder.Services.AddScoped<IPatternRepository, PatternRepository>();
 builder.Services.AddScoped<IPatternService, PatternService>();
+builder.Services.AddScoped<IPatternColorService, PatternColorService>();
 builder.Services.AddScoped<IPatternExcelService, PatternExcelService>();
 builder.Services.AddScoped<IWorkAccessService, WorkAccessService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
@@ -136,6 +137,7 @@ builder.Services.AddScoped<ISharingRepository, SharingRepository>();
 builder.Services.AddScoped<ISharingService, SharingService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR()
     .AddJsonProtocol(options => options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

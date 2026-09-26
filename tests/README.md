@@ -29,7 +29,7 @@ minutes. Nothing has to be installed except Docker, and the accounts, settings a
 - After changing the tests, rebuild the image: `docker compose --profile test build tests`.
 - Stop everything: `docker compose --profile app --profile test down`.
 
-The test accounts (`test.user1@example.com` and `test.user2@example.com`, password `Test1234!`) exist only in the separate
+The test accounts (`test.user1@example.com`, `test.user2@example.com` and `test.user3@example.com`, password `Test1234!`) exist only in the separate
 `crochetfileshelf_docker` database, so your own data is not touched.
 
 ## Running on your own machine
@@ -51,6 +51,9 @@ The test accounts (`test.user1@example.com` and `test.user2@example.com`, passwo
    | `user1.*`, `user2.*` | Email, password and username of the two accounts |
 
    Every setting can also be given as an environment variable, e.g. `BROWSER=edge` or `USER1_EMAIL=...`.
+
+   `user3.*` is optional: the account deletion test deletes that account, so it is skipped when the setting is empty (the Docker
+   setup creates the account again before every run).
 
 Requirements: JDK 17 or newer and Maven 3.9 or newer (or run the tests from IntelliJ IDEA, which bundles Maven).
 

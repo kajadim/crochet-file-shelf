@@ -1,7 +1,7 @@
 export interface WorkComment {
   id: string;
   text: string;
-  authorId: string;
+  authorId: string | null;
   authorName: string;
   authorUsername: string;
   authorAvatarVersion: number | null;

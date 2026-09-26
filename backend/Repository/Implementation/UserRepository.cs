@@ -2,6 +2,7 @@ using backend.Data;
 using backend.Models;
 using backend.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Repository.Implementation
 {
@@ -28,6 +29,12 @@ namespace backend.Repository.Implementation
 
         public async Task AddAsync(User user) =>
             await _context.Users.AddAsync(user);
+
+        public void Remove(User user) =>
+            _context.Users.Remove(user);
+
+        public Task<IDbContextTransaction> BeginTransactionAsync() =>
+            _context.Database.BeginTransactionAsync();
 
         public Task SaveChangesAsync() =>
             _context.SaveChangesAsync();
